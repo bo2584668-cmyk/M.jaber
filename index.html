@@ -15,8 +15,8 @@
         * { font-family: 'Cairo', 'Tajawal', sans-serif; }
         body { background: linear-gradient(145deg, #f1f5f9 0%, #ffffff 100%); scroll-behavior: smooth; }
         .glass-morphism { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .course-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.03); }
-        .course-card:hover { transform: translateY(-8px); box-shadow: 0 25px 30px -12px rgba(0, 119, 255, 0.15); border-color: rgba(37, 99, 235, 0.2); }
+        .course-card, .book-card, .announcement-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.03); }
+        .course-card:hover, .book-card:hover, .announcement-card:hover { transform: translateY(-8px); box-shadow: 0 25px 30px -12px rgba(0, 119, 255, 0.15); border-color: rgba(37, 99, 235, 0.2); }
         .loader { border-top-color: #2563eb; animation: spinner 0.8s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); z-index: 50; transition: 0.3s; }
@@ -65,6 +65,8 @@
                     <div class="hidden md:flex space-x-reverse space-x-6 text-gray-700 font-medium">
                         <a href="#" onclick="showPage('home')" class="nav-link hover:text-blue-600 transition">الرئيسية</a>
                         <a href="#" onclick="showPage('courses')" class="nav-link hover:text-blue-600 transition">الكورسات</a>
+                        <a href="#" onclick="showPage('library')" class="nav-link hover:text-blue-600 transition">المكتبة</a>
+                        <a href="#" onclick="showPage('announcements')" class="nav-link hover:text-blue-600 transition">الإعلانات</a>
                         <span id="adminLink" class="hidden">
                             <a href="#" onclick="showPage('admin')" class="text-red-600 font-bold hover:underline">لوحة الإدارة</a>
                         </span>
@@ -154,8 +156,8 @@
             <div class="text-center py-24 bg-white/70 rounded-[3rem] shadow-xl border border-white/50 mb-12 relative overflow-hidden backdrop-blur-sm">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-l from-blue-600 to-blue-400"></div>
                 <div class="inline-block px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-bold mb-6 shadow-sm">المنصة التعليمية الرسمية 🏆</div>
-                <h1 class="text-5xl md:text-8xl font-black text-gray-900 mb-8 leading-tight">ملك النحو <br><span class="gradient-text">محمد جابر</span></h1>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">أبسط شرح، أقوى ملازم، ومتابعة دقيقة حتى باب الامتحان. لغة الضاد أصبحت أسهل الآن.</p>
+                <h1 class="text-5xl md:text-8xl font-black text-gray-900 mb-8 leading-tight">ملك اللغه العربيه <br><span class="gradient-text">محمد جابر</span></h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">أبسط شرح، أقوى ملازم، ومتابعة دقيقة حتى باب الامتحان. الغة العربيه  أصبحت أسهل الآن.</p>
                 <div class="flex flex-wrap justify-center gap-5">
                     <button onclick="showPage('courses')" class="px-12 py-5 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-3xl font-black text-xl shadow-2xl shadow-blue-200 hover:shadow-blue-300 transform hover:-translate-y-1 transition duration-300">ابدأ رحلتك الآن</button>
                     <a href="https://wa.me/+201273740256" target="_blank" class="px-12 py-5 bg-white border-4 border-blue-600 text-blue-600 rounded-3xl font-black text-xl hover:bg-blue-50 transition duration-300 flex items-center gap-2">تحدث معنا</a>
@@ -199,6 +201,36 @@
                 <div class="col-span-full flex flex-col items-center py-20">
                     <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
                     <p class="text-gray-500 font-bold">يتم الآن تجهيز المحاضرات...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Library Page (الملازم) -->
+        <section id="page-library" class="page-content hidden">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-black text-gray-900 mb-4">المكتبة التعليمية</h2>
+                <div class="w-24 h-2 bg-gradient-to-l from-green-600 to-green-400 mx-auto rounded-full"></div>
+            </div>
+            
+            <div id="booksList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="col-span-full flex flex-col items-center py-20">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+                    <p class="text-gray-500 font-bold">جاري تحميل الملازم...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Announcements Page -->
+        <section id="page-announcements" class="page-content hidden">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-black text-gray-900 mb-4">آخر الإعلانات</h2>
+                <div class="w-24 h-2 bg-gradient-to-l from-yellow-600 to-yellow-400 mx-auto rounded-full"></div>
+            </div>
+            
+            <div id="announcementsList" class="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
+                <div class="col-span-full flex flex-col items-center py-20">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+                    <p class="text-gray-500 font-bold">جاري تحميل الإعلانات...</p>
                 </div>
             </div>
         </section>
@@ -260,60 +292,145 @@
         <!-- Admin Page -->
         <section id="page-admin" class="page-content hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Sidebar Tabs for Admin -->
                 <div class="lg:col-span-1">
                     <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100 sticky top-24">
-                        <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                            <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
-                            إضافة محاضرة
-                        </h3>
-                        <form id="courseForm" class="space-y-4">
-                            <input type="text" id="courseTitle" placeholder="عنوان المحاضرة" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                            
-                            <div class="grid grid-cols-2 gap-3">
-                                <select id="courseGrade" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                    <option value="1">أولى ثانوي</option>
-                                    <option value="2">تانية ثانوي</option>
-                                    <option value="3">تالتة ثانوي</option>
-                                </select>
-                                <select id="courseType" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                    <option value="paid">مدفوع</option>
-                                    <option value="free">مجاني</option>
-                                </select>
-                            </div>
-
-                            <input type="number" id="coursePrice" placeholder="السعر بالجنيه" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                            
-                            <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-blue-50/50">
-                                <label class="text-xs font-bold text-blue-600 block mb-2">غلاف المحاضرة (صورة)</label>
-                                <input type="file" id="courseImageFile" accept="image/*" class="text-xs w-full" required>
-                            </div>
-                            
-                            <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-red-50/50">
-                                <label class="text-xs font-bold text-red-600 block mb-2">فيديو المحاضرة</label>
-                                <input type="file" id="courseVideoFile" accept="video/*" class="text-xs w-full" required>
-                            </div>
-
-                            <textarea id="courseDesc" placeholder="وصف سريع للمحتوى..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
-                            
-                            <button type="submit" id="submitBtn" class="w-full py-5 bg-gradient-to-l from-blue-600 to-blue-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">نشر المحتوى</button>
-                        </form>
+                        <div class="flex flex-col gap-4">
+                            <button onclick="showAdminTab('courses')" class="admin-tab-btn active-admin-tab px-6 py-4 bg-blue-600 text-white rounded-2xl font-black text-right shadow-md">➕ إضافة محاضرة</button>
+                            <button onclick="showAdminTab('books')" class="admin-tab-btn px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-black text-right hover:bg-blue-100 transition">📚 إضافة ملزمة</button>
+                            <button onclick="showAdminTab('announcements')" class="admin-tab-btn px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-black text-right hover:bg-blue-100 transition">📢 إضافة إعلان</button>
+                            <button onclick="showAdminTab('requests')" class="admin-tab-btn px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-black text-right hover:bg-blue-100 transition">📋 طلبات التفعيل</button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 space-y-8">
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
-                        <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                            <span class="w-2 h-8 bg-green-500 rounded-full"></span>
-                            طلبات التفعيل
-                        </h3>
-                        <div id="subRequestsList" class="space-y-4">
-                            <p class="text-gray-400 text-center py-10">لا يوجد طلاب ينتظرون حالياً.</p>
+                    <!-- Admin Tab: Courses -->
+                    <div id="adminCoursesTab" class="admin-tab-content">
+                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
+                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
+                                <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
+                                إضافة محاضرة جديدة
+                            </h3>
+                            <form id="courseForm" class="space-y-4">
+                                <input type="text" id="courseTitle" placeholder="عنوان المحاضرة" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                                
+                                <div class="grid grid-cols-2 gap-3">
+                                    <select id="courseGrade" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                                        <option value="1">أولى ثانوي</option>
+                                        <option value="2">تانية ثانوي</option>
+                                        <option value="3">تالتة ثانوي</option>
+                                    </select>
+                                    <select id="courseType" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                                        <option value="paid">مدفوع</option>
+                                        <option value="free">مجاني</option>
+                                    </select>
+                                </div>
+
+                                <input type="number" id="coursePrice" placeholder="السعر بالجنيه" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                                
+                                <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-blue-50/50">
+                                    <label class="text-xs font-bold text-blue-600 block mb-2">غلاف المحاضرة (صورة)</label>
+                                    <input type="file" id="courseImageFile" accept="image/*" class="text-xs w-full" required>
+                                </div>
+                                
+                                <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-red-50/50">
+                                    <label class="text-xs font-bold text-red-600 block mb-2">فيديو المحاضرة</label>
+                                    <input type="file" id="courseVideoFile" accept="video/*" class="text-xs w-full" required>
+                                </div>
+
+                                <textarea id="courseDesc" placeholder="وصف سريع للمحتوى..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
+                                
+                                <button type="submit" id="submitBtn" class="w-full py-5 bg-gradient-to-l from-blue-600 to-blue-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">نشر المحاضرة</button>
+                            </form>
+                        </div>
+                        
+                        <div class="mt-8 bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
+                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
+                                <span class="w-2 h-8 bg-purple-500 rounded-full"></span>
+                                المحاضرات المنشورة
+                            </h3>
+                            <div id="adminCoursesList" class="grid grid-cols-1 gap-4"></div>
                         </div>
                     </div>
-                    
-                    <div class="space-y-4">
-                        <h3 class="font-black text-2xl px-4">المحاضرات المنشورة</h3>
-                        <div id="adminCoursesList" class="grid grid-cols-1 gap-4"></div>
+
+                    <!-- Admin Tab: Books -->
+                    <div id="adminBooksTab" class="admin-tab-content hidden">
+                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
+                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
+                                <span class="w-2 h-8 bg-green-600 rounded-full"></span>
+                                رفع ملزمة جديدة
+                            </h3>
+                            <form id="bookForm" class="space-y-4">
+                                <input type="text" id="bookTitle" placeholder="عنوان الملزمة" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                                
+                                <select id="bookGrade" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                                    <option value="1">الأول الثانوي</option>
+                                    <option value="2">الثاني الثانوي</option>
+                                    <option value="3">الثالث الثانوي</option>
+                                </select>
+                                
+                                <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-green-50/50">
+                                    <label class="text-xs font-bold text-green-600 block mb-2">ملف PDF</label>
+                                    <input type="file" id="bookFile" accept=".pdf" class="text-xs w-full" required>
+                                </div>
+
+                                <textarea id="bookDesc" placeholder="وصف مختصر للملزمة..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
+                                
+                                <button type="submit" id="submitBookBtn" class="w-full py-5 bg-gradient-to-l from-green-600 to-green-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">رفع الملزمة</button>
+                            </form>
+                        </div>
+                        
+                        <div class="mt-8 bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
+                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
+                                <span class="w-2 h-8 bg-orange-500 rounded-full"></span>
+                                الملازم المنشورة
+                            </h3>
+                            <div id="adminBooksList" class="grid grid-cols-1 gap-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Tab: Announcements -->
+                    <div id="adminAnnouncementsTab" class="admin-tab-content hidden">
+                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
+                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
+                                <span class="w-2 h-8 bg-yellow-600 rounded-full"></span>
+                                إضافة إعلان جديد
+                            </h3>
+                            <form id="announcementForm" class="space-y-4">
+                                <input type="text" id="announcementTitle" placeholder="عنوان الإعلان" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                                
+                                <textarea id="announcementContent" placeholder="محتوى الإعلان..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-32 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
+                                
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" id="announcementImportant" class="w-5 h-5">
+                                    <label for="announcementImportant" class="text-sm font-bold text-gray-700">إعلان مهم (يظهر في أعلى القائمة)</label>
+                                </div>
+                                
+                                <button type="submit" id="submitAnnouncementBtn" class="w-full py-5 bg-gradient-to-l from-yellow-600 to-yellow-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">نشر الإعلان</button>
+                            </form>
+                        </div>
+                        
+                        <div class="mt-8 bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
+                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
+                                <span class="w-2 h-8 bg-red-500 rounded-full"></span>
+                                الإعلانات السابقة
+                            </h3>
+                            <div id="adminAnnouncementsList" class="grid grid-cols-1 gap-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Tab: Requests -->
+                    <div id="adminRequestsTab" class="admin-tab-content hidden">
+                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
+                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
+                                <span class="w-2 h-8 bg-green-500 rounded-full"></span>
+                                طلبات التفعيل
+                            </h3>
+                            <div id="subRequestsList" class="space-y-4">
+                                <p class="text-gray-400 text-center py-10">لا يوجد طلاب ينتظرون حالياً.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -343,7 +460,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, GoogleAuthProvider, onAuthStateChanged, signOut, signInWithCredential } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, serverTimestamp, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, serverTimestamp, setDoc, getDoc, updateDoc, orderBy, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
     // --- Firebase Config ---
@@ -368,6 +485,8 @@
     let currentUserProfile = null;
     let currentFilterGrade = 'all';
     let allCourses = [];
+    let allBooks = [];
+    let allAnnouncements = [];
     let mySubscriptions = [];
     let isLoadingUser = true;
     let isProfileComplete = false;
@@ -418,7 +537,13 @@
             showToast('تم تسجيل الدخول بنجاح', 'success');
         } catch (e) { 
             console.error(e);
-            showToast('فشل تسجيل الدخول. حاول مرة أخرى.', 'error');
+            let errorMessage = 'فشل تسجيل الدخول. حاول مرة أخرى.';
+            if (e.code === 'auth/account-exists-with-different-credential') {
+                errorMessage = 'هذا البريد مرتبط بطريقة تسجيل دخول أخرى.';
+            } else if (e.code === 'auth/invalid-credential') {
+                errorMessage = 'بيانات الاعتماد غير صالحة.';
+            }
+            showToast(errorMessage, 'error');
         } finally {
             setLoading(false);
         }
@@ -445,7 +570,7 @@
                 currentUserProfile = snap.data();
                 isProfileComplete = true;
                 joiningGateway.classList.add('hidden');
-                profileLink.classList.remove('hidden'); // Show profile link
+                profileLink.classList.remove('hidden');
                 // Load profile data into profile page
                 document.getElementById('profileName').value = user.displayName || '';
                 document.getElementById('profileEmail').value = user.email || '';
@@ -553,7 +678,7 @@
                 </div>`;
         } else {
             authSection.innerHTML = `<div id="google-btn-container"></div>`;
-            // Render Google button after library loads
+            // Render Google button with retry
             const attemptRender = () => {
                 if (window.google && google.accounts) {
                     google.accounts.id.renderButton(
@@ -579,6 +704,29 @@
         });
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // --- Admin Tabs ---
+    window.showAdminTab = (tab) => {
+        document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.add('hidden'));
+        document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('bg-gray-100', 'text-gray-700');
+        });
+        
+        if (tab === 'courses') {
+            document.getElementById('adminCoursesTab').classList.remove('hidden');
+            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'courses\')"]').classList.add('bg-blue-600', 'text-white');
+        } else if (tab === 'books') {
+            document.getElementById('adminBooksTab').classList.remove('hidden');
+            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'books\')"]').classList.add('bg-blue-600', 'text-white');
+        } else if (tab === 'announcements') {
+            document.getElementById('adminAnnouncementsTab').classList.remove('hidden');
+            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'announcements\')"]').classList.add('bg-blue-600', 'text-white');
+        } else if (tab === 'requests') {
+            document.getElementById('adminRequestsTab').classList.remove('hidden');
+            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'requests\')"]').classList.add('bg-blue-600', 'text-white');
+        }
     };
 
     // --- File Upload ---
@@ -625,6 +773,69 @@
         } finally { 
             btn.disabled = false; 
             btn.innerText = "نشر المحتوى"; 
+        }
+    });
+
+    // --- Admin: Add Book ---
+    document.getElementById('bookForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+
+        const btn = document.getElementById('submitBookBtn');
+        btn.disabled = true;
+        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loader w-5 h-5 border-white"></div><span>جاري الرفع...</span></div>`;
+
+        try {
+            const pdfFile = document.getElementById('bookFile').files[0];
+            const timestamp = Date.now();
+            const pdfUrl = await uploadFile(pdfFile, `books/${timestamp}_${pdfFile.name}`);
+
+            await addDoc(collection(db, 'books'), {
+                title: document.getElementById('bookTitle').value,
+                grade: document.getElementById('bookGrade').value,
+                description: document.getElementById('bookDesc').value,
+                pdfUrl,
+                createdAt: serverTimestamp(),
+                createdBy: currentUser.uid
+            });
+            
+            document.getElementById('bookForm').reset();
+            showToast('تم رفع الملزمة بنجاح', 'success');
+        } catch (e) { 
+            console.error(e); 
+            showToast('حدث خطأ أثناء الرفع', 'error');
+        } finally { 
+            btn.disabled = false; 
+            btn.innerText = "رفع الملزمة"; 
+        }
+    });
+
+    // --- Admin: Add Announcement ---
+    document.getElementById('announcementForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+
+        const btn = document.getElementById('submitAnnouncementBtn');
+        btn.disabled = true;
+        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loader w-5 h-5 border-white"></div><span>جاري النشر...</span></div>`;
+
+        try {
+            await addDoc(collection(db, 'announcements'), {
+                title: document.getElementById('announcementTitle').value,
+                content: document.getElementById('announcementContent').value,
+                important: document.getElementById('announcementImportant').checked,
+                createdAt: serverTimestamp(),
+                createdBy: currentUser.uid
+            });
+            
+            document.getElementById('announcementForm').reset();
+            showToast('تم نشر الإعلان', 'success');
+        } catch (e) { 
+            console.error(e); 
+            showToast('حدث خطأ', 'error');
+        } finally { 
+            btn.disabled = false; 
+            btn.innerText = "نشر الإعلان"; 
         }
     });
 
@@ -679,7 +890,7 @@
         }
     });
 
-    // --- Filter ---
+    // --- Filter for Courses ---
     window.filterByGrade = (grade) => {
         currentFilterGrade = grade;
         document.querySelectorAll('.grade-btn').forEach(b => {
@@ -698,21 +909,40 @@
     function fetchData() {
         // Courses
         const coursesRef = collection(db, 'courses');
-        onSnapshot(query(coursesRef), (snapshot) => {
+        onSnapshot(query(coursesRef, orderBy('createdAt', 'desc')), (snapshot) => {
             allCourses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            allCourses.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
             renderCourses();
             if (currentUser?.email === ADMIN_EMAIL) {
                 renderAdminCourses(allCourses);
             }
         });
 
-        // Subscriptions
+        // Books
+        const booksRef = collection(db, 'books');
+        onSnapshot(query(booksRef, orderBy('createdAt', 'desc')), (snapshot) => {
+            allBooks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderBooks();
+            if (currentUser?.email === ADMIN_EMAIL) {
+                renderAdminBooks(allBooks);
+            }
+        });
+
+        // Announcements
+        const announcementsRef = collection(db, 'announcements');
+        onSnapshot(query(announcementsRef, orderBy('important', 'desc'), orderBy('createdAt', 'desc')), (snapshot) => {
+            allAnnouncements = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderAnnouncements();
+            if (currentUser?.email === ADMIN_EMAIL) {
+                renderAdminAnnouncements(allAnnouncements);
+            }
+        });
+
+        // Subscriptions (if user logged in)
         if (currentUser) {
             const subsRef = collection(db, 'subscriptions');
             onSnapshot(query(subsRef), (snapshot) => {
                 mySubscriptions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderCourses();
+                renderCourses(); // Re-render courses to update access status
                 if (currentUser.email === ADMIN_EMAIL) {
                     renderAdminRequests(mySubscriptions);
                 }
@@ -777,6 +1007,51 @@
         }).join('');
     }
 
+    // --- Render Books ---
+    function renderBooks() {
+        const container = document.getElementById('booksList');
+        if (!allBooks.length) { 
+            container.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-bold'>لا توجد ملازم حالياً.</div>"; 
+            return; 
+        }
+        
+        container.innerHTML = allBooks.map(book => `
+            <div class="book-card bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl flex items-center justify-center text-3xl">📘</div>
+                    <div>
+                        <h3 class="font-black text-xl text-gray-800">${book.title}</h3>
+                        <span class="text-xs text-gray-500">الصف ${book.grade == '1' ? 'الأول' : book.grade == '2' ? 'الثاني' : 'الثالث'} الثانوي</span>
+                    </div>
+                </div>
+                <p class="text-gray-500 text-sm mb-4 line-clamp-2">${book.description || ''}</p>
+                <a href="${book.pdfUrl}" target="_blank" class="block w-full py-3 bg-gradient-to-l from-green-600 to-green-500 text-white text-center rounded-2xl font-black shadow-lg hover:shadow-xl transition">📥 تحميل الملزمة</a>
+            </div>
+        `).join('');
+    }
+
+    // --- Render Announcements ---
+    function renderAnnouncements() {
+        const container = document.getElementById('announcementsList');
+        if (!allAnnouncements.length) { 
+            container.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-bold'>لا توجد إعلانات حالياً.</div>"; 
+            return; 
+        }
+        
+        container.innerHTML = allAnnouncements.map(ann => `
+            <div class="announcement-card bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-8 ${ann.important ? 'border-r-8 border-yellow-500' : ''}">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-100 to-yellow-50 rounded-2xl flex items-center justify-center text-2xl">📢</div>
+                    <div class="flex-1">
+                        <h3 class="font-black text-2xl text-gray-800 mb-2">${ann.title}</h3>
+                        <p class="text-gray-600 leading-relaxed">${ann.content}</p>
+                        <div class="text-xs text-gray-400 mt-4">${new Date(ann.createdAt?.seconds * 1000).toLocaleDateString('ar-EG')}</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
     // --- Admin Render Functions ---
     function renderAdminCourses(courses) {
         const container = document.getElementById('adminCoursesList');
@@ -791,6 +1066,44 @@
                     </div>
                 </div>
                 <button onclick="deleteCourse('${c.id}')" class="p-3 text-red-500 hover:bg-red-50 rounded-2xl transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function renderAdminBooks(books) {
+        const container = document.getElementById('adminBooksList');
+        if (!container) return;
+        container.innerHTML = books.map(b => `
+            <div class="flex items-center justify-between p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl">📘</div>
+                    <div>
+                        <div class="font-black text-gray-800">${b.title}</div>
+                        <div class="text-[10px] text-gray-400 font-bold">الصف: ${b.grade}</div>
+                    </div>
+                </div>
+                <button onclick="deleteBook('${b.id}')" class="p-3 text-red-500 hover:bg-red-50 rounded-2xl transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function renderAdminAnnouncements(announcements) {
+        const container = document.getElementById('adminAnnouncementsList');
+        if (!container) return;
+        container.innerHTML = announcements.map(a => `
+            <div class="flex items-center justify-between p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center text-2xl">📢</div>
+                    <div>
+                        <div class="font-black text-gray-800">${a.title}</div>
+                        <div class="text-[10px] text-gray-400 font-bold">${a.important ? '⭐ مهم' : 'عادي'}</div>
+                    </div>
+                </div>
+                <button onclick="deleteAnnouncement('${a.id}')" class="p-3 text-red-500 hover:bg-red-50 rounded-2xl transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 </button>
             </div>
@@ -866,10 +1179,40 @@
         }
     };
 
+    window.deleteBook = async (id) => {
+        if (!confirm("حذف الملزمة؟")) return;
+        setLoading(true);
+        try {
+            await deleteDoc(doc(db, 'books', id));
+            showToast('تم الحذف', 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('حدث خطأ', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    window.deleteAnnouncement = async (id) => {
+        if (!confirm("حذف الإعلان؟")) return;
+        setLoading(true);
+        try {
+            await deleteDoc(doc(db, 'announcements', id));
+            showToast('تم الحذف', 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('حدث خطأ', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // Make functions global for onclick
     window.approveSub = approveSub;
     window.deleteSub = deleteSub;
     window.deleteCourse = deleteCourse;
+    window.deleteBook = deleteBook;
+    window.deleteAnnouncement = deleteAnnouncement;
 
 </script>
 
