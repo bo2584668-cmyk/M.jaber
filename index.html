@@ -6,25 +6,40 @@
     <title>منصة محمد جابر لتعليم اللغة العربية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Google Fonts: Tajawal + Cairo -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; overflow-x: hidden; }
-        .glass-morphism { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .admin-gradient { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); }
-        .course-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .loader { border-top-color: #3b82f6; animation: spinner 1.5s linear infinite; }
+        * { font-family: 'Cairo', 'Tajawal', sans-serif; }
+        body { background: linear-gradient(145deg, #f1f5f9 0%, #ffffff 100%); scroll-behavior: smooth; }
+        .glass-morphism { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .course-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.03); }
+        .course-card:hover { transform: translateY(-8px); box-shadow: 0 25px 30px -12px rgba(0, 119, 255, 0.15); border-color: rgba(37, 99, 235, 0.2); }
+        .loader { border-top-color: #2563eb; animation: spinner 0.8s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .whatsapp-float { position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); z-index: 1000; transition: transform 0.3s; }
-        .whatsapp-float:hover { transform: scale(1.1); }
-        .hidden-content { filter: blur(10px); pointer-events: none; user-select: none; }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); z-index: 50; transition: 0.3s; }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(5deg); }
+        .hidden-content { filter: blur(6px); pointer-events: none; user-select: none; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background: white; padding: 14px 28px; border-radius: 60px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2); border-right: 6px solid; font-weight: 700; display: flex; align-items: center; gap: 12px; opacity: 0; transition: opacity 0.3s; }
+        .toast.show { opacity: 1; }
+        .toast.success { border-color: #10b981; background: #f0fdf9; color: #065f46; }
+        .toast.error { border-color: #ef4444; background: #fef2f2; color: #991b1b; }
+        .toast.info { border-color: #3b82f6; background: #eff6ff; color: #1e3a8a; }
+        .active-nav { color: #2563eb !important; font-weight: 900; position: relative; }
+        .active-nav::after { content: ''; position: absolute; bottom: -6px; right: 0; width: 100%; height: 3px; background: #2563eb; border-radius: 3px; }
+        .profile-card { background: linear-gradient(145deg, #ffffff, #f9fafc); box-shadow: 0 15px 35px -10px rgba(0,0,0,0.1); }
+        .gradient-text { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
 <body>
+
+<!-- Toast Container -->
+<div id="toast" class="toast hidden">
+    <span id="toastIcon">✅</span>
+    <span id="toastMessage">رسالة</span>
+</div>
 
 <!-- Google Login Config -->
 <div id="g_id_onload"
@@ -36,23 +51,29 @@
 </div>
 
 <div id="app" class="min-h-screen flex flex-col">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[200] flex items-center justify-center hidden">
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-14 w-14"></div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="glass-morphism sticky top-0 z-50 shadow-sm border-b border-gray-200">
+    <nav class="glass-morphism sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-4">
-                    <div class="text-2xl font-black text-blue-700 cursor-pointer" onclick="showPage('home')">محمد جابر</div>
-                    <div class="hidden md:flex space-x-reverse space-x-6 text-gray-600 font-medium">
+                <div class="flex items-center gap-6">
+                    <div class="text-2xl font-black bg-gradient-to-l from-blue-700 to-blue-500 bg-clip-text text-transparent cursor-pointer" onclick="showPage('home')">محمد جابر</div>
+                    <div class="hidden md:flex space-x-reverse space-x-6 text-gray-700 font-medium">
                         <a href="#" onclick="showPage('home')" class="nav-link hover:text-blue-600 transition">الرئيسية</a>
                         <a href="#" onclick="showPage('courses')" class="nav-link hover:text-blue-600 transition">الكورسات</a>
                         <span id="adminLink" class="hidden">
                             <a href="#" onclick="showPage('admin')" class="text-red-600 font-bold hover:underline">لوحة الإدارة</a>
                         </span>
+                        <span id="profileLink" class="hidden">
+                            <a href="#" onclick="showPage('profile')" class="nav-link hover:text-blue-600 transition">ملفي الشخصي</a>
+                        </span>
                     </div>
                 </div>
-                <div id="authSection" class="flex items-center gap-3">
-                    <div id="google-btn-container"></div>
-                </div>
+                <div id="authSection" class="flex items-center gap-3"></div>
             </div>
         </div>
     </nav>
@@ -60,20 +81,20 @@
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-4 py-8">
         
-        <!-- Registration/Profile Modal (أصبح اسمها بوابة الانضمام) -->
-        <div id="joining-gateway" class="fixed inset-0 z-[100] bg-slate-900/90 flex items-center justify-center hidden p-4 backdrop-blur-md">
-            <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl border-4 border-blue-50 fade-in">
+        <!-- Registration/Profile Modal (بوابة الانضمام) -->
+        <div id="joining-gateway" class="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center hidden p-4 backdrop-blur-lg">
+            <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl border-2 border-blue-100 fade-in">
                 <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-4xl">✨</span>
+                    <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                        <span class="text-4xl">📝</span>
                     </div>
-                    <h2 class="text-3xl font-black text-blue-900">بوابة الانضمام</h2>
-                    <p class="text-gray-500 mt-2">خطوة واحدة تفصلك عن التميز</p>
+                    <h2 class="text-3xl font-black text-gray-900">بوابة الانضمام</h2>
+                    <p class="text-gray-500 mt-2">أكمل بياناتك لتصبح جزءًا من عائلة الفرعون</p>
                 </div>
                 
                 <form id="profileForm" class="space-y-5">
                     <div class="space-y-1">
-                        <label class="block text-sm font-bold text-gray-700 mr-2">الصف الدراسي</label>
+                        <label class="block text-sm font-bold text-gray-700 mr-2 flex items-center gap-1"><span>🎓</span> الصف الدراسي</label>
                         <select id="userGrade" class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none transition" required>
                             <option value="">اختر صفك الدراسي</option>
                             <option value="1">الأول الثانوي</option>
@@ -82,11 +103,11 @@
                         </select>
                     </div>
                     <div class="space-y-1">
-                        <label class="block text-sm font-bold text-gray-700 mr-2">رقم الهاتف (واتساب)</label>
+                        <label class="block text-sm font-bold text-gray-700 mr-2 flex items-center gap-1"><span>📱</span> رقم الهاتف (واتساب)</label>
                         <input type="tel" id="userPhone" placeholder="01xxxxxxxxx" class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none transition" required>
                     </div>
                     <div class="space-y-1">
-                        <label class="block text-sm font-bold text-gray-700 mr-2">كيف سمعت عن الأستاذ؟</label>
+                        <label class="block text-sm font-bold text-gray-700 mr-2 flex items-center gap-1"><span>🔍</span> كيف سمعت عن الأستاذ؟</label>
                         <select id="discoverySource" class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none transition">
                             <option value="facebook">فيسبوك</option>
                             <option value="youtube">يوتيوب</option>
@@ -95,7 +116,7 @@
                             <option value="other">أخرى</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-lg hover:bg-blue-700 transform active:scale-95 transition shadow-xl shadow-blue-200">
+                    <button type="submit" class="w-full py-4 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-2xl font-black text-lg hover:shadow-xl transform active:scale-95 transition shadow-lg shadow-blue-200">
                         تأكيد البيانات والدخول
                     </button>
                 </form>
@@ -105,22 +126,22 @@
         <!-- Subscription Modal -->
         <div id="subscribe-modal" class="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center hidden p-4 backdrop-blur-sm">
             <div class="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl relative border border-blue-100">
-                <button onclick="closeSubscribeModal()" class="absolute top-5 left-5 text-gray-400 hover:text-black transition">✕</button>
+                <button onclick="closeSubscribeModal()" class="absolute top-5 left-5 text-gray-400 hover:text-black transition text-xl">✕</button>
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold text-blue-700">تفعيل المحتوى</h2>
-                    <div class="mt-4 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                    <div class="mt-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
                         <p class="text-sm text-blue-800">قم بتحويل المبلغ عبر فودافون كاش للرقم:</p>
-                        <p class="text-2xl font-black text-blue-900 mt-1">٠١٢٣٤٥٦٧٨</p>
+                        <p class="text-3xl font-black text-blue-900 mt-1 tracking-widest">٠١٢٣٤٥٦٧٨٩</p>
                     </div>
                 </div>
                 
                 <form id="subscribeForm" class="space-y-4">
                     <input type="hidden" id="subCourseId">
                     <input type="hidden" id="subCourseTitle">
-                    <input type="text" id="subName" placeholder="الاسم الكامل للطالب" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none" required>
-                    <input type="tel" id="subWhatsapp" placeholder="رقم الواتساب الخاص بك" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none" required>
-                    <input type="tel" id="subSenderPhone" placeholder="رقم المحفظة المحول منها" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none" required>
-                    <button type="submit" class="w-full py-4 bg-green-600 text-white rounded-2xl font-bold text-lg hover:bg-green-700 transition shadow-lg flex items-center justify-center gap-2">
+                    <input type="text" id="subName" placeholder="الاسم الكامل للطالب" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                    <input type="tel" id="subWhatsapp" placeholder="رقم الواتساب الخاص بك" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                    <input type="tel" id="subSenderPhone" placeholder="رقم المحفظة المحول منها" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
+                    <button type="submit" class="w-full py-4 bg-gradient-to-l from-green-600 to-green-500 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition shadow-lg flex items-center justify-center gap-2">
                         <span>إرسال الطلب للفرعون</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                     </button>
@@ -130,29 +151,29 @@
 
         <!-- Home Page -->
         <section id="page-home" class="page-content">
-            <div class="text-center py-24 bg-white rounded-[3rem] shadow-sm border border-gray-100 mb-12 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-3 bg-blue-600"></div>
-                <div class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-bold mb-6">المنصة التعليمية الرسمية 🏆</div>
-                <h1 class="text-5xl md:text-8xl font-black text-gray-900 mb-8 leading-tight">ملك النحو <br><span class="text-blue-600">محمد جابر</span></h1>
+            <div class="text-center py-24 bg-white/70 rounded-[3rem] shadow-xl border border-white/50 mb-12 relative overflow-hidden backdrop-blur-sm">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-l from-blue-600 to-blue-400"></div>
+                <div class="inline-block px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-bold mb-6 shadow-sm">المنصة التعليمية الرسمية 🏆</div>
+                <h1 class="text-5xl md:text-8xl font-black text-gray-900 mb-8 leading-tight">ملك النحو <br><span class="gradient-text">محمد جابر</span></h1>
                 <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">أبسط شرح، أقوى ملازم، ومتابعة دقيقة حتى باب الامتحان. لغة الضاد أصبحت أسهل الآن.</p>
                 <div class="flex flex-wrap justify-center gap-5">
-                    <button onclick="showPage('courses')" class="px-12 py-5 bg-blue-600 text-white rounded-3xl font-black text-xl shadow-2xl shadow-blue-200 hover:bg-blue-700 transform hover:-translate-y-2 transition duration-300">ابدأ رحلتك الآن</button>
+                    <button onclick="showPage('courses')" class="px-12 py-5 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-3xl font-black text-xl shadow-2xl shadow-blue-200 hover:shadow-blue-300 transform hover:-translate-y-1 transition duration-300">ابدأ رحلتك الآن</button>
                     <a href="https://wa.me/+201273740256" target="_blank" class="px-12 py-5 bg-white border-4 border-blue-600 text-blue-600 rounded-3xl font-black text-xl hover:bg-blue-50 transition duration-300 flex items-center gap-2">تحدث معنا</a>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-blue-200 transition">
+                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-blue-200 transition hover:shadow-xl">
                     <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">✍️</div>
                     <h3 class="text-2xl font-black mb-3 text-gray-800">ملازم احترافية</h3>
                     <p class="text-gray-500 leading-relaxed">خرائط ذهنية وتلخيصات شاملة تجعل الصعب سهلاً جداً.</p>
                 </div>
-                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-green-200 transition">
+                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-green-200 transition hover:shadow-xl">
                     <div class="w-20 h-20 bg-green-100 text-green-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">✅</div>
                     <h3 class="text-2xl font-black mb-3 text-gray-800">امتحانات فورية</h3>
                     <p class="text-gray-500 leading-relaxed">اختبارات بعد كل حصة لتقييم مستواك لحظة بلحظة.</p>
                 </div>
-                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-purple-200 transition">
+                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-purple-200 transition hover:shadow-xl">
                     <div class="w-20 h-20 bg-purple-100 text-purple-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">🎥</div>
                     <h3 class="text-2xl font-black mb-3 text-gray-800">جودة 4K</h3>
                     <p class="text-gray-500 leading-relaxed">تصوير سينمائي للمحاضرات يجعلك تعيش جو الحصة بالكامل.</p>
@@ -164,14 +185,14 @@
         <section id="page-courses" class="page-content hidden">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-black text-gray-900 mb-4">المحتوى التعليمي</h2>
-                <div class="w-24 h-2 bg-blue-600 mx-auto rounded-full"></div>
+                <div class="w-24 h-2 bg-gradient-to-l from-blue-600 to-blue-400 mx-auto rounded-full"></div>
             </div>
             
             <div id="gradeSelector" class="flex flex-wrap gap-4 mb-12 justify-center">
-                <button onclick="filterByGrade('all')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-100 text-gray-600 rounded-full font-black shadow-sm transition">الكل</button>
-                <button onclick="filterByGrade('1')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-100 text-gray-600 rounded-full font-black shadow-sm transition">الأول الثانوي</button>
-                <button onclick="filterByGrade('2')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-100 text-gray-600 rounded-full font-black shadow-sm transition">الثاني الثانوي</button>
-                <button onclick="filterByGrade('3')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-100 text-gray-600 rounded-full font-black shadow-sm transition">الثالث الثانوي</button>
+                <button onclick="filterByGrade('all')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold shadow-sm hover:border-blue-400 transition">الكل</button>
+                <button onclick="filterByGrade('1')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold hover:border-blue-400 transition">الأول الثانوي</button>
+                <button onclick="filterByGrade('2')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold hover:border-blue-400 transition">الثاني الثانوي</button>
+                <button onclick="filterByGrade('3')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold hover:border-blue-400 transition">الثالث الثانوي</button>
             </div>
 
             <div id="coursesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -182,31 +203,85 @@
             </div>
         </section>
 
+        <!-- Profile Page -->
+        <section id="page-profile" class="page-content hidden">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white/80 backdrop-blur-sm rounded-[2.5rem] shadow-2xl border border-gray-100 p-8 md:p-12 profile-card">
+                    <h2 class="text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
+                        <span class="w-2 h-10 bg-blue-600 rounded-full"></span>
+                        الملف الشخصي
+                    </h2>
+                    
+                    <form id="updateProfileForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">الاسم</label>
+                                <input type="text" id="profileName" class="w-full p-4 bg-gray-100 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">البريد الإلكتروني</label>
+                                <input type="email" id="profileEmail" class="w-full p-4 bg-gray-100 border border-gray-200 rounded-2xl outline-none" readonly>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-1">🎓 الصف الدراسي</label>
+                            <select id="profileGrade" class="w-full p-4 bg-white border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500 transition" required>
+                                <option value="1">الأول الثانوي</option>
+                                <option value="2">الثاني الثانوي</option>
+                                <option value="3">الثالث الثانوي</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-1">📱 رقم الهاتف (واتساب)</label>
+                            <input type="tel" id="profilePhone" class="w-full p-4 bg-white border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500 transition" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-1">🔍 مصدر التعريف</label>
+                            <select id="profileSource" class="w-full p-4 bg-white border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500 transition">
+                                <option value="facebook">فيسبوك</option>
+                                <option value="youtube">يوتيوب</option>
+                                <option value="friend">ترشيح من صديق</option>
+                                <option value="tiktok">تيك توك</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-5 bg-gradient-to-l from-blue-600 to-blue-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition">
+                            تحديث البيانات
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
         <!-- Admin Page -->
         <section id="page-admin" class="page-content hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1">
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100 sticky top-24">
+                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100 sticky top-24">
                         <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
                             <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
                             إضافة محاضرة
                         </h3>
                         <form id="courseForm" class="space-y-4">
-                            <input type="text" id="courseTitle" placeholder="عنوان المحاضرة" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="text" id="courseTitle" placeholder="عنوان المحاضرة" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
                             
                             <div class="grid grid-cols-2 gap-3">
-                                <select id="courseGrade" class="p-4 bg-gray-50 border rounded-2xl outline-none" required>
+                                <select id="courseGrade" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
                                     <option value="1">أولى ثانوي</option>
                                     <option value="2">تانية ثانوي</option>
                                     <option value="3">تالتة ثانوي</option>
                                 </select>
-                                <select id="courseType" class="p-4 bg-gray-50 border rounded-2xl outline-none" required>
+                                <select id="courseType" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
                                     <option value="paid">مدفوع</option>
                                     <option value="free">مجاني</option>
                                 </select>
                             </div>
 
-                            <input type="number" id="coursePrice" placeholder="السعر بالجنيه" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none" required>
+                            <input type="number" id="coursePrice" placeholder="السعر بالجنيه" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
                             
                             <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-blue-50/50">
                                 <label class="text-xs font-bold text-blue-600 block mb-2">غلاف المحاضرة (صورة)</label>
@@ -218,15 +293,15 @@
                                 <input type="file" id="courseVideoFile" accept="video/*" class="text-xs w-full" required>
                             </div>
 
-                            <textarea id="courseDesc" placeholder="وصف سريع للمحتوى..." class="w-full p-4 bg-gray-50 border rounded-2xl h-24 resize-none outline-none" required></textarea>
+                            <textarea id="courseDesc" placeholder="وصف سريع للمحتوى..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
                             
-                            <button type="submit" id="submitBtn" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-xl hover:bg-blue-700 transition">نشر المحتوى</button>
+                            <button type="submit" id="submitBtn" class="w-full py-5 bg-gradient-to-l from-blue-600 to-blue-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">نشر المحتوى</button>
                         </form>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 space-y-8">
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
+                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
                         <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
                             <span class="w-2 h-8 bg-green-500 rounded-full"></span>
                             طلبات التفعيل
@@ -253,12 +328,12 @@
 
     <!-- Footer -->
     <footer class="bg-slate-900 text-gray-300 mt-20 border-t border-gray-800 p-12 text-center">
-        <div class="text-4xl font-black text-white mb-4">محمد جابر</div>
+        <div class="text-4xl font-black bg-gradient-to-l from-white to-gray-300 bg-clip-text text-transparent mb-4">محمد جابر</div>
         <p class="max-w-md mx-auto text-sm text-gray-500 mb-8">ملك النحو واللغة العربية لطلاب الثانوية العامة. نحن نصنع التفوق بذكاء.</p>
         <div class="flex justify-center gap-6 mb-8 text-gray-400">
-            <a href="#" class="hover:text-blue-500">فيسبوك</a>
-            <a href="#" class="hover:text-red-500">يوتيوب</a>
-            <a href="#" class="hover:text-blue-400">تليجرام</a>
+            <a href="#" class="hover:text-blue-500 transition">فيسبوك</a>
+            <a href="#" class="hover:text-red-500 transition">يوتيوب</a>
+            <a href="#" class="hover:text-blue-400 transition">تليجرام</a>
         </div>
         <div class="text-xs text-gray-700 font-bold border-t border-gray-800 pt-8">&copy; 2026 جميع الحقوق محفوظة لـ برء عمر ومحمد جابر</div>
     </footer>
@@ -269,7 +344,9 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, GoogleAuthProvider, onAuthStateChanged, signOut, signInWithCredential } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, serverTimestamp, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
+    // --- Firebase Config ---
     const firebaseConfig = {
         apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
         authDomain: "mr-jabr.firebaseapp.com",
@@ -283,89 +360,211 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
     const ADMIN_EMAIL = "bo2584668@gmail.com";
-    const APP_ID = "mr-jabr-v1"; 
 
+    // --- State ---
     let currentUser = null;
     let currentUserProfile = null;
     let currentFilterGrade = 'all';
+    let allCourses = [];
+    let mySubscriptions = [];
+    let isLoadingUser = true;
+    let isProfileComplete = false;
+
+    // --- UI Elements ---
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const joiningGateway = document.getElementById('joining-gateway');
+    const authSection = document.getElementById('authSection');
+    const adminLink = document.getElementById('adminLink');
+    const profileLink = document.getElementById('profileLink');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    const toastIcon = document.getElementById('toastIcon');
+
+    // --- Toast Function ---
+    function showToast(message, type = 'info') {
+        const icons = {
+            success: '✅',
+            error: '❌',
+            info: 'ℹ️'
+        };
+        toastIcon.textContent = icons[type] || 'ℹ️';
+        toastMessage.textContent = message;
+        toast.className = `toast ${type} show`;
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.classList.add('hidden'), 300);
+        }, 3000);
+    }
+
+    // --- Loading ---
+    function setLoading(loading) {
+        if (loading) {
+            loadingOverlay.classList.remove('hidden');
+        } else {
+            loadingOverlay.classList.add('hidden');
+        }
+    }
 
     // --- Authentication ---
     window.handleCredentialResponse = async (response) => {
+        setLoading(true);
         const idToken = response.credential;
         const credential = GoogleAuthProvider.credential(idToken);
         try {
             await signInWithCredential(auth, credential);
-        } catch (e) { console.error(e); }
+            showToast('تم تسجيل الدخول بنجاح', 'success');
+        } catch (e) { 
+            console.error(e);
+            showToast('فشل تسجيل الدخول. حاول مرة أخرى.', 'error');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    window.logout = () => signOut(auth).then(() => window.location.reload());
+    window.logout = () => {
+        setLoading(true);
+        signOut(auth).then(() => {
+            showToast('تم تسجيل الخروج', 'info');
+            window.location.reload();
+        }).finally(() => setLoading(false));
+    };
 
+    // --- Check Profile on Auth Change ---
     onAuthStateChanged(auth, async (user) => {
+        setLoading(true);
         currentUser = user;
+        
         if (user) {
-            // Check Profile Immediately
-            const profileRef = doc(db, 'artifacts', APP_ID, 'users', user.uid, 'profile', 'data');
+            const profileRef = doc(db, 'users', user.uid);
             const snap = await getDoc(profileRef);
             
             if (snap.exists()) {
                 currentUserProfile = snap.data();
-                document.getElementById('joining-gateway').classList.add('hidden');
+                isProfileComplete = true;
+                joiningGateway.classList.add('hidden');
+                profileLink.classList.remove('hidden'); // Show profile link
+                // Load profile data into profile page
+                document.getElementById('profileName').value = user.displayName || '';
+                document.getElementById('profileEmail').value = user.email || '';
+                document.getElementById('profileGrade').value = currentUserProfile.grade || '1';
+                document.getElementById('profilePhone').value = currentUserProfile.phone || '';
+                document.getElementById('profileSource').value = currentUserProfile.source || 'facebook';
             } else {
-                // Only show gateway if NOT admin
+                currentUserProfile = null;
+                isProfileComplete = false;
+                profileLink.classList.add('hidden');
                 if (user.email !== ADMIN_EMAIL) {
-                    document.getElementById('joining-gateway').classList.remove('hidden');
+                    joiningGateway.classList.remove('hidden');
                 } else {
-                    document.getElementById('joining-gateway').classList.add('hidden');
+                    joiningGateway.classList.add('hidden');
                 }
             }
             
             if (user.email === ADMIN_EMAIL) {
-                document.getElementById('adminLink').classList.remove('hidden');
+                adminLink.classList.remove('hidden');
+            } else {
+                adminLink.classList.add('hidden');
             }
+        } else {
+            currentUserProfile = null;
+            isProfileComplete = false;
+            joiningGateway.classList.add('hidden');
+            adminLink.classList.add('hidden');
+            profileLink.classList.add('hidden');
         }
+        
         updateAuthUI(user);
-        fetchData(); // Trigger data fetch
+        fetchData(); // Start listeners
+        setLoading(false);
     });
 
-    // --- Joining Gateway Submission ---
+    // --- Update Profile Form (Joining Gateway) ---
     document.getElementById('profileForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentUser) return;
+        
+        setLoading(true);
         const profile = {
             grade: document.getElementById('userGrade').value,
             phone: document.getElementById('userPhone').value,
             source: document.getElementById('discoverySource').value,
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            email: currentUser.email,
+            displayName: currentUser.displayName,
+            photoURL: currentUser.photoURL
         };
-        await setDoc(doc(db, 'artifacts', APP_ID, 'users', currentUser.uid, 'profile', 'data'), profile);
-        currentUserProfile = profile;
-        document.getElementById('joining-gateway').classList.add('hidden');
-        alert("أهلاً بك في فريق الأستاذ محمد جابر! تم تفعيل حسابك.");
+        
+        try {
+            await setDoc(doc(db, 'users', currentUser.uid), profile);
+            currentUserProfile = profile;
+            isProfileComplete = true;
+            joiningGateway.classList.add('hidden');
+            profileLink.classList.remove('hidden');
+            showToast('أهلاً بك في عائلة الفرعون!', 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('حدث خطأ في حفظ البيانات', 'error');
+        } finally {
+            setLoading(false);
+        }
     });
 
+    // --- Update Profile Page Form ---
+    document.getElementById('updateProfileForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentUser) return;
+        
+        setLoading(true);
+        const updatedProfile = {
+            grade: document.getElementById('profileGrade').value,
+            phone: document.getElementById('profilePhone').value,
+            source: document.getElementById('profileSource').value,
+            updatedAt: serverTimestamp()
+        };
+        
+        try {
+            await updateDoc(doc(db, 'users', currentUser.uid), updatedProfile);
+            currentUserProfile = { ...currentUserProfile, ...updatedProfile };
+            showToast('تم تحديث البيانات بنجاح', 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('فشل التحديث', 'error');
+        } finally {
+            setLoading(false);
+        }
+    });
+
+    // --- Render Auth Section ---
     function updateAuthUI(user) {
-        const authSection = document.getElementById('authSection');
         if (user) {
             authSection.innerHTML = `
-                <div class="flex items-center gap-3 bg-white p-2 pr-5 rounded-full border shadow-sm border-blue-50">
+                <div class="flex items-center gap-3 bg-white/90 p-2 pr-5 rounded-full border shadow-md border-blue-100">
                     <div class="text-right hidden sm:block">
-                        <div class="text-xs font-black text-gray-900">${user.displayName}</div>
-                        <div class="text-[10px] text-blue-500 font-bold">${user.email === ADMIN_EMAIL ? 'المدير العام' : 'طالب المنصة'}</div>
+                        <div class="text-xs font-black text-gray-900">${user.displayName || 'طالب'}</div>
+                        <div class="text-[10px] text-blue-600 font-bold">${user.email === ADMIN_EMAIL ? 'المدير العام' : 'طالب المنصة'}</div>
                     </div>
-                    <img src="${user.photoURL}" class="w-10 h-10 rounded-full border-2 border-blue-100">
+                    <img src="${user.photoURL || 'https://ui-avatars.com/api/?name='+encodeURIComponent(user.displayName||'User')}" class="w-10 h-10 rounded-full border-2 border-blue-200">
                     <button onclick="logout()" class="p-2 text-red-500 hover:bg-red-50 rounded-full transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     </button>
                 </div>`;
         } else {
             authSection.innerHTML = `<div id="google-btn-container"></div>`;
-            setTimeout(() => {
-                google.accounts.id.renderButton(
-                    document.getElementById("google-btn-container"),
-                    { theme: "outline", size: "large", shape: "pill", locale: "ar", text: "signin_with" }
-                );
-            }, 100);
+            // Render Google button after library loads
+            const attemptRender = () => {
+                if (window.google && google.accounts) {
+                    google.accounts.id.renderButton(
+                        document.getElementById("google-btn-container"),
+                        { theme: "outline", size: "large", shape: "pill", locale: "ar", text: "signin_with", logo_alignment: "center" }
+                    );
+                } else {
+                    setTimeout(attemptRender, 200);
+                }
+            };
+            attemptRender();
         }
     }
 
@@ -374,68 +573,70 @@
         document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
         document.getElementById(`page-${pageId}`).classList.remove('hidden');
         
-        // Update Nav Links
+        // Update nav active class
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('text-blue-600', 'font-black');
+            link.classList.remove('active-nav', 'text-blue-600', 'font-black');
         });
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // --- Admin: File Handling ---
-    async function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
+    // --- File Upload ---
+    async function uploadFile(file, path) {
+        const storageRef = ref(storage, path);
+        await uploadBytes(storageRef, file);
+        return await getDownloadURL(storageRef);
     }
 
+    // --- Admin: Add Course ---
     document.getElementById('courseForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
 
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
-        btn.innerHTML = `
-            <div class="flex items-center justify-center gap-2">
-                <div class="loader w-5 h-5 border-white"></div>
-                <span>جاري الرفع...</span>
-            </div>`;
+        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loader w-5 h-5 border-white"></div><span>جاري الرفع...</span></div>`;
 
         try {
             const imgFile = document.getElementById('courseImageFile').files[0];
             const videoFile = document.getElementById('courseVideoFile').files[0];
             
-            const imgBase64 = await fileToBase64(imgFile);
-            const videoBase64 = await fileToBase64(videoFile);
+            const timestamp = Date.now();
+            const imageUrl = await uploadFile(imgFile, `courses/images/${timestamp}_${imgFile.name}`);
+            const videoUrl = await uploadFile(videoFile, `courses/videos/${timestamp}_${videoFile.name}`);
 
-            await addDoc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'courses'), {
+            await addDoc(collection(db, 'courses'), {
                 title: document.getElementById('courseTitle').value,
                 grade: document.getElementById('courseGrade').value,
                 type: document.getElementById('courseType').value,
                 price: document.getElementById('coursePrice').value,
-                image: imgBase64,
-                video: videoBase64,
+                imageUrl,
+                videoUrl,
                 description: document.getElementById('courseDesc').value,
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
+                createdBy: currentUser.uid
             });
+            
             document.getElementById('courseForm').reset();
-            alert("تم نشر المحاضرة بنجاح على المنصة!");
+            showToast('تم نشر المحاضرة بنجاح', 'success');
         } catch (e) { 
             console.error(e); 
-            alert("حدث خطأ أثناء الرفع. تأكد من حجم الملفات."); 
+            showToast('حدث خطأ أثناء الرفع', 'error');
         } finally { 
             btn.disabled = false; 
             btn.innerText = "نشر المحتوى"; 
         }
     });
 
-    // --- Subscriptions ---
+    // --- Subscription Modal ---
     window.openSubscribeModal = (id, title) => {
         if (!currentUser) {
-            alert("من فضلك سجل دخولك بجوجل أولاً.");
+            showToast('سجل دخولك أولاً', 'info');
+            return;
+        }
+        if (!isProfileComplete && currentUser.email !== ADMIN_EMAIL) {
+            showToast('يجب إكمال بياناتك أولاً', 'info');
+            joiningGateway.classList.remove('hidden');
             return;
         }
         document.getElementById('subCourseId').value = id;
@@ -447,6 +648,9 @@
 
     document.getElementById('subscribeForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!currentUser) return;
+        
+        setLoading(true);
         const subData = {
             courseId: document.getElementById('subCourseId').value,
             courseTitle: document.getElementById('subCourseTitle').value,
@@ -454,61 +658,75 @@
             studentWhatsapp: document.getElementById('subWhatsapp').value,
             senderPhone: document.getElementById('subSenderPhone').value,
             studentId: currentUser.uid,
+            studentEmail: currentUser.email,
             status: 'pending',
             createdAt: serverTimestamp()
         };
         
-        await addDoc(collection(db, 'artifacts', APP_ID, 'public', 'data', 'sub_requests'), subData);
-        
-        const msg = encodeURIComponent(`الأستاذ محمد جابر، قمت بتحويل الاشتراك لكورس: (${subData.courseTitle})\nالاسم: ${subData.studentName}\nالرقم المحول منه: ${subData.senderPhone}`);
-        window.open(`https://wa.me/+201273740256?text=${msg}`, '_blank');
-        
-        closeSubscribeModal();
-        alert("تم إرسال طلبك! سيتم تفعيل المحاضرة بمجرد مراجعة التحويل.");
+        try {
+            await addDoc(collection(db, 'subscriptions'), subData);
+            
+            const msg = encodeURIComponent(`الأستاذ محمد جابر، قمت بتحويل الاشتراك لكورس: (${subData.courseTitle})\nالاسم: ${subData.studentName}\nالرقم المحول منه: ${subData.senderPhone}`);
+            window.open(`https://wa.me/+201273740256?text=${msg}`, '_blank');
+            
+            closeSubscribeModal();
+            showToast('تم إرسال الطلب، سيتم مراجعته', 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('حدث خطأ', 'error');
+        } finally {
+            setLoading(false);
+        }
     });
 
-    // --- Render Logic ---
+    // --- Filter ---
     window.filterByGrade = (grade) => {
         currentFilterGrade = grade;
         document.querySelectorAll('.grade-btn').forEach(b => {
             b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-            b.classList.add('bg-white', 'text-gray-600', 'border-gray-100');
+            b.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
         });
         const active = Array.from(document.querySelectorAll('.grade-btn')).find(b => b.innerText.includes(grade == 'all' ? 'الكل' : grade == '1' ? 'الأول' : grade == '2' ? 'الثاني' : 'الثالث'));
         if (active) {
             active.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-            active.classList.remove('bg-white', 'text-gray-600', 'border-gray-100');
+            active.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
         }
-        render();
+        renderCourses();
     };
 
-    let allCourses = [];
-    let mySubscriptions = [];
-
+    // --- Fetch Real-time Data ---
     function fetchData() {
-        const coursesRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'courses');
+        // Courses
+        const coursesRef = collection(db, 'courses');
         onSnapshot(query(coursesRef), (snapshot) => {
             allCourses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             allCourses.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-            render();
+            renderCourses();
+            if (currentUser?.email === ADMIN_EMAIL) {
+                renderAdminCourses(allCourses);
+            }
         });
 
+        // Subscriptions
         if (currentUser) {
-            const subsRef = collection(db, 'artifacts', APP_ID, 'public', 'data', 'sub_requests');
+            const subsRef = collection(db, 'subscriptions');
             onSnapshot(query(subsRef), (snapshot) => {
                 mySubscriptions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                render();
-                if (currentUser.email === ADMIN_EMAIL) renderAdminRequests(mySubscriptions);
+                renderCourses();
+                if (currentUser.email === ADMIN_EMAIL) {
+                    renderAdminRequests(mySubscriptions);
+                }
             });
         }
     }
 
-    function render() {
+    // --- Render Courses ---
+    function renderCourses() {
         const container = document.getElementById('coursesList');
         let filtered = currentFilterGrade === 'all' ? allCourses : allCourses.filter(c => c.grade == currentFilterGrade);
         
         if (!filtered.length) { 
-            container.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-bold'>عفواً، لا توجد محاضرات منشورة لهذا الصف حالياً.</div>"; 
+            container.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-bold'>لا توجد محاضرات منشورة لهذا الصف حالياً.</div>"; 
             return; 
         }
         
@@ -521,27 +739,27 @@
             return `
                 <div class="course-card bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm fade-in">
                     <div class="relative h-56">
-                        <img src="${c.image}" class="w-full h-full object-cover ${!canAccess ? 'hidden-content' : ''}">
-                        <div class="absolute top-4 right-4 bg-blue-600 text-white text-xs px-4 py-2 rounded-full font-black shadow-lg">
+                        <img src="${c.imageUrl || 'https://via.placeholder.com/400x200?text=محاضرة'}" class="w-full h-full object-cover ${!canAccess ? 'hidden-content' : ''}">
+                        <div class="absolute top-4 right-4 bg-gradient-to-l from-blue-700 to-blue-500 text-white text-xs px-4 py-2 rounded-full font-black shadow-lg">
                             الصف ${c.grade == '1' ? 'الأول' : c.grade == '2' ? 'الثاني' : 'الثالث'}
                         </div>
                         ${!canAccess ? `
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/10">
-                                <span class="bg-white/90 p-4 rounded-full shadow-xl">🔒</span>
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
+                                <span class="bg-white/90 p-4 rounded-full shadow-xl text-2xl">🔒</span>
                             </div>
                         ` : ''}
                     </div>
                     <div class="p-8">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="font-black text-xl text-gray-800">${c.title}</h3>
-                            <span class="text-blue-600 font-black">${isFree ? 'مجاناً' : c.price + ' ج.م'}</span>
+                            <span class="text-blue-600 font-black bg-blue-50 px-3 py-1 rounded-full">${isFree ? 'مجاناً' : c.price + ' ج.م'}</span>
                         </div>
-                        <p class="text-gray-500 text-sm mb-6 line-clamp-2">${c.description}</p>
+                        <p class="text-gray-500 text-sm mb-6 line-clamp-2">${c.description || ''}</p>
                         
                         ${canAccess ? `
                             <div class="space-y-4">
                                 <video controls class="w-full rounded-2xl bg-black h-44 shadow-inner">
-                                    <source src="${c.video}" type="video/mp4">
+                                    <source src="${c.videoUrl}" type="video/mp4">
                                 </video>
                                 <button class="w-full py-4 bg-blue-50 text-blue-700 font-black rounded-2xl hover:bg-blue-100 transition">بدء المشاهدة</button>
                             </div>
@@ -550,24 +768,23 @@
                                 <p class="text-sm font-bold text-gray-600 mb-4">${isPending ? 'طلبك قيد المراجعة...' : 'اشترك لمشاهدة المحاضرة كاملاً'}</p>
                                 ${isPending ? 
                                     `<div class="loader w-6 h-6 border-blue-600 mx-auto"></div>` : 
-                                    `<button onclick="openSubscribeModal('${c.id}', '${c.title}')" class="w-full py-4 bg-blue-600 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:bg-blue-700 transition">تفعيل المحاضرة الآن</button>`}
+                                    `<button onclick="openSubscribeModal('${c.id}', '${c.title}')" class="w-full py-4 bg-gradient-to-l from-blue-600 to-blue-500 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:shadow-2xl transition">تفعيل المحاضرة الآن</button>`}
                             </div>
                         `}
                     </div>
                 </div>
             `;
         }).join('');
-
-        renderAdminCourses(allCourses);
     }
 
+    // --- Admin Render Functions ---
     function renderAdminCourses(courses) {
         const container = document.getElementById('adminCoursesList');
-        if (currentUser?.email !== ADMIN_EMAIL) return;
+        if (!container) return;
         container.innerHTML = courses.map(c => `
             <div class="flex items-center justify-between p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
                 <div class="flex items-center gap-4">
-                    <img src="${c.image}" class="w-14 h-14 rounded-2xl object-cover shadow-sm">
+                    <img src="${c.imageUrl || 'https://via.placeholder.com/56'}" class="w-14 h-14 rounded-2xl object-cover shadow-sm">
                     <div>
                         <div class="font-black text-gray-800">${c.title}</div>
                         <div class="text-[10px] text-gray-400 font-bold uppercase">صف: ${c.grade} • ${c.type === 'paid' ? 'مدفوع' : 'مجاني'}</div>
@@ -583,7 +800,10 @@
     function renderAdminRequests(reqs) {
         const container = document.getElementById('subRequestsList');
         const pendings = reqs.filter(r => r.status === 'pending');
-        if (!pendings.length) { container.innerHTML = "<p class='text-center text-gray-400 py-10'>لا يوجد طلبات جديدة حالياً.</p>"; return; }
+        if (!pendings.length) { 
+            container.innerHTML = "<p class='text-center text-gray-400 py-10'>لا يوجد طلبات جديدة حالياً.</p>"; 
+            return; 
+        }
         
         container.innerHTML = pendings.map(r => `
             <div class="p-6 bg-blue-50/50 border border-blue-100 rounded-[2rem] flex flex-col md:flex-row justify-between items-center gap-4">
@@ -603,18 +823,53 @@
         `).join('');
     }
 
+    // --- Admin Actions ---
     window.approveSub = async (id) => {
-        await updateDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'sub_requests', id), { status: 'approved' });
-        alert("تم تفعيل المحاضرة للطالب بنجاح!");
+        if (!confirm("تأكيد تفعيل المحاضرة للطالب؟")) return;
+        setLoading(true);
+        try {
+            await updateDoc(doc(db, 'subscriptions', id), { status: 'approved' });
+            showToast('تم التفعيل بنجاح', 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('حدث خطأ', 'error');
+        } finally {
+            setLoading(false);
+        }
     };
 
     window.deleteSub = async (id) => {
-        if (confirm("هل أنت متأكد من رفض هذا الطلب؟")) await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'sub_requests', id));
+        if (!confirm("هل أنت متأكد من رفض هذا الطلب؟")) return;
+        setLoading(true);
+        try {
+            await deleteDoc(doc(db, 'subscriptions', id));
+            showToast('تم رفض الطلب', 'info');
+        } catch (error) {
+            console.error(error);
+            showToast('حدث خطأ', 'error');
+        } finally {
+            setLoading(false);
+        }
     };
 
     window.deleteCourse = async (id) => {
-        if (confirm("سيتم حذف المحاضرة نهائياً من المنصة، هل توافق؟")) await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'courses', id));
+        if (!confirm("سيتم حذف المحاضرة نهائياً من المنصة، هل توافق؟")) return;
+        setLoading(true);
+        try {
+            await deleteDoc(doc(db, 'courses', id));
+            showToast('تم الحذف', 'success');
+        } catch (error) {
+            console.error(error);
+            showToast('حدث خطأ', 'error');
+        } finally {
+            setLoading(false);
+        }
     };
+
+    // Make functions global for onclick
+    window.approveSub = approveSub;
+    window.deleteSub = deleteSub;
+    window.deleteCourse = deleteCourse;
 
 </script>
 
