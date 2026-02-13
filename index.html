@@ -3,434 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة محمد جابر لتعليم اللغة العربية</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <!-- Google Fonts: Tajawal + Cairo -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>أكاديمية الأستاذ محمد جابر التعليمية - اللغة العربية</title>
     
+    <!-- External Libraries & Frameworks -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <script>
+        // Advanced Tailwind Configuration
+        window.tailwindConfig = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa',
+                            500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a'
+                        },
+                        gold: '#d4af37',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b'
+                    },
+                    boxShadow: {
+                        'premium': '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                    }
+                }
+            }
+        };
+    </script>
+
     <style>
-        * { font-family: 'Cairo', 'Tajawal', sans-serif; }
-        body { background: linear-gradient(145deg, #f1f5f9 0%, #ffffff 100%); scroll-behavior: smooth; }
-        .glass-morphism { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .course-card, .book-card, .announcement-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.03); }
-        .course-card:hover, .book-card:hover, .announcement-card:hover { transform: translateY(-8px); box-shadow: 0 25px 30px -12px rgba(0, 119, 255, 0.15); border-color: rgba(37, 99, 235, 0.2); }
-        .loader { border-top-color: #2563eb; animation: spinner 0.8s linear infinite; }
-        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); z-index: 50; transition: 0.3s; }
-        .whatsapp-float:hover { transform: scale(1.1) rotate(5deg); }
-        .hidden-content { filter: blur(6px); pointer-events: none; user-select: none; }
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background: white; padding: 14px 28px; border-radius: 60px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2); border-right: 6px solid; font-weight: 700; display: flex; align-items: center; gap: 12px; opacity: 0; transition: opacity 0.3s; }
-        .toast.show { opacity: 1; }
-        .toast.success { border-color: #10b981; background: #f0fdf9; color: #065f46; }
-        .toast.error { border-color: #ef4444; background: #fef2f2; color: #991b1b; }
-        .toast.info { border-color: #3b82f6; background: #eff6ff; color: #1e3a8a; }
-        .active-nav { color: #2563eb !important; font-weight: 900; position: relative; }
-        .active-nav::after { content: ''; position: absolute; bottom: -6px; right: 0; width: 100%; height: 3px; background: #2563eb; border-radius: 3px; }
-        .profile-card { background: linear-gradient(145deg, #ffffff, #f9fafc); box-shadow: 0 15px 35px -10px rgba(0,0,0,0.1); }
-        .gradient-text { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* Modern Design System */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --transition-speed: 0.4s;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, rgba(30, 64, 175, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(29, 78, 216, 0.05) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(37, 99, 235, 0.05) 0px, transparent 50%);
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 700;
+            transition: var(--transition-speed);
+        }
+
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -5px; right: 0; width: 0; height: 3px;
+            background-color: #1e40af; transition: width 0.3s;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Loader */
+        #loader {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        /* Dashboard Sidebar Sidebar Animation */
+        .sidebar-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Shimmer Effect */
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+        /* Responsive Grid Fixes */
+        @media (max-width: 768px) {
+            .mobile-hide { display: none !important; }
+        }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-<!-- Toast Container -->
-<div id="toast" class="toast hidden">
-    <span id="toastIcon">✅</span>
-    <span id="toastMessage">رسالة</span>
-</div>
+    <!-- Screen Mesh -->
+    <div class="bg-mesh"></div>
 
-<!-- Google Login Config -->
-<div id="g_id_onload"
-     data-client_id="583210084990-m5j5pkdp63s255aci47grhdhef5rfk9s.apps.googleusercontent.com"
-     data-context="signin"
-     data-ux_mode="popup"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
-
-<div id="app" class="min-h-screen flex flex-col">
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[200] flex items-center justify-center hidden">
-        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-14 w-14"></div>
+    <!-- Page Loader -->
+    <div id="loader">
+        <div class="relative w-24 h-24">
+            <div class="absolute inset-0 border-4 border-primary-100 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-primary-600 rounded-full border-t-transparent animate-spin"></div>
+        </div>
+        <p class="mt-4 font-black text-primary-900 animate-pulse">جاري تحميل الأكاديمية...</p>
     </div>
 
-    <!-- Navigation -->
-    <nav class="glass-morphism sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-6">
-                    <div class="text-2xl font-black bg-gradient-to-l from-blue-700 to-blue-500 bg-clip-text text-transparent cursor-pointer" onclick="showPage('home')">محمد جابر</div>
-                    <div class="hidden md:flex space-x-reverse space-x-6 text-gray-700 font-medium">
-                        <a href="#" onclick="showPage('home')" class="nav-link hover:text-blue-600 transition">الرئيسية</a>
-                        <a href="#" onclick="showPage('courses')" class="nav-link hover:text-blue-600 transition">الكورسات</a>
-                        <a href="#" onclick="showPage('library')" class="nav-link hover:text-blue-600 transition">المكتبة</a>
-                        <a href="#" onclick="showPage('announcements')" class="nav-link hover:text-blue-600 transition">الإعلانات</a>
-                        <span id="adminLink" class="hidden">
-                            <a href="#" onclick="showPage('admin')" class="text-red-600 font-bold hover:underline">لوحة الإدارة</a>
-                        </span>
-                        <span id="profileLink" class="hidden">
-                            <a href="#" onclick="showPage('profile')" class="nav-link hover:text-blue-600 transition">ملفي الشخصي</a>
-                        </span>
-                    </div>
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 w-full z-[100] transition-all duration-300 h-20" id="main-header">
+        <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+            <!-- Brand -->
+            <div class="flex items-center gap-4 cursor-pointer group" onclick="window.router('home')">
+                <div class="w-12 h-12 bg-primary-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg transform group-hover:rotate-12 transition-all">م</div>
+                <div>
+                    <h1 class="text-xl font-black text-primary-900 leading-none">محمد جابر</h1>
+                    <span class="text-[11px] font-bold text-gray-500 uppercase tracking-widest">Arabic Masterclass</span>
                 </div>
-                <div id="authSection" class="flex items-center gap-3"></div>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center space-x-reverse space-x-10 text-gray-700">
+                <button onclick="window.router('home')" class="nav-link font-bold active">الرئيسية</button>
+                <button onclick="window.router('courses')" class="nav-link font-bold">المسارات التعليمية</button>
+                <button onclick="window.router('library')" class="nav-link font-bold">المكتبة الرقمية</button>
+                <button onclick="window.router('exams')" class="nav-link font-bold">الاختبارات</button>
+                <button onclick="window.router('contact')" class="nav-link font-bold">تواصل معنا</button>
+            </nav>
+
+            <!-- Auth & Menu -->
+            <div class="flex items-center gap-4">
+                <div id="google-auth-container" class="flex">
+                    <div id="g_id_signin"></div>
+                </div>
+                
+                <div id="user-context" class="hidden flex items-center gap-3 bg-white/50 p-1.5 rounded-full border border-white/50 shadow-sm">
+                    <div class="relative group cursor-pointer" onclick="window.router('profile')">
+                        <img id="user-avatar" src="" class="w-10 h-10 rounded-full object-cover border-2 border-primary-600">
+                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-success rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="hidden md:block">
+                        <p id="user-display-name" class="text-xs font-black text-gray-800"></p>
+                        <p id="user-role-label" class="text-[9px] text-primary-600 font-bold">طالب متميز</p>
+                    </div>
+                    <button onclick="window.logout()" class="p-2.5 text-red-500 hover:bg-red-50 rounded-full transition" title="تسجيل خروج">
+                        <i class="fa-solid fa-power-off"></i>
+                    </button>
+                </div>
+
+                <button class="lg:hidden p-3 bg-white rounded-xl shadow-sm text-primary-900" onclick="window.toggleMobileMenu()">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow container mx-auto px-4 py-8">
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-drawer" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm hidden flex justify-end">
+        <div class="w-72 bg-white h-full shadow-2xl animate__animated animate__slideInLeft">
+            <div class="p-6 flex flex-col h-full">
+                <div class="flex justify-between items-center mb-10">
+                    <span class="font-black text-xl text-primary-900">القائمة</span>
+                    <button onclick="window.toggleMobileMenu()" class="text-gray-400 hover:text-black text-2xl"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="flex flex-col gap-6">
+                    <button onclick="window.router('home')" class="text-right font-bold text-lg hover:text-primary-600"><i class="fa-solid fa-house ml-3 text-primary-300"></i>الرئيسية</button>
+                    <button onclick="window.router('courses')" class="text-right font-bold text-lg hover:text-primary-600"><i class="fa-solid fa-book-open ml-3 text-primary-300"></i>الكورسات</button>
+                    <button onclick="window.router('library')" class="text-right font-bold text-lg hover:text-primary-600"><i class="fa-solid fa-file-pdf ml-3 text-primary-300"></i>المكتبة</button>
+                    <button onclick="window.router('exams')" class="text-right font-bold text-lg hover:text-primary-600"><i class="fa-solid fa-pen-nib ml-3 text-primary-300"></i>الاختبارات</button>
+                    <button onclick="window.router('admin')" id="mobile-admin-btn" class="hidden text-right font-bold text-lg text-red-600"><i class="fa-solid fa-gauge ml-3"></i>لوحة الإدارة</button>
+                </div>
+                <div class="mt-auto border-t pt-6">
+                    <div class="bg-blue-50 p-4 rounded-2xl">
+                        <p class="text-[10px] font-bold text-primary-600 mb-2">الدعم الفني</p>
+                        <p class="text-xs text-gray-600 leading-relaxed font-bold">تحتاج لمساعدة؟ تواصل معنا عبر واتساب</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow pt-24 min-h-screen">
         
-        <!-- Registration/Profile Modal (بوابة الانضمام) -->
-        <div id="joining-gateway" class="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center hidden p-4 backdrop-blur-lg">
-            <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl border-2 border-blue-100 fade-in">
-                <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-                        <span class="text-4xl">📝</span>
+        <!-- SECTION: HOME -->
+        <section id="section-home" class="view-section py-8">
+            <div class="max-w-7xl mx-auto px-4">
+                <!-- Hero Banner -->
+                <div class="relative overflow-hidden rounded-[3rem] bg-primary-900 text-white p-10 md:p-20 shadow-premium mb-12">
+                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                        <div class="flex-1 text-center md:text-right">
+                            <span class="inline-block px-4 py-1.5 bg-white/10 rounded-full text-xs font-bold mb-6 backdrop-blur shadow-sm">أهلاً بك في منصة المستقبل التعليمية</span>
+                            <h1 class="text-4xl md:text-7xl font-black mb-8 leading-[1.2]">
+                                اصنع مستقبلك بـ <br> <span class="text-gold">لغتك العربية</span>
+                            </h1>
+                            <p class="text-lg text-primary-100 max-w-xl md:ml-0 mb-10 font-medium leading-relaxed">
+                                نجمع بين الأصالة اللغوية وأحدث طرق التعلم الرقمية لنقدم تجربة تعليمية فريدة لكل طالب ثانوية عامة يسعى للقمة.
+                            </p>
+                            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                                <button onclick="window.router('courses')" class="px-10 py-5 bg-white text-primary-900 rounded-2xl font-black shadow-lg hover:bg-gold hover:text-white transition-all transform hover:-translate-y-1">تصفح المحاضرات</button>
+                                <button onclick="window.router('library')" class="px-10 py-5 bg-primary-700/50 text-white border border-white/20 rounded-2xl font-black backdrop-blur hover:bg-white/10 transition-all">تحميل الملازم</button>
+                            </div>
+                        </div>
+                        <div class="flex-1 relative">
+                            <div class="absolute inset-0 bg-gold/20 blur-3xl rounded-full"></div>
+                            <img src="https://cdn-icons-png.flaticon.com/512/3429/3429433.png" class="relative z-10 w-full max-w-sm mx-auto animate__animated animate__pulse animate__infinite animate__slow">
+                        </div>
                     </div>
-                    <h2 class="text-3xl font-black text-gray-900">بوابة الانضمام</h2>
-                    <p class="text-gray-500 mt-2">أكمل بياناتك لتصبح جزءًا من عائلة الفرعون</p>
+                    <!-- Decorative Shapes -->
+                    <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-600/30 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-gold/10 rounded-full blur-3xl"></div>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+                    <div class="glass-card p-8 flex items-center gap-6 shadow-sm border border-white/50 group hover:bg-white transition-all">
+                        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-primary-600 text-2xl group-hover:bg-primary-600 group-hover:text-white transition-all"><i class="fa-solid fa-users"></i></div>
+                        <div><p class="text-3xl font-black text-gray-800 counter" data-target="15000">0</p><p class="text-xs font-bold text-gray-500">طالب مشترك</p></div>
+                    </div>
+                    <div class="glass-card p-8 flex items-center gap-6 shadow-sm border border-white/50 group hover:bg-white transition-all">
+                        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 text-2xl group-hover:bg-green-600 group-hover:text-white transition-all"><i class="fa-solid fa-video"></i></div>
+                        <div><p class="text-3xl font-black text-gray-800 counter" data-target="850">0</p><p class="text-xs font-bold text-gray-500">ساعة شرح</p></div>
+                    </div>
+                    <div class="glass-card p-8 flex items-center gap-6 shadow-sm border border-white/50 group hover:bg-white transition-all">
+                        <div class="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600 text-2xl group-hover:bg-yellow-600 group-hover:text-white transition-all"><i class="fa-solid fa-file-invoice"></i></div>
+                        <div><p class="text-3xl font-black text-gray-800 counter" data-target="320">0</p><p class="text-xs font-bold text-gray-500">ملزمة PDF</p></div>
+                    </div>
+                    <div class="glass-card p-8 flex items-center gap-6 shadow-sm border border-white/50 group hover:bg-white transition-all">
+                        <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 text-2xl group-hover:bg-purple-600 group-hover:text-white transition-all"><i class="fa-solid fa-award"></i></div>
+                        <div><p class="text-3xl font-black text-gray-800 counter" data-target="98">0</p><p class="text-xs font-bold text-gray-500">نسبة النجاح</p></div>
+                    </div>
+                </div>
+
+                <!-- Featured Section -->
+                <div class="flex justify-between items-end mb-10">
+                    <div class="space-y-2">
+                        <h2 class="text-3xl font-black text-primary-900">أحدث المحاضرات</h2>
+                        <div class="w-20 h-1.5 bg-gold rounded-full"></div>
+                    </div>
+                    <button onclick="window.router('courses')" class="text-primary-600 font-black hover:underline">عرض الكل <i class="fa-solid fa-chevron-left mr-2"></i></button>
+                </div>
+                <div id="featured-courses-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: COURSES -->
+        <section id="section-courses" class="view-section hidden py-10">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between gap-8 mb-12">
+                    <div class="max-w-lg">
+                        <h2 class="text-4xl font-black text-gray-900 mb-4">الدورات والمحاضرات</h2>
+                        <p class="text-gray-500 font-bold">اختر الصف الدراسي وتابع محاضراتك بكل سهولة، شرح وافي لكل تفاصيل المنهج.</p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm h-fit self-end">
+                        <button onclick="window.filterCourses('all')" class="filter-btn active px-6 py-2.5 rounded-xl font-bold bg-primary-800 text-white">الكل</button>
+                        <button onclick="window.filterCourses('1sec')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-gray-500 hover:bg-gray-100">الصف الأول</button>
+                        <button onclick="window.filterCourses('2sec')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-gray-500 hover:bg-gray-100">الصف الثاني</button>
+                        <button onclick="window.filterCourses('3sec')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-gray-500 hover:bg-gray-100">الصف الثالث</button>
+                    </div>
+                </div>
+                <div id="courses-full-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: LIBRARY -->
+        <section id="section-library" class="view-section hidden py-10">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-black text-gray-900 mb-4">المكتبة الرقمية</h2>
+                    <p class="text-gray-500 font-bold max-w-2xl mx-auto leading-relaxed">كنز من المعلومات والملازم المنظمة، ابحث عن ملخصك المفضل وقم بتحميله بضغطة واحدة.</p>
                 </div>
                 
-                <form id="profileForm" class="space-y-5">
-                    <div class="space-y-1">
-                        <label class="block text-sm font-bold text-gray-700 mr-2 flex items-center gap-1"><span>🎓</span> الصف الدراسي</label>
-                        <select id="userGrade" class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none transition" required>
-                            <option value="">اختر صفك الدراسي</option>
-                            <option value="1">الأول الثانوي</option>
-                            <option value="2">الثاني الثانوي</option>
-                            <option value="3">الثالث الثانوي</option>
-                        </select>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="block text-sm font-bold text-gray-700 mr-2 flex items-center gap-1"><span>📱</span> رقم الهاتف (واتساب)</label>
-                        <input type="tel" id="userPhone" placeholder="01xxxxxxxxx" class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none transition" required>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="block text-sm font-bold text-gray-700 mr-2 flex items-center gap-1"><span>🔍</span> كيف سمعت عن الأستاذ؟</label>
-                        <select id="discoverySource" class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none transition">
-                            <option value="facebook">فيسبوك</option>
-                            <option value="youtube">يوتيوب</option>
-                            <option value="friend">ترشيح من صديق</option>
-                            <option value="tiktok">تيك توك</option>
-                            <option value="other">أخرى</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="w-full py-4 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-2xl font-black text-lg hover:shadow-xl transform active:scale-95 transition shadow-lg shadow-blue-200">
-                        تأكيد البيانات والدخول
-                    </button>
-                </form>
-            </div>
-        </div>
+                <div class="grid lg:grid-cols-4 gap-10">
+                    <!-- Sidebar Filters -->
+                    <aside class="lg:col-span-1 space-y-6">
+                        <div class="bg-white p-6 rounded-3xl shadow-premium border border-gray-100">
+                            <h3 class="font-black text-lg mb-6 border-b pb-4">تصنيفات المكتبة</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                    <input type="checkbox" checked class="w-5 h-5 accent-primary-600">
+                                    <span class="font-bold text-gray-700">ملازم الشرح</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                    <input type="checkbox" checked class="w-5 h-5 accent-primary-600">
+                                    <span class="font-bold text-gray-700">خرائط ذهنية</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                    <input type="checkbox" checked class="w-5 h-5 accent-primary-600">
+                                    <span class="font-bold text-gray-700">بنك الأسئلة</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="bg-primary-900 p-8 rounded-3xl text-white relative overflow-hidden">
+                            <h4 class="font-black mb-2 text-lg">طلب ملزمة خاصة؟</h4>
+                            <p class="text-xs text-primary-200 mb-6 font-bold">إذا كنت تبحث عن موضوع معين ولم تجده، راسلنا فوراً.</p>
+                            <button class="w-full py-3 bg-white text-primary-900 rounded-xl font-bold shadow-lg">تواصل معنا</button>
+                            <i class="fa-solid fa-paper-plane absolute -bottom-4 -left-4 text-7xl text-white/10 -rotate-12"></i>
+                        </div>
+                    </aside>
 
-        <!-- Subscription Modal -->
-        <div id="subscribe-modal" class="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center hidden p-4 backdrop-blur-sm">
-            <div class="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl relative border border-blue-100">
-                <button onclick="closeSubscribeModal()" class="absolute top-5 left-5 text-gray-400 hover:text-black transition text-xl">✕</button>
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-blue-700">تفعيل المحتوى</h2>
-                    <div class="mt-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
-                        <p class="text-sm text-blue-800">قم بتحويل المبلغ عبر فودافون كاش للرقم:</p>
-                        <p class="text-3xl font-black text-blue-900 mt-1 tracking-widest">٠١٢٣٤٥٦٧٨٩</p>
+                    <!-- Library Grid -->
+                    <div class="lg:col-span-3">
+                        <div class="bg-white p-4 rounded-3xl mb-8 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
+                            <div class="relative w-full md:w-96">
+                                <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="lib-search" placeholder="ابحث عن اسم الملزمة..." class="w-full pr-12 pl-4 py-3 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-primary-100 font-bold">
+                            </div>
+                            <div class="flex items-center gap-3 px-4 py-2 bg-blue-50 text-primary-900 rounded-xl font-black text-xs">
+                                <i class="fa-solid fa-sort"></i> ترتيب حسب: الأحدث
+                            </div>
+                        </div>
+                        <div id="library-full-grid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                            <!-- Dynamic Content -->
+                        </div>
                     </div>
-                </div>
-                
-                <form id="subscribeForm" class="space-y-4">
-                    <input type="hidden" id="subCourseId">
-                    <input type="hidden" id="subCourseTitle">
-                    <input type="text" id="subName" placeholder="الاسم الكامل للطالب" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                    <input type="tel" id="subWhatsapp" placeholder="رقم الواتساب الخاص بك" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                    <input type="tel" id="subSenderPhone" placeholder="رقم المحفظة المحول منها" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                    <button type="submit" class="w-full py-4 bg-gradient-to-l from-green-600 to-green-500 text-white rounded-2xl font-bold text-lg hover:shadow-xl transition shadow-lg flex items-center justify-center gap-2">
-                        <span>إرسال الطلب للفرعون</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Home Page -->
-        <section id="page-home" class="page-content">
-            <div class="text-center py-24 bg-white/70 rounded-[3rem] shadow-xl border border-white/50 mb-12 relative overflow-hidden backdrop-blur-sm">
-                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-l from-blue-600 to-blue-400"></div>
-                <div class="inline-block px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-bold mb-6 shadow-sm">المنصة التعليمية الرسمية 🏆</div>
-                <h1 class="text-5xl md:text-8xl font-black text-gray-900 mb-8 leading-tight">ملك اللغه العربيه <br><span class="gradient-text">محمد جابر</span></h1>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">أبسط شرح، أقوى ملازم، ومتابعة دقيقة حتى باب الامتحان. الغة العربيه  أصبحت أسهل الآن.</p>
-                <div class="flex flex-wrap justify-center gap-5">
-                    <button onclick="showPage('courses')" class="px-12 py-5 bg-gradient-to-l from-blue-700 to-blue-500 text-white rounded-3xl font-black text-xl shadow-2xl shadow-blue-200 hover:shadow-blue-300 transform hover:-translate-y-1 transition duration-300">ابدأ رحلتك الآن</button>
-                    <a href="https://wa.me/+201273740256" target="_blank" class="px-12 py-5 bg-white border-4 border-blue-600 text-blue-600 rounded-3xl font-black text-xl hover:bg-blue-50 transition duration-300 flex items-center gap-2">تحدث معنا</a>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-blue-200 transition hover:shadow-xl">
-                    <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">✍️</div>
-                    <h3 class="text-2xl font-black mb-3 text-gray-800">ملازم احترافية</h3>
-                    <p class="text-gray-500 leading-relaxed">خرائط ذهنية وتلخيصات شاملة تجعل الصعب سهلاً جداً.</p>
-                </div>
-                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-green-200 transition hover:shadow-xl">
-                    <div class="w-20 h-20 bg-green-100 text-green-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">✅</div>
-                    <h3 class="text-2xl font-black mb-3 text-gray-800">امتحانات فورية</h3>
-                    <p class="text-gray-500 leading-relaxed">اختبارات بعد كل حصة لتقييم مستواك لحظة بلحظة.</p>
-                </div>
-                <div class="p-10 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-center hover:border-purple-200 transition hover:shadow-xl">
-                    <div class="w-20 h-20 bg-purple-100 text-purple-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">🎥</div>
-                    <h3 class="text-2xl font-black mb-3 text-gray-800">جودة 4K</h3>
-                    <p class="text-gray-500 leading-relaxed">تصوير سينمائي للمحاضرات يجعلك تعيش جو الحصة بالكامل.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Courses Page -->
-        <section id="page-courses" class="page-content hidden">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-gray-900 mb-4">المحتوى التعليمي</h2>
-                <div class="w-24 h-2 bg-gradient-to-l from-blue-600 to-blue-400 mx-auto rounded-full"></div>
-            </div>
-            
-            <div id="gradeSelector" class="flex flex-wrap gap-4 mb-12 justify-center">
-                <button onclick="filterByGrade('all')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold shadow-sm hover:border-blue-400 transition">الكل</button>
-                <button onclick="filterByGrade('1')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold hover:border-blue-400 transition">الأول الثانوي</button>
-                <button onclick="filterByGrade('2')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold hover:border-blue-400 transition">الثاني الثانوي</button>
-                <button onclick="filterByGrade('3')" class="grade-btn px-8 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full font-bold hover:border-blue-400 transition">الثالث الثانوي</button>
-            </div>
-
-            <div id="coursesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="col-span-full flex flex-col items-center py-20">
-                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-                    <p class="text-gray-500 font-bold">يتم الآن تجهيز المحاضرات...</p>
+        <!-- SECTION: EXAMS -->
+        <section id="section-exams" class="view-section hidden py-10">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="bg-white p-10 rounded-4xl shadow-premium text-center border border-gray-100">
+                    <div class="w-24 h-24 bg-purple-100 rounded-3xl flex items-center justify-center text-purple-600 text-4xl mx-auto mb-8 shadow-inner">
+                        <i class="fa-solid fa-pen-fancy"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-gray-900 mb-6">مركز الاختبارات الإلكترونية</h2>
+                    <p class="text-gray-500 font-bold mb-10 leading-relaxed max-w-lg mx-auto">
+                        تحدّ نفسك وقم بقياس مستواك الحقيقي مع اختباراتنا الشاملة. يتم التصحيح تلقائياً مع تزويدك بتقرير مفصل عن نقاط القوة والضعف.
+                    </p>
+                    <div id="exams-container" class="space-y-4 text-right">
+                        <!-- Dynamic Content -->
+                        <div class="p-6 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 text-center text-gray-400 font-bold">
+                            لا توجد اختبارات متاحة حالياً لصفك الدراسي
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Library Page (الملازم) -->
-        <section id="page-library" class="page-content hidden">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-gray-900 mb-4">المكتبة التعليمية</h2>
-                <div class="w-24 h-2 bg-gradient-to-l from-green-600 to-green-400 mx-auto rounded-full"></div>
-            </div>
-            
-            <div id="booksList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="col-span-full flex flex-col items-center py-20">
-                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-                    <p class="text-gray-500 font-bold">جاري تحميل الملازم...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Announcements Page -->
-        <section id="page-announcements" class="page-content hidden">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-gray-900 mb-4">آخر الإعلانات</h2>
-                <div class="w-24 h-2 bg-gradient-to-l from-yellow-600 to-yellow-400 mx-auto rounded-full"></div>
-            </div>
-            
-            <div id="announcementsList" class="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
-                <div class="col-span-full flex flex-col items-center py-20">
-                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-                    <p class="text-gray-500 font-bold">جاري تحميل الإعلانات...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Profile Page -->
-        <section id="page-profile" class="page-content hidden">
-            <div class="max-w-3xl mx-auto">
-                <div class="bg-white/80 backdrop-blur-sm rounded-[2.5rem] shadow-2xl border border-gray-100 p-8 md:p-12 profile-card">
-                    <h2 class="text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
-                        <span class="w-2 h-10 bg-blue-600 rounded-full"></span>
-                        الملف الشخصي
-                    </h2>
+        <!-- SECTION: ADMIN PANEL -->
+        <section id="section-admin" class="view-section hidden py-8">
+            <div class="max-w-[1400px] mx-auto px-4">
+                <div class="grid lg:grid-cols-12 gap-8">
                     
-                    <form id="updateProfileForm" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">الاسم</label>
-                                <input type="text" id="profileName" class="w-full p-4 bg-gray-100 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" readonly>
+                    <!-- Sidebar Navigation -->
+                    <aside class="lg:col-span-3 space-y-4">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                            <h3 class="font-black text-primary-900 mb-8 px-4 border-r-4 border-primary-600 pr-4">إدارة المنصة</h3>
+                            <nav class="flex flex-col gap-2">
+                                <button onclick="window.adminNav('dashboard')" class="admin-nav-btn active flex items-center gap-4 px-6 py-4 rounded-2xl bg-primary-800 text-white font-black transition shadow-lg">
+                                    <i class="fa-solid fa-chart-line text-lg w-6"></i> الإحصائيات العامة
+                                </button>
+                                <button onclick="window.adminNav('add-content')" class="admin-nav-btn flex items-center gap-4 px-6 py-4 rounded-2xl text-gray-500 font-bold hover:bg-gray-50 transition">
+                                    <i class="fa-solid fa-plus-circle text-lg w-6"></i> إضافة محتوى
+                                </button>
+                                <button onclick="window.adminNav('manage-users')" class="admin-nav-btn flex items-center gap-4 px-6 py-4 rounded-2xl text-gray-500 font-bold hover:bg-gray-50 transition">
+                                    <i class="fa-solid fa-users-gear text-lg w-6"></i> إدارة المستخدمين
+                                </button>
+                                <button onclick="window.adminNav('exams-manager')" class="admin-nav-btn flex items-center gap-4 px-6 py-4 rounded-2xl text-gray-500 font-bold hover:bg-gray-50 transition">
+                                    <i class="fa-solid fa-scroll text-lg w-6"></i> صانع الاختبارات
+                                </button>
+                            </nav>
+                        </div>
+                        <div class="bg-dark text-white p-8 rounded-3xl shadow-premium relative overflow-hidden bg-slate-900">
+                            <p class="text-xs text-slate-400 font-bold mb-4 uppercase">نصيحة أمنية</p>
+                            <p class="text-sm leading-relaxed font-bold">تأكد دائماً من تسجيل الخروج عند استخدام جهاز عام لحماية بيانات الطلاب والمنصة.</p>
+                            <i class="fa-solid fa-shield-halved absolute -bottom-6 -left-6 text-7xl text-white/5 -rotate-12"></i>
+                        </div>
+                    </aside>
+
+                    <!-- Content Panel -->
+                    <div class="lg:col-span-9 space-y-8">
+                        
+                        <!-- Panel: Dashboard -->
+                        <div id="admin-panel-dashboard" class="admin-panel space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                                    <p class="text-xs font-black text-gray-400 mb-2 uppercase">إجمالي المبيعات</p>
+                                    <p class="text-4xl font-black text-primary-900">0 <span class="text-sm font-bold text-gray-400 mr-2">ج.م</span></p>
+                                </div>
+                                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                                    <p class="text-xs font-black text-gray-400 mb-2 uppercase">المشاهدات النشطة</p>
+                                    <p class="text-4xl font-black text-success">0</p>
+                                </div>
+                                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                                    <p class="text-xs font-black text-gray-400 mb-2 uppercase">ملازم محملة اليوم</p>
+                                    <p class="text-4xl font-black text-warning">0</p>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">البريد الإلكتروني</label>
-                                <input type="email" id="profileEmail" class="w-full p-4 bg-gray-100 border border-gray-200 rounded-2xl outline-none" readonly>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-1">🎓 الصف الدراسي</label>
-                            <select id="profileGrade" class="w-full p-4 bg-white border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500 transition" required>
-                                <option value="1">الأول الثانوي</option>
-                                <option value="2">الثاني الثانوي</option>
-                                <option value="3">الثالث الثانوي</option>
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-1">📱 رقم الهاتف (واتساب)</label>
-                            <input type="tel" id="profilePhone" class="w-full p-4 bg-white border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500 transition" required>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-1">🔍 مصدر التعريف</label>
-                            <select id="profileSource" class="w-full p-4 bg-white border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500 transition">
-                                <option value="facebook">فيسبوك</option>
-                                <option value="youtube">يوتيوب</option>
-                                <option value="friend">ترشيح من صديق</option>
-                                <option value="tiktok">تيك توك</option>
-                                <option value="other">أخرى</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="w-full py-5 bg-gradient-to-l from-blue-600 to-blue-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition">
-                            تحديث البيانات
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- Admin Page -->
-        <section id="page-admin" class="page-content hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Sidebar Tabs for Admin -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100 sticky top-24">
-                        <div class="flex flex-col gap-4">
-                            <button onclick="showAdminTab('courses')" class="admin-tab-btn active-admin-tab px-6 py-4 bg-blue-600 text-white rounded-2xl font-black text-right shadow-md">➕ إضافة محاضرة</button>
-                            <button onclick="showAdminTab('books')" class="admin-tab-btn px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-black text-right hover:bg-blue-100 transition">📚 إضافة ملزمة</button>
-                            <button onclick="showAdminTab('announcements')" class="admin-tab-btn px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-black text-right hover:bg-blue-100 transition">📢 إضافة إعلان</button>
-                            <button onclick="showAdminTab('requests')" class="admin-tab-btn px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-black text-right hover:bg-blue-100 transition">📋 طلبات التفعيل</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 space-y-8">
-                    <!-- Admin Tab: Courses -->
-                    <div id="adminCoursesTab" class="admin-tab-content">
-                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
-                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                                <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
-                                إضافة محاضرة جديدة
-                            </h3>
-                            <form id="courseForm" class="space-y-4">
-                                <input type="text" id="courseTitle" placeholder="عنوان المحاضرة" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                
-                                <div class="grid grid-cols-2 gap-3">
-                                    <select id="courseGrade" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                        <option value="1">أولى ثانوي</option>
-                                        <option value="2">تانية ثانوي</option>
-                                        <option value="3">تالتة ثانوي</option>
-                                    </select>
-                                    <select id="courseType" class="p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                        <option value="paid">مدفوع</option>
-                                        <option value="free">مجاني</option>
-                                    </select>
-                                </div>
-
-                                <input type="number" id="coursePrice" placeholder="السعر بالجنيه" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                
-                                <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-blue-50/50">
-                                    <label class="text-xs font-bold text-blue-600 block mb-2">غلاف المحاضرة (صورة)</label>
-                                    <input type="file" id="courseImageFile" accept="image/*" class="text-xs w-full" required>
-                                </div>
-                                
-                                <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-red-50/50">
-                                    <label class="text-xs font-bold text-red-600 block mb-2">فيديو المحاضرة</label>
-                                    <input type="file" id="courseVideoFile" accept="video/*" class="text-xs w-full" required>
-                                </div>
-
-                                <textarea id="courseDesc" placeholder="وصف سريع للمحتوى..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
-                                
-                                <button type="submit" id="submitBtn" class="w-full py-5 bg-gradient-to-l from-blue-600 to-blue-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">نشر المحاضرة</button>
-                            </form>
-                        </div>
-                        
-                        <div class="mt-8 bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
-                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                                <span class="w-2 h-8 bg-purple-500 rounded-full"></span>
-                                المحاضرات المنشورة
-                            </h3>
-                            <div id="adminCoursesList" class="grid grid-cols-1 gap-4"></div>
-                        </div>
-                    </div>
-
-                    <!-- Admin Tab: Books -->
-                    <div id="adminBooksTab" class="admin-tab-content hidden">
-                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
-                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                                <span class="w-2 h-8 bg-green-600 rounded-full"></span>
-                                رفع ملزمة جديدة
-                            </h3>
-                            <form id="bookForm" class="space-y-4">
-                                <input type="text" id="bookTitle" placeholder="عنوان الملزمة" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                
-                                <select id="bookGrade" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                    <option value="1">الأول الثانوي</option>
-                                    <option value="2">الثاني الثانوي</option>
-                                    <option value="3">الثالث الثانوي</option>
-                                </select>
-                                
-                                <div class="p-4 border-2 border-dashed rounded-2xl text-center bg-green-50/50">
-                                    <label class="text-xs font-bold text-green-600 block mb-2">ملف PDF</label>
-                                    <input type="file" id="bookFile" accept=".pdf" class="text-xs w-full" required>
-                                </div>
-
-                                <textarea id="bookDesc" placeholder="وصف مختصر للملزمة..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
-                                
-                                <button type="submit" id="submitBookBtn" class="w-full py-5 bg-gradient-to-l from-green-600 to-green-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">رفع الملزمة</button>
-                            </form>
-                        </div>
-                        
-                        <div class="mt-8 bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
-                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                                <span class="w-2 h-8 bg-orange-500 rounded-full"></span>
-                                الملازم المنشورة
-                            </h3>
-                            <div id="adminBooksList" class="grid grid-cols-1 gap-4"></div>
-                        </div>
-                    </div>
-
-                    <!-- Admin Tab: Announcements -->
-                    <div id="adminAnnouncementsTab" class="admin-tab-content hidden">
-                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
-                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                                <span class="w-2 h-8 bg-yellow-600 rounded-full"></span>
-                                إضافة إعلان جديد
-                            </h3>
-                            <form id="announcementForm" class="space-y-4">
-                                <input type="text" id="announcementTitle" placeholder="عنوان الإعلان" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-300" required>
-                                
-                                <textarea id="announcementContent" placeholder="محتوى الإعلان..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-32 resize-none outline-none focus:ring-2 focus:ring-blue-300" required></textarea>
-                                
-                                <div class="flex items-center gap-3">
-                                    <input type="checkbox" id="announcementImportant" class="w-5 h-5">
-                                    <label for="announcementImportant" class="text-sm font-bold text-gray-700">إعلان مهم (يظهر في أعلى القائمة)</label>
-                                </div>
-                                
-                                <button type="submit" id="submitAnnouncementBtn" class="w-full py-5 bg-gradient-to-l from-yellow-600 to-yellow-500 text-white rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition">نشر الإعلان</button>
-                            </form>
-                        </div>
-                        
-                        <div class="mt-8 bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
-                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                                <span class="w-2 h-8 bg-red-500 rounded-full"></span>
-                                الإعلانات السابقة
-                            </h3>
-                            <div id="adminAnnouncementsList" class="grid grid-cols-1 gap-4"></div>
-                        </div>
-                    </div>
-
-                    <!-- Admin Tab: Requests -->
-                    <div id="adminRequestsTab" class="admin-tab-content hidden">
-                        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-lg border border-gray-100">
-                            <h3 class="font-black text-2xl mb-6 flex items-center gap-2">
-                                <span class="w-2 h-8 bg-green-500 rounded-full"></span>
-                                طلبات التفعيل
-                            </h3>
-                            <div id="subRequestsList" class="space-y-4">
-                                <p class="text-gray-400 text-center py-10">لا يوجد طلاب ينتظرون حالياً.</p>
+                            <div class="bg-white p-8 rounded-4xl shadow-sm border border-gray-100">
+                                <h4 class="font-black text-xl mb-10">تحليل النمو الأسبوعي</h4>
+                                <canvas id="growthChart" height="120"></canvas>
                             </div>
                         </div>
+
+                        <!-- Panel: Add Content -->
+                        <div id="admin-panel-add-content" class="admin-panel hidden animate__animated animate__fadeIn">
+                            <div class="bg-white p-8 md:p-12 rounded-4xl shadow-premium border border-gray-100">
+                                <div class="flex flex-wrap gap-4 mb-10">
+                                    <button onclick="window.setEntryType('course')" class="entry-type-btn active flex-1 py-4 px-6 rounded-2xl bg-primary-800 text-white font-black shadow-lg transition">إضافة كورس فيديو</button>
+                                    <button onclick="window.setEntryType('book')" class="entry-type-btn flex-1 py-4 px-6 rounded-2xl bg-gray-50 text-gray-500 font-bold hover:bg-gray-100 transition">إضافة ملزمة PDF</button>
+                                </div>
+
+                                <form id="globalAdminForm" class="space-y-6">
+                                    <input type="hidden" id="adminEntryType" value="course">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div class="space-y-2">
+                                            <label class="text-xs font-black text-gray-500 uppercase px-4">عنوان المحتوى</label>
+                                            <input type="text" id="adminTitle" placeholder="مثال: شرح درس النحو" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border border-transparent focus:border-primary-600 focus:bg-white transition font-bold" required>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-xs font-black text-gray-500 uppercase px-4">الصف الدراسي</label>
+                                            <select id="adminLevel" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border border-transparent focus:border-primary-600 focus:bg-white transition font-bold">
+                                                <option value="1sec">الصف الأول الثانوي</option>
+                                                <option value="2sec">الصف الثاني الثانوي</option>
+                                                <option value="3sec">الصف الثالث الثانوي</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-black text-gray-500 uppercase px-4">الرابط المباشر (Video/PDF Link)</label>
+                                        <input type="text" id="adminLink" placeholder="انسخ الرابط هنا..." class="w-full p-4 bg-gray-50 rounded-2xl outline-none border border-transparent focus:border-primary-600 focus:bg-white transition font-bold" required>
+                                    </div>
+                                    <div id="courseOnlyFields" class="grid md:grid-cols-2 gap-6">
+                                        <div class="space-y-2">
+                                            <label class="text-xs font-black text-gray-500 uppercase px-4">السعر (ج.م)</label>
+                                            <input type="number" id="adminPrice" placeholder="اتركه فارغاً إذا كان مجاني" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border border-transparent focus:border-primary-600 focus:bg-white transition font-bold">
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-xs font-black text-gray-500 uppercase px-4">مدة الفيديو (بالدقائق)</label>
+                                            <input type="number" id="adminDuration" placeholder="اختياري" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border border-transparent focus:border-primary-600 focus:bg-white transition font-bold">
+                                        </div>
+                                    </div>
+                                    <div class="pt-6">
+                                        <button type="submit" class="w-full py-5 bg-primary-800 text-white font-black text-lg rounded-3xl shadow-premium hover:opacity-90 transition-all flex items-center justify-center gap-4">
+                                            <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Panel: Exams Manager -->
+                        <div id="admin-panel-exams-manager" class="admin-panel hidden animate__animated animate__fadeIn">
+                            <div class="bg-white p-10 rounded-4xl shadow-sm text-center">
+                                <i class="fa-solid fa-vials text-6xl text-gray-200 mb-6"></i>
+                                <h3 class="text-xl font-black mb-4">وحدة بناء الاختبارات</h3>
+                                <p class="text-gray-500 font-bold mb-8">هذه الميزة تتيح لك إنشاء أسئلة اختيار من متعدد مع تحديد الإجابة الصحيحة.</p>
+                                <button class="px-10 py-4 bg-primary-800 text-white rounded-2xl font-black shadow-lg">إنشاء اختبار جديد</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -438,783 +492,507 @@
 
     </main>
 
-    <!-- WhatsApp Float -->
-    <a href="https://wa.me/+201273740256" target="_blank" class="whatsapp-float">
-        <svg viewBox="0 0 24 24" width="35" height="35" fill="currentColor"><path d="M12.031 6.172c-2.32 0-4.591.398-6.758 1.147l-1.17.404-.774-2.83 2.851.744c2.257-.738 4.612-1.119 7.003-1.119 11.233 0 16.554 12.004 9.39 20.233l.118-.12c-2.103 1.9-4.778 2.853-7.692 2.853-2.13 0-4.215-.39-6.208-1.156l-1.18-.454-2.872.744.774-2.854-.454-1.188c-.776-2.034-1.17-4.175-1.17-6.363 0-5.362 2.112-10.402 5.947-14.197 3.835-3.795 8.937-5.885 14.364-5.885 10.434 0 18.913 8.479 18.913 18.913 0 5.103-1.986 9.897-5.592 13.503-3.606 3.606-8.4 5.592-13.321 5.592z"/></svg>
-    </a>
+    <!-- Global Video Player Modal -->
+    <div id="global-video-modal" class="fixed inset-0 z-[500] bg-black/95 hidden flex flex-col items-center justify-center p-4 backdrop-blur-md">
+        <div class="w-full max-w-6xl relative flex flex-col">
+            <div class="flex justify-between items-center mb-6 px-4">
+                <h3 id="video-playing-title" class="text-white font-black text-xl truncate max-w-md"></h3>
+                <button onclick="window.closeVideo()" class="w-14 h-14 bg-white/10 hover:bg-red-600 text-white rounded-full transition-all text-2xl flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-premium border border-white/10">
+                <iframe id="global-iframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="mt-8 px-6 py-4 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/5">
+                <p class="text-white/60 font-bold text-sm"><i class="fa-solid fa-circle-info ml-2"></i> تأكد من وجود اتصال قوي بالإنترنت لمتابعة المحاضرة بجودة عالية.</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-gray-300 mt-20 border-t border-gray-800 p-12 text-center">
-        <div class="text-4xl font-black bg-gradient-to-l from-white to-gray-300 bg-clip-text text-transparent mb-4">محمد جابر</div>
-        <p class="max-w-md mx-auto text-sm text-gray-500 mb-8">ملك النحو واللغة العربية لطلاب الثانوية العامة. نحن نصنع التفوق بذكاء.</p>
-        <div class="flex justify-center gap-6 mb-8 text-gray-400">
-            <a href="#" class="hover:text-blue-500 transition">فيسبوك</a>
-            <a href="#" class="hover:text-red-500 transition">يوتيوب</a>
-            <a href="#" class="hover:text-blue-400 transition">تليجرام</a>
+    <footer class="bg-primary-950 text-white pt-20 pb-10 mt-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-primary-900 font-black text-2xl">م</div>
+                        <h4 class="text-2xl font-black">محمد جابر</h4>
+                    </div>
+                    <p class="text-primary-200 text-sm leading-relaxed font-bold">المنصة التعليمية الأولى المتخصصة في تدريس اللغة العربية للمرحلة الثانوية بأسلوب عصري ومبتكر يضمن التفوق والتميز.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-primary-900 transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-primary-900 transition"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-primary-900 transition"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="font-black text-lg mb-8 text-gold">روابط سريعة</h5>
+                    <ul class="space-y-4 text-sm font-bold text-primary-100">
+                        <li><a href="#" class="hover:text-white transition">عن الأستاذ</a></li>
+                        <li><a href="#" class="hover:text-white transition">المسارات الدراسية</a></li>
+                        <li><a href="#" class="hover:text-white transition">جدول المحاضرات</a></li>
+                        <li><a href="#" class="hover:text-white transition">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-black text-lg mb-8 text-gold">تواصل معنا</h5>
+                    <ul class="space-y-4 text-sm font-bold text-primary-100">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-gold"></i> القاهرة، مدينة نصر</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-phone text-gold"></i> +20 100 000 0000</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-envelope text-gold"></i> info@mohamedjaber.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-black text-lg mb-8 text-gold">النشرة البريدية</h5>
+                    <p class="text-xs text-primary-200 mb-6 font-bold">اشترك لتصلك أحدث الملازم والتدريبات فور صدورها.</p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="بريدك الإلكتروني" class="flex-grow bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm outline-none focus:bg-white/20 transition">
+                        <button class="px-4 py-3 bg-white text-primary-900 rounded-xl font-bold hover:bg-gold hover:text-white transition shadow-lg">اشترك</button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-10 text-center flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-xs font-bold text-primary-400">جميع الحقوق محفوظة © 2024 - منصة الأستاذ محمد جابر التعليمية</p>
+                <div class="flex gap-6 text-xs font-bold text-primary-400">
+                    <a href="#" class="hover:text-white">شروط الاستخدام</a>
+                    <a href="#" class="hover:text-white">المساعدة</a>
+                </div>
+            </div>
         </div>
-        <div class="text-xs text-gray-700 font-bold border-t border-gray-800 pt-8">&copy; 2026 جميع الحقوق محفوظة لـ برء عمر ومحمد جابر</div>
+        <!-- Footer Shapes -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary-800/20 rounded-full blur-[100px] -translate-y-1/2"></div>
     </footer>
-</div>
 
-<!-- Firebase & Logic -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, onAuthStateChanged, signOut, signInWithCredential } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, serverTimestamp, setDoc, getDoc, updateDoc, orderBy, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+    <!-- Core Application Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-    // --- Firebase Config ---
-    const firebaseConfig = {
-        apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
-        authDomain: "mr-jabr.firebaseapp.com",
-        projectId: "mr-jabr",
-        storageBucket: "mr-jabr.firebasestorage.app",
-        messagingSenderId: "563345828466",
-        appId: "1:563345828466:web:f0bdd40711c935f60d30eb",
-        measurementId: "G-C7L0T2QHL8"
-    };
+        // Constants & Configuration
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-    const ADMIN_EMAIL = "bo2584668@gmail.com";
-
-    // --- State ---
-    let currentUser = null;
-    let currentUserProfile = null;
-    let currentFilterGrade = 'all';
-    let allCourses = [];
-    let allBooks = [];
-    let allAnnouncements = [];
-    let mySubscriptions = [];
-    let isLoadingUser = true;
-    let isProfileComplete = false;
-
-    // --- UI Elements ---
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const joiningGateway = document.getElementById('joining-gateway');
-    const authSection = document.getElementById('authSection');
-    const adminLink = document.getElementById('adminLink');
-    const profileLink = document.getElementById('profileLink');
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toastMessage');
-    const toastIcon = document.getElementById('toastIcon');
-
-    // --- Toast Function ---
-    function showToast(message, type = 'info') {
-        const icons = {
-            success: '✅',
-            error: '❌',
-            info: 'ℹ️'
+        // Local Application State
+        const AppState = {
+            user: JSON.parse(localStorage.getItem('jaber_pro_user')) || null,
+            adminEmail: "admin@teacher.com",
+            courses: [],
+            books: [],
+            exams: [],
+            activeFilter: 'all',
+            isHeaderShrunk: false,
+            notifications: []
         };
-        toastIcon.textContent = icons[type] || 'ℹ️';
-        toastMessage.textContent = message;
-        toast.className = `toast ${type} show`;
-        toast.classList.remove('hidden');
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.classList.add('hidden'), 300);
-        }, 3000);
-    }
 
-    // --- Loading ---
-    function setLoading(loading) {
-        if (loading) {
-            loadingOverlay.classList.remove('hidden');
-        } else {
-            loadingOverlay.classList.add('hidden');
-        }
-    }
+        // --- Core Functions ---
 
-    // --- Authentication ---
-    window.handleCredentialResponse = async (response) => {
-        setLoading(true);
-        const idToken = response.credential;
-        const credential = GoogleAuthProvider.credential(idToken);
-        try {
-            await signInWithCredential(auth, credential);
-            showToast('تم تسجيل الدخول بنجاح', 'success');
-        } catch (e) { 
-            console.error(e);
-            let errorMessage = 'فشل تسجيل الدخول. حاول مرة أخرى.';
-            if (e.code === 'auth/account-exists-with-different-credential') {
-                errorMessage = 'هذا البريد مرتبط بطريقة تسجيل دخول أخرى.';
-            } else if (e.code === 'auth/invalid-credential') {
-                errorMessage = 'بيانات الاعتماد غير صالحة.';
+        /**
+         * Initialize Application
+         */
+        async function initApp() {
+            try {
+                await signInAnonymously(auth);
+                setupCoreListeners();
+                setupGlobalScrollHandler();
+                setupAuthDisplay();
+                setupAnimations();
+                
+                // Close loader after minimal delay for UX
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 1200);
+            } catch (error) {
+                console.error("Initialization Failed:", error);
+                Swal.fire('خطأ في الاتصال', 'يرجى التحقق من اتصالك بالإنترنت', 'error');
             }
-            showToast(errorMessage, 'error');
-        } finally {
-            setLoading(false);
         }
-    };
 
-    window.logout = () => {
-        setLoading(true);
-        signOut(auth).then(() => {
-            showToast('تم تسجيل الخروج', 'info');
-            window.location.reload();
-        }).finally(() => setLoading(false));
-    };
+        /**
+         * Firestore Data Listeners
+         */
+        function setupCoreListeners() {
+            // Courses Listener
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'courses'), (snap) => {
+                AppState.courses = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderCourseGalleries();
+            });
 
-    // --- Check Profile on Auth Change ---
-    onAuthStateChanged(auth, async (user) => {
-        setLoading(true);
-        currentUser = user;
-        
-        if (user) {
-            const profileRef = doc(db, 'users', user.uid);
-            const snap = await getDoc(profileRef);
-            
-            if (snap.exists()) {
-                currentUserProfile = snap.data();
-                isProfileComplete = true;
-                joiningGateway.classList.add('hidden');
-                profileLink.classList.remove('hidden');
-                // Load profile data into profile page
-                document.getElementById('profileName').value = user.displayName || '';
-                document.getElementById('profileEmail').value = user.email || '';
-                document.getElementById('profileGrade').value = currentUserProfile.grade || '1';
-                document.getElementById('profilePhone').value = currentUserProfile.phone || '';
-                document.getElementById('profileSource').value = currentUserProfile.source || 'facebook';
+            // Library Listener
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'books'), (snap) => {
+                AppState.books = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderLibraryGallery();
+            });
+        }
+
+        /**
+         * Routing & Section Management
+         */
+        window.router = (sectionId) => {
+            const allSections = document.querySelectorAll('.view-section');
+            const targetSection = document.getElementById(`section-${sectionId}`);
+            const allNavLinks = document.querySelectorAll('.nav-link');
+
+            if (!targetSection) return;
+
+            // Update UI State
+            allSections.forEach(s => s.classList.add('hidden'));
+            targetSection.classList.remove('hidden');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Close mobile menu
+            document.getElementById('mobile-drawer').classList.add('hidden');
+
+            // Handle specific section inits
+            if (sectionId === 'admin') initAdminDashboard();
+            if (sectionId === 'home') runCounters();
+        };
+
+        /**
+         * Auth Handlers
+         */
+        window.handleCredentialResponse = (response) => {
+            try {
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                const userObj = {
+                    id: payload.sub,
+                    name: payload.name,
+                    email: payload.email,
+                    picture: payload.picture,
+                    isAdmin: payload.email === AppState.adminEmail
+                };
+
+                AppState.user = userObj;
+                localStorage.setItem('jaber_pro_user', JSON.stringify(userObj));
+                setupAuthDisplay();
+                
+                Swal.fire({
+                    title: `مرحباً بك يا ${userObj.name}`,
+                    text: 'تم تسجيل دخولك بنجاح للمنصة',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } catch (err) {
+                console.error("Auth Decode Error:", err);
+            }
+        };
+
+        window.logout = () => {
+            Swal.fire({
+                title: 'هل تريد الخروج؟',
+                text: "سيتعين عليك تسجيل الدخول مرة أخرى للوصول للمحاضرات",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1e40af',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم، سجل الخروج',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('jaber_pro_user');
+                    AppState.user = null;
+                    location.reload();
+                }
+            });
+        };
+
+        function setupAuthDisplay() {
+            const authContainer = document.getElementById('google-auth-container');
+            const userContext = document.getElementById('user-context');
+            const adminBtn = document.getElementById('mobile-admin-btn');
+            const navAdmin = document.getElementById('nav-admin');
+
+            if (AppState.user) {
+                authContainer.classList.add('hidden');
+                userContext.classList.remove('hidden');
+                document.getElementById('user-avatar').src = AppState.user.picture;
+                document.getElementById('user-display-name').textContent = AppState.user.name;
+                
+                if (AppState.user.isAdmin) {
+                    adminBtn?.classList.remove('hidden');
+                    navAdmin?.classList.remove('hidden');
+                    document.getElementById('user-role-label').textContent = 'مدير المنصة';
+                }
             } else {
-                currentUserProfile = null;
-                isProfileComplete = false;
-                profileLink.classList.add('hidden');
-                if (user.email !== ADMIN_EMAIL) {
-                    joiningGateway.classList.remove('hidden');
-                } else {
-                    joiningGateway.classList.add('hidden');
-                }
+                authContainer.classList.remove('hidden');
+                userContext.classList.add('hidden');
+                // GSI Button setup
+                google.accounts.id.initialize({
+                    client_id: "583210084990-m5j5pkdp63s255aci47grhdhef5rfk9s.apps.googleusercontent.com",
+                    callback: window.handleCredentialResponse
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById("g_id_signin"),
+                    { theme: "outline", size: "large", text: "signin_with", shape: "pill" }
+                );
             }
-            
-            if (user.email === ADMIN_EMAIL) {
-                adminLink.classList.remove('hidden');
-            } else {
-                adminLink.classList.add('hidden');
-            }
-        } else {
-            currentUserProfile = null;
-            isProfileComplete = false;
-            joiningGateway.classList.add('hidden');
-            adminLink.classList.add('hidden');
-            profileLink.classList.add('hidden');
         }
-        
-        updateAuthUI(user);
-        fetchData(); // Start listeners
-        setLoading(false);
-    });
 
-    // --- Update Profile Form (Joining Gateway) ---
-    document.getElementById('profileForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!currentUser) return;
-        
-        setLoading(true);
-        const profile = {
-            grade: document.getElementById('userGrade').value,
-            phone: document.getElementById('userPhone').value,
-            source: document.getElementById('discoverySource').value,
-            createdAt: serverTimestamp(),
-            email: currentUser.email,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL
+        /**
+         * Course Filtering & Rendering
+         */
+        window.filterCourses = (level) => {
+            AppState.activeFilter = level;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-primary-800', 'text-white');
+                btn.classList.add('text-gray-500');
+            });
+            event.target.classList.add('active', 'bg-primary-800', 'text-white');
+            event.target.classList.remove('text-gray-500');
+            renderCourseGalleries();
         };
-        
-        try {
-            await setDoc(doc(db, 'users', currentUser.uid), profile);
-            currentUserProfile = profile;
-            isProfileComplete = true;
-            joiningGateway.classList.add('hidden');
-            profileLink.classList.remove('hidden');
-            showToast('أهلاً بك في عائلة الفرعون!', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('حدث خطأ في حفظ البيانات', 'error');
-        } finally {
-            setLoading(false);
-        }
-    });
 
-    // --- Update Profile Page Form ---
-    document.getElementById('updateProfileForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!currentUser) return;
-        
-        setLoading(true);
-        const updatedProfile = {
-            grade: document.getElementById('profileGrade').value,
-            phone: document.getElementById('profilePhone').value,
-            source: document.getElementById('profileSource').value,
-            updatedAt: serverTimestamp()
-        };
-        
-        try {
-            await updateDoc(doc(db, 'users', currentUser.uid), updatedProfile);
-            currentUserProfile = { ...currentUserProfile, ...updatedProfile };
-            showToast('تم تحديث البيانات بنجاح', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('فشل التحديث', 'error');
-        } finally {
-            setLoading(false);
-        }
-    });
-
-    // --- Render Auth Section ---
-    function updateAuthUI(user) {
-        if (user) {
-            authSection.innerHTML = `
-                <div class="flex items-center gap-3 bg-white/90 p-2 pr-5 rounded-full border shadow-md border-blue-100">
-                    <div class="text-right hidden sm:block">
-                        <div class="text-xs font-black text-gray-900">${user.displayName || 'طالب'}</div>
-                        <div class="text-[10px] text-blue-600 font-bold">${user.email === ADMIN_EMAIL ? 'المدير العام' : 'طالب المنصة'}</div>
-                    </div>
-                    <img src="${user.photoURL || 'https://ui-avatars.com/api/?name='+encodeURIComponent(user.displayName||'User')}" class="w-10 h-10 rounded-full border-2 border-blue-200">
-                    <button onclick="logout()" class="p-2 text-red-500 hover:bg-red-50 rounded-full transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    </button>
-                </div>`;
-        } else {
-            authSection.innerHTML = `<div id="google-btn-container"></div>`;
-            // Render Google button with retry
-            const attemptRender = () => {
-                if (window.google && google.accounts) {
-                    google.accounts.id.renderButton(
-                        document.getElementById("google-btn-container"),
-                        { theme: "outline", size: "large", shape: "pill", locale: "ar", text: "signin_with", logo_alignment: "center" }
-                    );
-                } else {
-                    setTimeout(attemptRender, 200);
-                }
-            };
-            attemptRender();
-        }
-    }
-
-    // --- Navigation ---
-    window.showPage = (pageId) => {
-        document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-        document.getElementById(`page-${pageId}`).classList.remove('hidden');
-        
-        // Update nav active class
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active-nav', 'text-blue-600', 'font-black');
-        });
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    // --- Admin Tabs ---
-    window.showAdminTab = (tab) => {
-        document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.add('hidden'));
-        document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-            btn.classList.remove('bg-blue-600', 'text-white');
-            btn.classList.add('bg-gray-100', 'text-gray-700');
-        });
-        
-        if (tab === 'courses') {
-            document.getElementById('adminCoursesTab').classList.remove('hidden');
-            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'courses\')"]').classList.add('bg-blue-600', 'text-white');
-        } else if (tab === 'books') {
-            document.getElementById('adminBooksTab').classList.remove('hidden');
-            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'books\')"]').classList.add('bg-blue-600', 'text-white');
-        } else if (tab === 'announcements') {
-            document.getElementById('adminAnnouncementsTab').classList.remove('hidden');
-            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'announcements\')"]').classList.add('bg-blue-600', 'text-white');
-        } else if (tab === 'requests') {
-            document.getElementById('adminRequestsTab').classList.remove('hidden');
-            document.querySelector('.admin-tab-btn[onclick="showAdminTab(\'requests\')"]').classList.add('bg-blue-600', 'text-white');
-        }
-    };
-
-    // --- File Upload ---
-    async function uploadFile(file, path) {
-        const storageRef = ref(storage, path);
-        await uploadBytes(storageRef, file);
-        return await getDownloadURL(storageRef);
-    }
-
-    // --- Admin: Add Course ---
-    document.getElementById('courseForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
-
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loader w-5 h-5 border-white"></div><span>جاري الرفع...</span></div>`;
-
-        try {
-            const imgFile = document.getElementById('courseImageFile').files[0];
-            const videoFile = document.getElementById('courseVideoFile').files[0];
+        function renderCourseGalleries() {
+            const fullGrid = document.getElementById('courses-full-grid');
+            const featuredGrid = document.getElementById('featured-courses-grid');
             
-            const timestamp = Date.now();
-            const imageUrl = await uploadFile(imgFile, `courses/images/${timestamp}_${imgFile.name}`);
-            const videoUrl = await uploadFile(videoFile, `courses/videos/${timestamp}_${videoFile.name}`);
+            const filtered = AppState.activeFilter === 'all' 
+                ? AppState.courses 
+                : AppState.courses.filter(c => c.level === AppState.activeFilter);
 
-            await addDoc(collection(db, 'courses'), {
-                title: document.getElementById('courseTitle').value,
-                grade: document.getElementById('courseGrade').value,
-                type: document.getElementById('courseType').value,
-                price: document.getElementById('coursePrice').value,
-                imageUrl,
-                videoUrl,
-                description: document.getElementById('courseDesc').value,
-                createdAt: serverTimestamp(),
-                createdBy: currentUser.uid
-            });
-            
-            document.getElementById('courseForm').reset();
-            showToast('تم نشر المحاضرة بنجاح', 'success');
-        } catch (e) { 
-            console.error(e); 
-            showToast('حدث خطأ أثناء الرفع', 'error');
-        } finally { 
-            btn.disabled = false; 
-            btn.innerText = "نشر المحتوى"; 
-        }
-    });
-
-    // --- Admin: Add Book ---
-    document.getElementById('bookForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
-
-        const btn = document.getElementById('submitBookBtn');
-        btn.disabled = true;
-        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loader w-5 h-5 border-white"></div><span>جاري الرفع...</span></div>`;
-
-        try {
-            const pdfFile = document.getElementById('bookFile').files[0];
-            const timestamp = Date.now();
-            const pdfUrl = await uploadFile(pdfFile, `books/${timestamp}_${pdfFile.name}`);
-
-            await addDoc(collection(db, 'books'), {
-                title: document.getElementById('bookTitle').value,
-                grade: document.getElementById('bookGrade').value,
-                description: document.getElementById('bookDesc').value,
-                pdfUrl,
-                createdAt: serverTimestamp(),
-                createdBy: currentUser.uid
-            });
-            
-            document.getElementById('bookForm').reset();
-            showToast('تم رفع الملزمة بنجاح', 'success');
-        } catch (e) { 
-            console.error(e); 
-            showToast('حدث خطأ أثناء الرفع', 'error');
-        } finally { 
-            btn.disabled = false; 
-            btn.innerText = "رفع الملزمة"; 
-        }
-    });
-
-    // --- Admin: Add Announcement ---
-    document.getElementById('announcementForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
-
-        const btn = document.getElementById('submitAnnouncementBtn');
-        btn.disabled = true;
-        btn.innerHTML = `<div class="flex items-center justify-center gap-2"><div class="loader w-5 h-5 border-white"></div><span>جاري النشر...</span></div>`;
-
-        try {
-            await addDoc(collection(db, 'announcements'), {
-                title: document.getElementById('announcementTitle').value,
-                content: document.getElementById('announcementContent').value,
-                important: document.getElementById('announcementImportant').checked,
-                createdAt: serverTimestamp(),
-                createdBy: currentUser.uid
-            });
-            
-            document.getElementById('announcementForm').reset();
-            showToast('تم نشر الإعلان', 'success');
-        } catch (e) { 
-            console.error(e); 
-            showToast('حدث خطأ', 'error');
-        } finally { 
-            btn.disabled = false; 
-            btn.innerText = "نشر الإعلان"; 
-        }
-    });
-
-    // --- Subscription Modal ---
-    window.openSubscribeModal = (id, title) => {
-        if (!currentUser) {
-            showToast('سجل دخولك أولاً', 'info');
-            return;
-        }
-        if (!isProfileComplete && currentUser.email !== ADMIN_EMAIL) {
-            showToast('يجب إكمال بياناتك أولاً', 'info');
-            joiningGateway.classList.remove('hidden');
-            return;
-        }
-        document.getElementById('subCourseId').value = id;
-        document.getElementById('subCourseTitle').value = title;
-        document.getElementById('subscribe-modal').classList.remove('hidden');
-    };
-
-    window.closeSubscribeModal = () => document.getElementById('subscribe-modal').classList.add('hidden');
-
-    document.getElementById('subscribeForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!currentUser) return;
-        
-        setLoading(true);
-        const subData = {
-            courseId: document.getElementById('subCourseId').value,
-            courseTitle: document.getElementById('subCourseTitle').value,
-            studentName: document.getElementById('subName').value,
-            studentWhatsapp: document.getElementById('subWhatsapp').value,
-            senderPhone: document.getElementById('subSenderPhone').value,
-            studentId: currentUser.uid,
-            studentEmail: currentUser.email,
-            status: 'pending',
-            createdAt: serverTimestamp()
-        };
-        
-        try {
-            await addDoc(collection(db, 'subscriptions'), subData);
-            
-            const msg = encodeURIComponent(`الأستاذ محمد جابر، قمت بتحويل الاشتراك لكورس: (${subData.courseTitle})\nالاسم: ${subData.studentName}\nالرقم المحول منه: ${subData.senderPhone}`);
-            window.open(`https://wa.me/+201273740256?text=${msg}`, '_blank');
-            
-            closeSubscribeModal();
-            showToast('تم إرسال الطلب، سيتم مراجعته', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('حدث خطأ', 'error');
-        } finally {
-            setLoading(false);
-        }
-    });
-
-    // --- Filter for Courses ---
-    window.filterByGrade = (grade) => {
-        currentFilterGrade = grade;
-        document.querySelectorAll('.grade-btn').forEach(b => {
-            b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-            b.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
-        });
-        const active = Array.from(document.querySelectorAll('.grade-btn')).find(b => b.innerText.includes(grade == 'all' ? 'الكل' : grade == '1' ? 'الأول' : grade == '2' ? 'الثاني' : 'الثالث'));
-        if (active) {
-            active.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-            active.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
-        }
-        renderCourses();
-    };
-
-    // --- Fetch Real-time Data ---
-    function fetchData() {
-        // Courses
-        const coursesRef = collection(db, 'courses');
-        onSnapshot(query(coursesRef, orderBy('createdAt', 'desc')), (snapshot) => {
-            allCourses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderCourses();
-            if (currentUser?.email === ADMIN_EMAIL) {
-                renderAdminCourses(allCourses);
-            }
-        });
-
-        // Books
-        const booksRef = collection(db, 'books');
-        onSnapshot(query(booksRef, orderBy('createdAt', 'desc')), (snapshot) => {
-            allBooks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderBooks();
-            if (currentUser?.email === ADMIN_EMAIL) {
-                renderAdminBooks(allBooks);
-            }
-        });
-
-        // Announcements
-        const announcementsRef = collection(db, 'announcements');
-        onSnapshot(query(announcementsRef, orderBy('important', 'desc'), orderBy('createdAt', 'desc')), (snapshot) => {
-            allAnnouncements = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderAnnouncements();
-            if (currentUser?.email === ADMIN_EMAIL) {
-                renderAdminAnnouncements(allAnnouncements);
-            }
-        });
-
-        // Subscriptions (if user logged in)
-        if (currentUser) {
-            const subsRef = collection(db, 'subscriptions');
-            onSnapshot(query(subsRef), (snapshot) => {
-                mySubscriptions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderCourses(); // Re-render courses to update access status
-                if (currentUser.email === ADMIN_EMAIL) {
-                    renderAdminRequests(mySubscriptions);
-                }
-            });
-        }
-    }
-
-    // --- Render Courses ---
-    function renderCourses() {
-        const container = document.getElementById('coursesList');
-        let filtered = currentFilterGrade === 'all' ? allCourses : allCourses.filter(c => c.grade == currentFilterGrade);
-        
-        if (!filtered.length) { 
-            container.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-bold'>لا توجد محاضرات منشورة لهذا الصف حالياً.</div>"; 
-            return; 
-        }
-        
-        container.innerHTML = filtered.map(c => {
-            const isSubscribed = mySubscriptions.some(s => s.courseId === c.id && s.studentId === currentUser?.uid && s.status === 'approved');
-            const isPending = mySubscriptions.some(s => s.courseId === c.id && s.studentId === currentUser?.uid && s.status === 'pending');
-            const isFree = c.type === 'free';
-            const canAccess = isSubscribed || isFree || currentUser?.email === ADMIN_EMAIL;
-
-            return `
-                <div class="course-card bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm fade-in">
-                    <div class="relative h-56">
-                        <img src="${c.imageUrl || 'https://via.placeholder.com/400x200?text=محاضرة'}" class="w-full h-full object-cover ${!canAccess ? 'hidden-content' : ''}">
-                        <div class="absolute top-4 right-4 bg-gradient-to-l from-blue-700 to-blue-500 text-white text-xs px-4 py-2 rounded-full font-black shadow-lg">
-                            الصف ${c.grade == '1' ? 'الأول' : c.grade == '2' ? 'الثاني' : 'الثالث'}
+            const courseCard = (c) => `
+                <div class="group relative bg-white rounded-3xl p-5 shadow-sm border border-gray-100 hover:shadow-premium transition-all duration-500 animate__animated animate__fadeInUp">
+                    <div class="relative w-full aspect-video rounded-2xl overflow-hidden mb-6 bg-primary-50">
+                        <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-20">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fa-solid fa-play text-4xl text-primary-200 group-hover:text-primary-600 transition-colors"></i>
                         </div>
-                        ${!canAccess ? `
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
-                                <span class="bg-white/90 p-4 rounded-full shadow-xl text-2xl">🔒</span>
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="p-8">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-black text-xl text-gray-800">${c.title}</h3>
-                            <span class="text-blue-600 font-black bg-blue-50 px-3 py-1 rounded-full">${isFree ? 'مجاناً' : c.price + ' ج.م'}</span>
+                        <div class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-[10px] font-black text-primary-900 shadow-sm">
+                            ${c.level === '3sec' ? 'الصف الثالث' : c.level === '2sec' ? 'الصف الثاني' : 'الصف الأول'}
                         </div>
-                        <p class="text-gray-500 text-sm mb-6 line-clamp-2">${c.description || ''}</p>
-                        
-                        ${canAccess ? `
-                            <div class="space-y-4">
-                                <video controls class="w-full rounded-2xl bg-black h-44 shadow-inner">
-                                    <source src="${c.videoUrl}" type="video/mp4">
-                                </video>
-                                <button class="w-full py-4 bg-blue-50 text-blue-700 font-black rounded-2xl hover:bg-blue-100 transition">بدء المشاهدة</button>
-                            </div>
-                        ` : `
-                            <div class="bg-gray-50 p-6 rounded-2xl text-center border-2 border-dashed border-gray-200">
-                                <p class="text-sm font-bold text-gray-600 mb-4">${isPending ? 'طلبك قيد المراجعة...' : 'اشترك لمشاهدة المحاضرة كاملاً'}</p>
-                                ${isPending ? 
-                                    `<div class="loader w-6 h-6 border-blue-600 mx-auto"></div>` : 
-                                    `<button onclick="openSubscribeModal('${c.id}', '${c.title}')" class="w-full py-4 bg-gradient-to-l from-blue-600 to-blue-500 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:shadow-2xl transition">تفعيل المحاضرة الآن</button>`}
-                            </div>
-                        `}
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-[10px] font-bold text-gray-400">
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-clock"></i> ${c.duration || '--'} دقيقة</span>
+                            <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-eye"></i> 1.2k مشاهدة</span>
+                        </div>
+                        <h3 class="font-black text-gray-800 text-lg group-hover:text-primary-800 transition-colors line-clamp-2 min-h-[3.5rem]">${c.title}</h3>
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+                            <span class="text-primary-900 font-black text-xl">${c.price ? c.price + ' <span class="text-xs">ج.م</span>' : '<span class="text-success">مجاني</span>'}</span>
+                            <button onclick="window.watchVideo('${c.link}', '${c.title}')" class="px-6 py-2.5 bg-primary-800 text-white rounded-xl text-xs font-black shadow-lg shadow-primary-200 hover:scale-105 active:scale-95 transition-all">
+                                مشاهدة المحاضرة
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
-        }).join('');
-    }
 
-    // --- Render Books ---
-    function renderBooks() {
-        const container = document.getElementById('booksList');
-        if (!allBooks.length) { 
-            container.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-bold'>لا توجد ملازم حالياً.</div>"; 
-            return; 
+            if (fullGrid) fullGrid.innerHTML = filtered.length ? filtered.map(courseCard).join('') : `<div class="col-span-full py-20 text-center font-bold text-gray-300">لا توجد محاضرات في هذا القسم حالياً</div>`;
+            if (featuredGrid) featuredGrid.innerHTML = AppState.courses.slice(0, 3).map(courseCard).join('');
         }
-        
-        container.innerHTML = allBooks.map(book => `
-            <div class="book-card bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm p-6">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl flex items-center justify-center text-3xl">📘</div>
-                    <div>
-                        <h3 class="font-black text-xl text-gray-800">${book.title}</h3>
-                        <span class="text-xs text-gray-500">الصف ${book.grade == '1' ? 'الأول' : book.grade == '2' ? 'الثاني' : 'الثالث'} الثانوي</span>
+
+        /**
+         * Library Rendering
+         */
+        function renderLibraryGallery() {
+            const grid = document.getElementById('library-full-grid');
+            if (!grid) return;
+
+            grid.innerHTML = AppState.books.length ? AppState.books.map(b => `
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-start gap-5 hover:shadow-premium transition-all animate__animated animate__zoomIn">
+                    <div class="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 text-2xl flex-shrink-0">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-black text-gray-800 mb-2 leading-tight line-clamp-2">${b.title}</h4>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-bold text-gray-400">PDF • 2.4 MB</span>
+                            <span class="text-[10px] font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-md">جديد</span>
+                        </div>
+                        <a href="${b.link}" target="_blank" class="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 text-gray-600 rounded-xl text-xs font-black hover:bg-red-500 hover:text-white transition-all">
+                            <i class="fa-solid fa-download"></i> تحميل الآن
+                        </a>
                     </div>
                 </div>
-                <p class="text-gray-500 text-sm mb-4 line-clamp-2">${book.description || ''}</p>
-                <a href="${book.pdfUrl}" target="_blank" class="block w-full py-3 bg-gradient-to-l from-green-600 to-green-500 text-white text-center rounded-2xl font-black shadow-lg hover:shadow-xl transition">📥 تحميل الملزمة</a>
-            </div>
-        `).join('');
-    }
-
-    // --- Render Announcements ---
-    function renderAnnouncements() {
-        const container = document.getElementById('announcementsList');
-        if (!allAnnouncements.length) { 
-            container.innerHTML = "<div class='col-span-full text-center py-20 text-gray-400 font-bold'>لا توجد إعلانات حالياً.</div>"; 
-            return; 
+            `).join('') : `<div class="col-span-full py-20 text-center font-bold text-gray-300">المكتبة فارغة حالياً</div>`;
         }
-        
-        container.innerHTML = allAnnouncements.map(ann => `
-            <div class="announcement-card bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-8 ${ann.important ? 'border-r-8 border-yellow-500' : ''}">
-                <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-100 to-yellow-50 rounded-2xl flex items-center justify-center text-2xl">📢</div>
-                    <div class="flex-1">
-                        <h3 class="font-black text-2xl text-gray-800 mb-2">${ann.title}</h3>
-                        <p class="text-gray-600 leading-relaxed">${ann.content}</p>
-                        <div class="text-xs text-gray-400 mt-4">${new Date(ann.createdAt?.seconds * 1000).toLocaleDateString('ar-EG')}</div>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
 
-    // --- Admin Render Functions ---
-    function renderAdminCourses(courses) {
-        const container = document.getElementById('adminCoursesList');
-        if (!container) return;
-        container.innerHTML = courses.map(c => `
-            <div class="flex items-center justify-between p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div class="flex items-center gap-4">
-                    <img src="${c.imageUrl || 'https://via.placeholder.com/56'}" class="w-14 h-14 rounded-2xl object-cover shadow-sm">
-                    <div>
-                        <div class="font-black text-gray-800">${c.title}</div>
-                        <div class="text-[10px] text-gray-400 font-bold uppercase">صف: ${c.grade} • ${c.type === 'paid' ? 'مدفوع' : 'مجاني'}</div>
-                    </div>
-                </div>
-                <button onclick="deleteCourse('${c.id}')" class="p-3 text-red-500 hover:bg-red-50 rounded-2xl transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                </button>
-            </div>
-        `).join('');
-    }
+        /**
+         * Video Player Logic
+         */
+        window.watchVideo = (link, title) => {
+            if (!AppState.user) {
+                return Swal.fire({
+                    title: 'تنبيه',
+                    text: 'يجب عليك تسجيل الدخول بحساب جوجل لمشاهدة المحاضرات',
+                    icon: 'info',
+                    confirmButtonText: 'فهمت'
+                });
+            }
 
-    function renderAdminBooks(books) {
-        const container = document.getElementById('adminBooksList');
-        if (!container) return;
-        container.innerHTML = books.map(b => `
-            <div class="flex items-center justify-between p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center text-2xl">📘</div>
-                    <div>
-                        <div class="font-black text-gray-800">${b.title}</div>
-                        <div class="text-[10px] text-gray-400 font-bold">الصف: ${b.grade}</div>
-                    </div>
-                </div>
-                <button onclick="deleteBook('${b.id}')" class="p-3 text-red-500 hover:bg-red-50 rounded-2xl transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                </button>
-            </div>
-        `).join('');
-    }
+            // Simple YouTube Parser
+            let videoId = '';
+            if (link.includes('v=')) videoId = link.split('v=')[1].split('&')[0];
+            else if (link.includes('youtu.be/')) videoId = link.split('youtu.be/')[1].split('?')[0];
+            else videoId = link.split('/').pop();
 
-    function renderAdminAnnouncements(announcements) {
-        const container = document.getElementById('adminAnnouncementsList');
-        if (!container) return;
-        container.innerHTML = announcements.map(a => `
-            <div class="flex items-center justify-between p-5 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center text-2xl">📢</div>
-                    <div>
-                        <div class="font-black text-gray-800">${a.title}</div>
-                        <div class="text-[10px] text-gray-400 font-bold">${a.important ? '⭐ مهم' : 'عادي'}</div>
-                    </div>
-                </div>
-                <button onclick="deleteAnnouncement('${a.id}')" class="p-3 text-red-500 hover:bg-red-50 rounded-2xl transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                </button>
-            </div>
-        `).join('');
-    }
+            document.getElementById('video-playing-title').textContent = title;
+            document.getElementById('global-iframe').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0`;
+            document.getElementById('global-video-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
 
-    function renderAdminRequests(reqs) {
-        const container = document.getElementById('subRequestsList');
-        const pendings = reqs.filter(r => r.status === 'pending');
-        if (!pendings.length) { 
-            container.innerHTML = "<p class='text-center text-gray-400 py-10'>لا يوجد طلبات جديدة حالياً.</p>"; 
-            return; 
+        window.closeVideo = () => {
+            document.getElementById('global-video-modal').classList.add('hidden');
+            document.getElementById('global-iframe').src = '';
+            document.body.style.overflow = 'auto';
+        };
+
+        /**
+         * Admin Dashboard Management
+         */
+        window.adminNav = (tabId) => {
+            document.querySelectorAll('.admin-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`admin-panel-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-primary-800', 'text-white', 'shadow-lg');
+                btn.classList.add('text-gray-500');
+            });
+            event.currentTarget.classList.add('active', 'bg-primary-800', 'text-white', 'shadow-lg');
+            event.currentTarget.classList.remove('text-gray-500');
+        };
+
+        window.setEntryType = (type) => {
+            document.getElementById('adminEntryType').value = type;
+            document.getElementById('courseOnlyFields').classList.toggle('hidden', type !== 'course');
+            
+            document.querySelectorAll('.entry-type-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-primary-800', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-gray-50', 'text-gray-500');
+            });
+            event.target.classList.add('active', 'bg-primary-800', 'text-white', 'shadow-lg');
+            event.target.classList.remove('bg-gray-50', 'text-gray-500');
+        };
+
+        function initAdminDashboard() {
+            if (!AppState.user?.isAdmin) {
+                router('home');
+                return Swal.fire('وصول ممنوع', 'هذه المنطقة للمسؤولين فقط', 'error');
+            }
+            
+            // Render Growth Chart
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+                    datasets: [{
+                        label: 'المستخدمين الجدد',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        borderColor: '#1e40af',
+                        backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
         }
-        
-        container.innerHTML = pendings.map(r => `
-            <div class="p-6 bg-blue-50/50 border border-blue-100 rounded-[2rem] flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="text-sm">
-                    <div class="font-black text-blue-900 text-lg mb-1">${r.studentName}</div>
-                    <div class="text-gray-600 mb-1">المحاضرة: <span class="font-black text-gray-800">${r.courseTitle}</span></div>
-                    <div class="flex gap-4 text-[11px] font-bold text-blue-600">
-                        <span>📱 ${r.studentWhatsapp}</span>
-                        <span>💸 من: ${r.senderPhone}</span>
-                    </div>
-                </div>
-                <div class="flex gap-2 w-full md:w-auto">
-                    <button onclick="approveSub('${r.id}')" class="flex-1 md:flex-none bg-blue-600 text-white px-6 py-3 rounded-2xl text-xs font-black shadow-lg">تفعيل</button>
-                    <button onclick="deleteSub('${r.id}')" class="flex-1 md:flex-none bg-white text-red-500 border border-red-100 px-6 py-3 rounded-2xl text-xs font-black">رفض</button>
-                </div>
-            </div>
-        `).join('');
-    }
 
-    // --- Admin Actions ---
-    window.approveSub = async (id) => {
-        if (!confirm("تأكيد تفعيل المحاضرة للطالب؟")) return;
-        setLoading(true);
-        try {
-            await updateDoc(doc(db, 'subscriptions', id), { status: 'approved' });
-            showToast('تم التفعيل بنجاح', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('حدث خطأ', 'error');
-        } finally {
-            setLoading(false);
+        /**
+         * Form Submissions
+         */
+        document.getElementById('globalAdminForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const type = document.getElementById('adminEntryType').value;
+            const btn = e.target.querySelector('button');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> جاري الحفظ...';
+
+            const payload = {
+                title: document.getElementById('adminTitle').value,
+                link: document.getElementById('adminLink').value,
+                level: document.getElementById('adminLevel').value,
+                createdAt: new Date().toISOString(),
+                author: AppState.user.name
+            };
+
+            if (type === 'course') {
+                payload.price = document.getElementById('adminPrice').value;
+                payload.duration = document.getElementById('adminDuration').value;
+            }
+
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', type + 's'), payload);
+                Swal.fire('نجاح العملية', 'تم نشر المحتوى الجديد بنجاح على المنصة', 'success');
+                e.target.reset();
+            } catch (err) {
+                Swal.fire('خطأ', 'فشل حفظ البيانات في فايربيز', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى';
+            }
+        });
+
+        // --- Utilities & UI Helpers ---
+
+        function setupGlobalScrollHandler() {
+            window.addEventListener('scroll', () => {
+                const header = document.getElementById('main-header');
+                if (window.scrollY > 50) {
+                    header.classList.add('glass', 'shadow-sm', 'h-16');
+                    header.classList.remove('h-20');
+                } else {
+                    header.classList.remove('glass', 'shadow-sm', 'h-16');
+                    header.classList.add('h-20');
+                }
+            });
         }
-    };
 
-    window.deleteSub = async (id) => {
-        if (!confirm("هل أنت متأكد من رفض هذا الطلب؟")) return;
-        setLoading(true);
-        try {
-            await deleteDoc(doc(db, 'subscriptions', id));
-            showToast('تم رفض الطلب', 'info');
-        } catch (error) {
-            console.error(error);
-            showToast('حدث خطأ', 'error');
-        } finally {
-            setLoading(false);
+        window.toggleMobileMenu = () => {
+            const drawer = document.getElementById('mobile-drawer');
+            drawer.classList.toggle('hidden');
+        };
+
+        function runCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const speed = 200;
+                const inc = target / speed;
+
+                const updateCount = () => {
+                    const current = +counter.innerText;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current + inc);
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
         }
-    };
 
-    window.deleteCourse = async (id) => {
-        if (!confirm("سيتم حذف المحاضرة نهائياً من المنصة، هل توافق؟")) return;
-        setLoading(true);
-        try {
-            await deleteDoc(doc(db, 'courses', id));
-            showToast('تم الحذف', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('حدث خطأ', 'error');
-        } finally {
-            setLoading(false);
+        function setupAnimations() {
+            // Animate items on viewport enter if needed
+            gsap.from(".glass-card", {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power2.out"
+            });
         }
-    };
 
-    window.deleteBook = async (id) => {
-        if (!confirm("حذف الملزمة؟")) return;
-        setLoading(true);
-        try {
-            await deleteDoc(doc(db, 'books', id));
-            showToast('تم الحذف', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('حدث خطأ', 'error');
-        } finally {
-            setLoading(false);
-        }
-    };
+        // Initialize Everything
+        window.onload = initApp;
 
-    window.deleteAnnouncement = async (id) => {
-        if (!confirm("حذف الإعلان؟")) return;
-        setLoading(true);
-        try {
-            await deleteDoc(doc(db, 'announcements', id));
-            showToast('تم الحذف', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('حدث خطأ', 'error');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Make functions global for onclick
-    window.approveSub = approveSub;
-    window.deleteSub = deleteSub;
-    window.deleteCourse = deleteCourse;
-    window.deleteBook = deleteBook;
-    window.deleteAnnouncement = deleteAnnouncement;
-
-</script>
-
+    </script>
 </body>
 </html>
