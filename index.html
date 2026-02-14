@@ -19,10 +19,11 @@
             font-family: 'Cairo', sans-serif;
         }
         body {
-            background: #f0f2f5;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecf2 100%);
             color: #2c3e50;
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         :root {
             --primary: #1e2a3a;
@@ -35,9 +36,10 @@
             --warning: #f39c12;
             --info: #3498db;
             --gradient: linear-gradient(135deg, #1e2a3a 0%, #2c3e50 100%);
+            --gradient-gold: linear-gradient(135deg, #c9a959 0%, #d4af37 100%);
             --shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --shadow-hover: 0 15px 40px rgba(0,0,0,0.2);
-            --transition: all 0.3s ease;
+            --shadow-hover: 0 20px 40px rgba(0,0,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         .container {
             width: 90%;
@@ -60,7 +62,7 @@
             color: #2c3e50;
             padding: 15px 25px;
             border-radius: 50px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -68,6 +70,8 @@
             transform: translateX(120%);
             animation: slideInLeft 0.3s forwards, fadeOut 0.5s 4.5s forwards;
             border-right: 5px solid var(--secondary);
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.95);
         }
         .toast.success { border-right-color: var(--success); }
         .toast.error { border-right-color: var(--danger); }
@@ -89,6 +93,7 @@
             top: 0;
             z-index: 1000;
             box-shadow: var(--shadow);
+            border-bottom: 2px solid var(--accent);
         }
         header .container {
             display: flex;
@@ -109,6 +114,11 @@
             border: 3px solid var(--accent);
             object-fit: cover;
             background: white;
+            transition: var(--transition);
+        }
+        .logo img:hover {
+            transform: scale(1.05);
+            border-color: white;
         }
         .logo h1 {
             font-size: 2rem;
@@ -117,6 +127,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
         .logo span {
             display: block;
@@ -138,9 +149,11 @@
             position: relative;
             padding: 0.5rem 0;
             white-space: nowrap;
+            font-size: 1.1rem;
         }
         nav a:hover {
             color: var(--accent);
+            transform: translateY(-2px);
         }
         nav a::after {
             content: '';
@@ -161,7 +174,7 @@
             flex-wrap: wrap;
         }
         .auth-buttons button {
-            background: var(--accent);
+            background: var(--gradient-gold);
             border: none;
             padding: 0.6rem 1.5rem;
             border-radius: 50px;
@@ -169,23 +182,25 @@
             cursor: pointer;
             transition: var(--transition);
             color: var(--dark);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .auth-buttons button:hover {
-            background: #e6c200;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #d4af37, #c9a959);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
         }
         .user-info {
             display: flex;
             align-items: center;
             gap: 1rem;
             color: white;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.15);
             padding: 0.5rem 1.2rem;
             border-radius: 50px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
             flex-wrap: wrap;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         .user-info span {
             font-weight: 600;
@@ -196,6 +211,7 @@
             padding: 0.2rem 1rem;
             border-radius: 50px;
             font-size: 0.8rem;
+            font-weight: 700;
         }
         .user-info button {
             background: var(--danger);
@@ -208,6 +224,7 @@
         }
         .user-info button:hover {
             background: #c0392b;
+            transform: scale(1.05);
         }
         .hidden { display: none !important; }
 
@@ -247,7 +264,7 @@
             opacity: 0.9;
         }
         .hero .btn {
-            background: var(--accent);
+            background: var(--gradient-gold);
             color: var(--dark);
             padding: 1rem 3rem;
             border-radius: 50px;
@@ -256,6 +273,8 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             transition: var(--transition);
             border: 2px solid var(--accent);
+            display: inline-block;
+            text-decoration: none;
         }
         .hero .btn:hover {
             background: transparent;
@@ -280,6 +299,7 @@
             transition: var(--transition);
             position: relative;
             top: 0;
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .card:hover {
             transform: translateY(-10px);
@@ -289,6 +309,10 @@
             height: 200px;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+        }
+        .card:hover .card-img {
+            transform: scale(1.05);
         }
         .card-content {
             padding: 2rem;
@@ -313,21 +337,24 @@
             cursor: pointer;
             transition: var(--transition);
             width: 100%;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         .btn-card:hover {
             background: linear-gradient(135deg, #2c3e50, #1e2a3a);
             letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         /* ========== Forms ========== */
         .form-container {
             max-width: 600px;
             margin: 3rem auto;
-            background: white;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
             padding: clamp(1.5rem, 5vw, 3rem);
             border-radius: 30px;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .form-container h2 {
             text-align: center;
@@ -373,10 +400,11 @@
         .form-group input[type="file"] {
             padding: 0.8rem;
             border-radius: 30px;
+            background: white;
         }
         .btn-submit {
-            background: var(--gradient);
-            color: white;
+            background: var(--gradient-gold);
+            color: var(--dark);
             width: 100%;
             padding: 1.2rem;
             border: none;
@@ -386,11 +414,16 @@
             cursor: pointer;
             transition: var(--transition);
             margin-top: 1rem;
+            border: 1px solid rgba(255,255,255,0.3);
         }
-        .btn-submit:hover {
-            background: linear-gradient(135deg, #2c3e50, #1e2a3a);
+        .btn-submit:hover:not(:disabled) {
+            background: linear-gradient(135deg, #d4af37, #c9a959);
             transform: scale(1.02);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* ========== Dashboard ========== */
@@ -399,6 +432,7 @@
             color: white;
             padding: 2rem 0;
             margin-bottom: 3rem;
+            border-bottom: 3px solid var(--accent);
         }
         .stats-grid {
             display: grid;
@@ -412,6 +446,11 @@
             border-radius: 20px;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
         }
         .stat-card i {
             font-size: 3rem;
@@ -429,6 +468,7 @@
             padding: 2rem;
             margin-bottom: 2rem;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .lesson-group h3 {
             color: var(--primary);
@@ -473,10 +513,12 @@
             border-radius: 30px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 600;
         }
         .btn-small:hover {
             background: var(--accent);
             color: var(--dark);
+            transform: scale(1.05);
         }
 
         /* ========== Admin Tabs ========== */
@@ -495,11 +537,13 @@
             font-weight: 700;
             transition: var(--transition);
             box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .admin-tab.active {
-            background: var(--accent);
+            background: var(--gradient-gold);
             color: var(--dark);
             transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
         .admin-section {
             display: none;
@@ -507,6 +551,7 @@
             padding: 2rem;
             border-radius: 30px;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .admin-section.active {
             display: block;
@@ -527,11 +572,13 @@
             background: white;
             border-radius: 20px;
             overflow: hidden;
+            box-shadow: var(--shadow);
         }
         th {
             background: var(--primary);
             color: white;
             padding: 1rem;
+            font-weight: 600;
         }
         td {
             padding: 1rem;
@@ -550,6 +597,7 @@
             color: white;
             padding: 3rem 0 1rem;
             margin-top: 4rem;
+            border-top: 3px solid var(--accent);
         }
         .footer-grid {
             display: grid;
@@ -605,12 +653,28 @@
             border-radius: 30px;
             font-size: 0.9rem;
             font-weight: 600;
+            display: inline-block;
         }
         .badge.pending { background: #f39c12; color: white; }
         .badge.active { background: #27ae60; color: white; }
         .badge.expired { background: #7f8c8d; color: white; }
         .badge.admin { background: #8e44ad; color: white; }
         .badge.user { background: #3498db; color: white; }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -830,11 +894,13 @@
                     subscriptionStatusSpan.innerHTML = `<span class="badge expired">غير مشترك</span>`;
                 }
 
-                // إذا كان المستخدم في صفحة تسجيل الدخول أو إنشاء حساب، نوجهه للوحة التحكم
+                // إذا كان المستخدم في صفحة تسجيل الدخول أو إنشاء حساب، نوجهه للوحة التحكم فوراً
                 if (currentPage === 'login' || currentPage === 'signup') {
-                    loadPage('dashboard');
+                    // تغيير currentPage قبل التحميل لتجنب التوجيه المتكرر
+                    currentPage = 'dashboard';
+                    await loadPage('dashboard');
                 } else {
-                    loadPage(currentPage);
+                    await loadPage(currentPage);
                 }
             } else {
                 currentUser = null;
@@ -843,7 +909,7 @@
                 userInfoDiv.classList.add('hidden');
                 mycoursesLink.classList.add('hidden');
                 footerMycourses.classList.add('hidden');
-                loadPage(currentPage);
+                await loadPage(currentPage);
             }
         });
 
@@ -1248,7 +1314,7 @@
 
         function renderSubscriptionRequest() {
             return `
-                <div class="request-form" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 2rem; border-radius: 30px; margin-bottom: 2rem;">
+                <div class="request-form" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 2rem; border-radius: 30px; margin-bottom: 2rem; border: 1px solid rgba(0,0,0,0.05);">
                     <h3 style="color: var(--primary);"><i class="fas fa-key"></i> تفعيل الاشتراك</h3>
                     <p>سعر الاشتراك: <strong>شهري 100 جنيه</strong> | <strong>ترم 300 جنيه</strong></p>
                     <p>لتفعيل الاشتراك يرجى تحويل فودافون كاش على الأرقام التالية:</p>
@@ -1431,7 +1497,7 @@
                     <div class="form-group">
                         <label><input type="checkbox" id="lessonPaid"> درس مدفوع</label>
                     </div>
-                    <button type="submit" class="btn-submit">نشر الدرس</button>
+                    <button type="submit" class="btn-submit" id="addLessonBtn">نشر الدرس</button>
                 </form>
                 <hr>
                 <h3>الدروس الموجودة</h3>
@@ -1440,33 +1506,52 @@
 
             document.getElementById('addLessonForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const courseId = document.getElementById('lessonCourse').value;
-                const month = document.getElementById('lessonMonth').value;
-                const title = document.getElementById('lessonTitle').value;
-                const desc = document.getElementById('lessonDesc').value;
-                const videoUrl = document.getElementById('lessonVideo').value;
-                const videoFile = document.getElementById('lessonVideoFile').files[0];
-                const thumbFile = document.getElementById('lessonThumb').files[0];
-                const paid = document.getElementById('lessonPaid').checked;
+                const btn = document.getElementById('addLessonBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري النشر...';
+                
+                try {
+                    const courseId = document.getElementById('lessonCourse').value;
+                    const month = document.getElementById('lessonMonth').value;
+                    const title = document.getElementById('lessonTitle').value;
+                    const desc = document.getElementById('lessonDesc').value;
+                    const videoUrl = document.getElementById('lessonVideo').value;
+                    const videoFile = document.getElementById('lessonVideoFile').files[0];
+                    const thumbFile = document.getElementById('lessonThumb').files[0];
+                    const paid = document.getElementById('lessonPaid').checked;
 
-                let finalVideoUrl = videoUrl;
-                if (videoFile) {
-                    const storageRef = ref(storage, `videos/${Date.now()}_${videoFile.name}`);
-                    await uploadBytes(storageRef, videoFile);
-                    finalVideoUrl = await getDownloadURL(storageRef);
-                }
-                let thumbUrl = '';
-                if (thumbFile) {
-                    const thumbRef = ref(storage, `thumbs/${Date.now()}_${thumbFile.name}`);
-                    await uploadBytes(thumbRef, thumbFile);
-                    thumbUrl = await getDownloadURL(thumbRef);
-                }
+                    if (!videoUrl && !videoFile) {
+                        showToast('يجب إدخال رابط فيديو أو رفع ملف فيديو', 'warning', 'fa-exclamation-triangle');
+                        btn.disabled = false;
+                        btn.innerHTML = 'نشر الدرس';
+                        return;
+                    }
 
-                await addDoc(collection(db, 'lessons'), {
-                    courseId, month, title, description: desc, videoUrl: finalVideoUrl, thumbUrl, paid, order: Date.now(), createdAt: new Date()
-                });
-                showToast('تم إضافة الدرس', 'success', 'fa-check-circle');
-                loadLessonsList();
+                    let finalVideoUrl = videoUrl;
+                    if (videoFile) {
+                        const storageRef = ref(storage, `videos/${Date.now()}_${videoFile.name}`);
+                        await uploadBytes(storageRef, videoFile);
+                        finalVideoUrl = await getDownloadURL(storageRef);
+                    }
+                    let thumbUrl = '';
+                    if (thumbFile) {
+                        const thumbRef = ref(storage, `thumbs/${Date.now()}_${thumbFile.name}`);
+                        await uploadBytes(thumbRef, thumbFile);
+                        thumbUrl = await getDownloadURL(thumbRef);
+                    }
+
+                    await addDoc(collection(db, 'lessons'), {
+                        courseId, month, title, description: desc, videoUrl: finalVideoUrl, thumbUrl, paid, order: Date.now(), createdAt: new Date()
+                    });
+                    showToast('تم إضافة الدرس بنجاح', 'success', 'fa-check-circle');
+                    document.getElementById('addLessonForm').reset();
+                    loadLessonsList();
+                } catch (error) {
+                    showToast('حدث خطأ: ' + error.message, 'error', 'fa-exclamation-circle');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = 'نشر الدرس';
+                }
             });
 
             loadLessonsList();
