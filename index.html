@@ -8,20 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Swiper (للإضافات) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- GSAP -->
+    <!-- GSAP (اختياري) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <!-- Firebase SDK (modular) -->
+    <!-- Firebase Firestore فقط (بدون Auth) -->
     <script type="module">
-        // استيراد Firebase (v9+)
+        // استيراد Firebase Firestore فقط (v9+)
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-        import { getAuth, GoogleAuthProvider, signInWithCredential, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, orderBy } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
         
         // إعدادات Firebase (خاصة بك)
         const firebaseConfig = {
@@ -36,30 +33,21 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
 
-        // تعريض الكائنات العامة للاستخدام في النطاق العام (لكننا سنستخدم module)
-        window.firebaseAuth = auth;
-        window.firebaseDb = db;
-        window.firebaseProvider = provider;
-        window.GoogleAuthProvider = GoogleAuthProvider;
-        window.signInWithCredential = signInWithCredential;
-        window.onAuthStateChanged = onAuthStateChanged;
-        window.signOut = signOut;
+        // تعريض db للاستخدام العام
+        window.db = db;
+        window.collection = collection;
         window.doc = doc;
         window.setDoc = setDoc;
         window.getDoc = getDoc;
-        window.collection = collection;
-        window.query = query;
-        window.where = where;
         window.getDocs = getDocs;
         window.addDoc = addDoc;
         window.updateDoc = updateDoc;
         window.deleteDoc = deleteDoc;
+        window.query = query;
+        window.where = where;
         window.orderBy = orderBy;
-        window.onSnapshot = onSnapshot;
     </script>
     <style>
         body { font-family: 'Cairo', sans-serif; background: #f9fafb; }
@@ -68,15 +56,16 @@
         .course-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15); }
         .admin-tab { @apply px-6 py-3 font-bold rounded-full transition-all; }
         .admin-tab.active { @apply bg-blue-600 text-white; }
-        /* custom scroll */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #e2e8f0; }
         ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+        .float-anim { animation: float 6s infinite; }
     </style>
 </head>
 <body class="text-gray-800 overflow-x-hidden">
 
-    <!-- ========== HEADER (ثابت) ========== -->
+    <!-- ========== HEADER ========== -->
     <header id="mainHeader" class="fixed top-0 w-full z-50 transition-all duration-300 h-20 flex items-center bg-white/90 backdrop-blur-md shadow-sm">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <a href="#" onclick="navigate('home'); return false;" class="flex items-center gap-2">
@@ -102,7 +91,7 @@
                     <button onclick="openLoginModal()" class="px-5 py-2 rounded-full border-2 border-blue-600 text-blue-600 font-bold hover:bg-blue-600 hover:text-white transition">دخول</button>
                     <button onclick="openLoginModal()" class="px-5 py-2 rounded-full bg-blue-600 text-white font-bold shadow-lg">ابدأ</button>
                 </div>
-                <button id="menuToggle" class="md:hidden p-2 rounded-lg bg-gray-100"><i class="fas fa-bars"></i></button>
+                <button id="menuToggle" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-gray-100"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
@@ -129,12 +118,11 @@
         </div>
     </div>
 
-    <!-- ========== الصفحات (نظام SPA بسيط) ========== -->
+    <!-- ========== الصفحات ========== -->
     <main class="pt-24 min-h-screen">
         <!-- الصفحة الرئيسية -->
         <section id="page-home" class="page active">
-            <!-- Hero Section -->
-            <div class="hero-gradient text-white py-20 relative overflow-hidden">
+            <div class="hero-gradient bg-gradient-to-l from-blue-900 to-blue-600 text-white py-20 relative overflow-hidden">
                 <div class="container mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
                     <div class="space-y-6">
                         <h1 class="text-5xl md:text-6xl font-black leading-tight">أتقن اللغة العربية <br> <span class="text-yellow-300">بأسلوب عصري</span></h1>
@@ -142,11 +130,11 @@
                         <button onclick="navigate('courses')" class="bg-white text-blue-700 font-bold px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition">تصفح الكورسات</button>
                     </div>
                     <div class="flex justify-center">
-                        <img src="https://placehold.co/600x400/1e3a8a/white?text=Mohamed+Jaber" class="rounded-3xl shadow-2xl float-anim" style="animation: float 6s infinite;">
+                        <img src="https://placehold.co/600x400/1e3a8a/white?text=Mohamed+Jaber" class="rounded-3xl shadow-2xl float-anim">
                     </div>
                 </div>
             </div>
-            <!-- مميزات إضافية 10 ميزات -->
+            <!-- 10 ميزات -->
             <div class="py-20 bg-white">
                 <div class="container mx-auto px-4">
                     <h2 class="text-4xl font-black text-center mb-16">لماذا أكاديميتنا؟ <span class="text-blue-600">10 ميزات حصرية</span></h2>
@@ -176,9 +164,7 @@
                     <button onclick="filterCourses('second')" class="filter-btn px-6 py-2 bg-gray-200 rounded-full font-bold hover:bg-gray-300">الثاني</button>
                     <button onclick="filterCourses('third')" class="filter-btn px-6 py-2 bg-gray-200 rounded-full font-bold hover:bg-gray-300">الثالث</button>
                 </div>
-                <div id="coursesContainer" class="grid md:grid-cols-3 gap-8">
-                    <!-- هنا يتم تحميل الكورسات ديناميكياً -->
-                </div>
+                <div id="coursesContainer" class="grid md:grid-cols-3 gap-8"></div>
             </div>
         </section>
 
@@ -236,23 +222,16 @@
         </div>
     </footer>
 
-    <script type="module">
+    <script>
         // ================================
-        // استيراد Firebase وتعريف المتغيرات
+        // المتغيرات العامة
         // ================================
-        import { getAuth, GoogleAuthProvider, signInWithCredential, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-        
-        const auth = window.firebaseAuth;
-        const db = window.firebaseDb;
+        let currentUser = null; // سيحتوي على بيانات المستخدم من Google (الاسم، البريد، الصورة)
+        let currentUserRole = 'user'; // يتم تعيينها لاحقاً من Firestore
         const adminEmail = 'bo2584668@gmail.com';
 
-        // متغيرات عامة
-        let currentUser = null;
-        let currentUserRole = 'user';
-
         // ================================
-        // تهيئة Google Sign-In
+        // Google Identity Services
         // ================================
         window.onload = function() {
             if (google && google.accounts) {
@@ -269,86 +248,126 @@
         };
 
         async function handleGoogleCredential(response) {
-            const credential = GoogleAuthProvider.credential(response.credential);
-            try {
-                const userCredential = await signInWithCredential(auth, credential);
-                const user = userCredential.user;
-                // تسجيل المستخدم في Firestore إذا لم يكن موجوداً
-                const userRef = doc(db, 'users', user.uid);
-                const userSnap = await getDoc(userRef);
-                if (!userSnap.exists()) {
-                    // مستخدم جديد - نحدد الدور (admin إذا البريد هو الأدمن)
-                    const role = (user.email === adminEmail) ? 'admin' : 'user';
-                    await setDoc(userRef, {
-                        name: user.displayName,
-                        email: user.email,
-                        photoURL: user.photoURL,
-                        role: role,
-                        createdAt: new Date().toISOString()
-                    });
-                } else {
-                    // تحديث آخر ظهور
-                    await updateDoc(userRef, { lastLogin: new Date().toISOString() });
-                }
-                closeLoginModal();
-                Swal.fire({ title: 'مرحباً!', text: 'تم تسجيل الدخول بنجاح', icon: 'success', timer: 2000, showConfirm: false });
-            } catch (error) {
-                Swal.fire({ title: 'خطأ', text: error.message, icon: 'error' });
+            // فك تشفير JWT للحصول على بيانات المستخدم
+            const data = parseJwt(response.credential);
+            
+            // إنشاء كائن المستخدم
+            const user = {
+                uid: data.sub,
+                name: data.name,
+                email: data.email,
+                picture: data.picture,
+            };
+            
+            // تخزين المستخدم في الجلسة الحالية
+            currentUser = user;
+            
+            // حفظ/تحديث المستخدم في Firestore
+            await saveUserToFirestore(user);
+            
+            // جلب دور المستخدم من Firestore
+            await loadUserRole(user.uid);
+            
+            // تحديث واجهة المستخدم
+            updateUIAfterLogin(user);
+            
+            closeLoginModal();
+            
+            Swal.fire({
+                title: 'مرحباً ' + user.name,
+                text: 'تم تسجيل الدخول بنجاح',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+
+        // فك تشفير JWT
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // حفظ المستخدم في Firestore (مجموعة users)
+        async function saveUserToFirestore(user) {
+            const userRef = doc(window.db, 'users', user.uid);
+            const userSnap = await getDoc(userRef);
+            if (!userSnap.exists()) {
+                // مستخدم جديد - نحدد الدور (admin إذا كان البريد هو الأدمن)
+                const role = (user.email === adminEmail) ? 'admin' : 'user';
+                await setDoc(userRef, {
+                    name: user.name,
+                    email: user.email,
+                    photoURL: user.picture,
+                    role: role,
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString()
+                });
+            } else {
+                // تحديث آخر ظهور
+                await updateDoc(userRef, { lastLogin: new Date().toISOString() });
             }
         }
 
-        // مراقبة حالة المصادقة
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                // جلب الدور من Firestore
-                const userRef = doc(db, 'users', user.uid);
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists()) {
-                    currentUserRole = userSnap.data().role || 'user';
-                } else {
-                    currentUserRole = (user.email === adminEmail) ? 'admin' : 'user';
-                }
-                // تحديث واجهة المستخدم
-                document.getElementById('authButtons').classList.add('hidden');
-                document.getElementById('userProfile').classList.remove('hidden');
-                document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/40';
-                document.getElementById('userName').innerText = user.displayName || 'مستخدم';
-
-                // إظهار رابط الأدمن إذا كان المستخدم أدمن
-                if (currentUserRole === 'admin') {
-                    document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-                } else {
-                    document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-                }
-
-                // تحميل المحتوى بناءً على الصفحة الحالية
-                loadPageContent(getCurrentPage());
+        // تحميل دور المستخدم من Firestore
+        async function loadUserRole(uid) {
+            const userRef = doc(window.db, 'users', uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                currentUserRole = userSnap.data().role || 'user';
             } else {
-                currentUser = null;
                 currentUserRole = 'user';
-                document.getElementById('authButtons').classList.remove('hidden');
-                document.getElementById('userProfile').classList.add('hidden');
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-                loadPageContent(getCurrentPage());
             }
-        });
+            // إظهار/إخفاء عناصر الأدمن
+            if (currentUserRole === 'admin') {
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+            } else {
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+            }
+        }
+
+        // تحديث واجهة المستخدم بعد تسجيل الدخول
+        function updateUIAfterLogin(user) {
+            document.getElementById('authButtons').classList.add('hidden');
+            document.getElementById('userProfile').classList.remove('hidden');
+            document.getElementById('userAvatar').src = user.picture || 'https://via.placeholder.com/40';
+            document.getElementById('userName').innerText = user.name;
+        }
+
+        // تسجيل الخروج (محلي فقط، لأننا لا نستخدم Firebase Auth)
+        function logout() {
+            currentUser = null;
+            currentUserRole = 'user';
+            document.getElementById('authButtons').classList.remove('hidden');
+            document.getElementById('userProfile').classList.add('hidden');
+            document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+            // إلغاء الجلسة في Google (اختياري)
+            if (google && google.accounts) {
+                google.accounts.id.disableAutoSelect();
+            }
+            navigate('home');
+            Swal.fire({
+                title: 'تم تسجيل الخروج',
+                icon: 'info',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
 
         // ================================
         // نظام التوجيه (SPA)
         // ================================
         function navigate(page) {
-            // إخفاء جميع الصفحات
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${page}`).classList.remove('hidden');
-            // تحديث الرابط في شريط العنوان
             history.pushState({page}, '', `#${page}`);
             loadPageContent(page);
         }
 
         function getCurrentPage() {
-            const hash = window.location.hash.substring(1) || 'home';
-            return hash;
+            return window.location.hash.substring(1) || 'home';
         }
 
         window.addEventListener('popstate', (e) => {
@@ -358,16 +377,16 @@
             loadPageContent(page);
         });
 
-        // تحميل المحتوى الخاص بكل صفحة (كورسات، طلبات، إلخ)
         async function loadPageContent(page) {
             if (page === 'courses') {
                 loadCoursesList();
             } else if (page === 'admin' && currentUserRole === 'admin') {
-                adminTab('courses'); // افتراضي
+                adminTab('courses');
             } else if (page === 'settings' && currentUser) {
                 loadUserSettings();
             } else if (page === 'course-detail') {
-                // سيتم التعامل معها عبر معلمات
+                const courseId = sessionStorage.getItem('currentCourseId');
+                if (courseId) loadCourseDetails(courseId);
             }
         }
 
@@ -378,7 +397,7 @@
             const container = document.getElementById('coursesContainer');
             container.innerHTML = '<div class="col-span-3 text-center py-10">جاري التحميل...</div>';
             
-            let q = collection(db, 'courses');
+            let q = collection(window.db, 'courses');
             if (grade !== 'all') {
                 q = query(q, where('grade', '==', grade));
             }
@@ -409,41 +428,37 @@
             loadCoursesList(grade);
         };
 
-        window.viewCourse = async function(courseId) {
-            // تخزين معرف الكورس مؤقتاً
+        window.viewCourse = function(courseId) {
             sessionStorage.setItem('currentCourseId', courseId);
             navigate('course-detail');
-            await loadCourseDetails(courseId);
         };
 
         async function loadCourseDetails(courseId) {
             const container = document.getElementById('courseDetailContainer');
             container.innerHTML = '<p class="text-center">تحميل...</p>';
             
-            const courseRef = doc(db, 'courses', courseId);
+            const courseRef = doc(window.db, 'courses', courseId);
             const courseSnap = await getDoc(courseRef);
             if (!courseSnap.exists()) return;
             const course = { id: courseSnap.id, ...courseSnap.data() };
             
-            // التحقق مما إذا كان المستخدم مشتركًا في هذا الكورس (إذا كان مدفوعًا)
+            // التحقق من صلاحية الوصول للمحتوى (إذا كان مسجل دخول ولديه اشتراك نشط أو الكورس مجاني)
             let canAccess = false;
-            if (currentUser) {
-                if (course.price === 0) canAccess = true; // مجاني
-                else {
-                    // تحقق من وجود اشتراك نشط
-                    const subsQuery = query(collection(db, 'subscriptions'), where('userId', '==', currentUser.uid), where('courseId', '==', courseId), where('status', '==', 'active'));
-                    const subsSnap = await getDocs(subsQuery);
-                    canAccess = !subsSnap.empty;
-                }
-            } else {
-                canAccess = (course.price === 0);
+            if (course.price === 0) canAccess = true;
+            else if (currentUser) {
+                const subsQuery = query(collection(window.db, 'subscriptions'), 
+                    where('userId', '==', currentUser.uid), 
+                    where('courseId', '==', courseId), 
+                    where('status', '==', 'active'));
+                const subsSnap = await getDocs(subsQuery);
+                canAccess = !subsSnap.empty;
             }
 
             let videosHtml = '';
             if (course.videos && course.videos.length > 0) {
                 videosHtml = course.videos.map((video, index) => `
-                    <div class="border-b py-2">
-                        <h4 class="font-bold">${index+1}. ${video.title}</h4>
+                    <div class="border-b py-4">
+                        <h4 class="font-bold mb-2">${index+1}. ${video.title}</h4>
                         ${canAccess ? `<iframe class="w-full h-64 rounded-xl" src="https://www.youtube.com/embed/${video.youtubeId}" frameborder="0" allowfullscreen></iframe>` : '<p class="text-red-500">هذا المحتوى متاح للمشتركين فقط</p>'}
                     </div>
                 `).join('');
@@ -452,10 +467,12 @@
             }
 
             let subscribeBtn = '';
-            if (!canAccess && course.price > 0 && currentUser) {
-                subscribeBtn = `<button onclick="requestSubscription('${course.id}')" class="px-6 py-3 bg-green-600 text-white rounded-xl font-bold">طلب اشتراك</button>`;
-            } else if (!currentUser && course.price > 0) {
-                subscribeBtn = `<button onclick="openLoginModal()" class="px-6 py-3 bg-blue-600 text-white rounded-xl">سجل دخول أولاً</button>`;
+            if (!canAccess && course.price > 0) {
+                if (currentUser) {
+                    subscribeBtn = `<button onclick="requestSubscription('${course.id}')" class="px-6 py-3 bg-green-600 text-white rounded-xl font-bold">طلب اشتراك</button>`;
+                } else {
+                    subscribeBtn = `<button onclick="openLoginModal()" class="px-6 py-3 bg-blue-600 text-white rounded-xl">سجل دخول أولاً</button>`;
+                }
             }
 
             container.innerHTML = `
@@ -467,7 +484,7 @@
         }
 
         // ================================
-        // طلب اشتراك (يدوي عبر واتساب)
+        // طلب اشتراك
         // ================================
         window.requestSubscription = async function(courseId) {
             if (!currentUser) return openLoginModal();
@@ -475,7 +492,7 @@
             const { value: formData } = await Swal.fire({
                 title: 'طلب تفعيل اشتراك',
                 html:
-                    '<input id="swal-name" class="swal2-input" placeholder="الاسم الثلاثي" value="' + currentUser.displayName + '">' +
+                    '<input id="swal-name" class="swal2-input" placeholder="الاسم الثلاثي" value="' + currentUser.name + '">' +
                     '<input id="swal-whatsapp" class="swal2-input" placeholder="رقم واتساب (مثال: 01012345678)">' +
                     '<input id="swal-phone" class="swal2-input" placeholder="رقم الهاتف (للتحويل)">',
                 showCancelButton: true,
@@ -492,7 +509,6 @@
             });
 
             if (formData) {
-                // حفظ الطلب في Firestore
                 const request = {
                     userId: currentUser.uid,
                     userName: formData.name,
@@ -502,7 +518,7 @@
                     status: 'pending',
                     createdAt: new Date().toISOString(),
                 };
-                await addDoc(collection(db, 'subscriptionRequests'), request);
+                await addDoc(collection(window.db, 'subscriptionRequests'), request);
                 
                 Swal.fire({
                     title: 'تم إرسال الطلب',
@@ -513,14 +529,14 @@
         };
 
         // ================================
-        // إعدادات الطالب (الاشتراكات)
+        // إعدادات الطالب
         // ================================
         async function loadUserSettings() {
             document.getElementById('profileEmail').innerText = currentUser.email;
-            document.getElementById('profileName').innerText = currentUser.displayName;
+            document.getElementById('profileName').innerText = currentUser.name;
 
             const subsContainer = document.getElementById('userSubscriptions');
-            const q = query(collection(db, 'subscriptions'), where('userId', '==', currentUser.uid));
+            const q = query(collection(window.db, 'subscriptions'), where('userId', '==', currentUser.uid));
             const subsSnap = await getDocs(q);
             if (subsSnap.empty) {
                 subsContainer.innerHTML = '<p>لا توجد اشتراكات</p>';
@@ -529,7 +545,7 @@
             let html = '';
             for (const docSub of subsSnap.docs) {
                 const sub = docSub.data();
-                const courseRef = doc(db, 'courses', sub.courseId);
+                const courseRef = doc(window.db, 'courses', sub.courseId);
                 const courseSnap = await getDoc(courseRef);
                 const courseTitle = courseSnap.exists() ? courseSnap.data().title : 'غير معروف';
                 html += `
@@ -565,7 +581,7 @@
                 <div id="adminCoursesList" class="grid gap-4"></div>
             `;
             const listDiv = document.getElementById('adminCoursesList');
-            const q = query(collection(db, 'courses'), orderBy('createdAt', 'desc'));
+            const q = query(collection(window.db, 'courses'), orderBy('createdAt', 'desc'));
             const snap = await getDocs(q);
             let html = '';
             snap.forEach(doc => {
@@ -587,7 +603,6 @@
         }
 
         window.showAddCourseModal = function() {
-            // نموذج إضافة كورس (يمكن توسيعه)
             Swal.fire({
                 title: 'إضافة كورس',
                 html: `
@@ -609,8 +624,10 @@
                     const price = parseFloat(document.getElementById('course-price').value) || 0;
                     const grade = document.getElementById('course-grade').value;
                     const image = document.getElementById('course-image').value || 'https://placehold.co/600x400/3b82f6/white?text=Course';
-                    await addDoc(collection(db, 'courses'), {
-                        title, description: desc, price, grade, image, createdAt: new Date().toISOString(), videos: []
+                    await addDoc(collection(window.db, 'courses'), {
+                        title, description: desc, price, grade, image, 
+                        createdAt: new Date().toISOString(), 
+                        videos: [] // يمكن إضافتها لاحقاً
                     });
                     Swal.fire('تم', 'تمت إضافة الكورس', 'success');
                     renderAdminCourses();
@@ -620,9 +637,14 @@
 
         window.deleteCourse = async function(id) {
             if (confirm('هل أنت متأكد؟')) {
-                await deleteDoc(doc(db, 'courses', id));
+                await deleteDoc(doc(window.db, 'courses', id));
                 renderAdminCourses();
             }
+        };
+
+        window.editCourse = function(id) {
+            // يمكن تنفيذ تعديل لاحقاً
+            Swal.fire('ميزة التعديل', 'سيتم إضافتها قريباً', 'info');
         };
 
         // طلبات التفعيل
@@ -630,17 +652,17 @@
             const content = document.getElementById('adminContent');
             content.innerHTML = '<div id="requestsList"></div>';
             const listDiv = document.getElementById('requestsList');
-            const q = query(collection(db, 'subscriptionRequests'), where('status', '==', 'pending'));
+            const q = query(collection(window.db, 'subscriptionRequests'), where('status', '==', 'pending'));
             const snap = await getDocs(q);
             let html = '';
             snap.forEach(doc => {
                 const r = doc.data();
                 html += `
                     <div class="bg-white p-4 rounded-xl mb-4">
-                        <p>الاسم: ${r.userName}</p>
-                        <p>واتساب: ${r.userWhatsapp}</p>
-                        <p>هاتف: ${r.userPhone}</p>
-                        <p>الكورس: ${r.courseId}</p>
+                        <p><strong>الاسم:</strong> ${r.userName}</p>
+                        <p><strong>واتساب:</strong> ${r.userWhatsapp}</p>
+                        <p><strong>هاتف:</strong> ${r.userPhone}</p>
+                        <p><strong>معرف الكورس:</strong> ${r.courseId}</p>
                         <button onclick="acceptRequest('${doc.id}', '${r.userId}', '${r.courseId}')" class="px-4 py-2 bg-green-600 text-white rounded-xl ml-2">قبول</button>
                         <button onclick="rejectRequest('${doc.id}')" class="px-4 py-2 bg-red-600 text-white rounded-xl">رفض</button>
                     </div>
@@ -666,8 +688,7 @@
                 if (duration === 'monthly') endDate.setMonth(endDate.getMonth() + 1);
                 else endDate.setMonth(endDate.getMonth() + 5);
 
-                // إضافة اشتراك للمستخدم
-                await addDoc(collection(db, 'subscriptions'), {
+                await addDoc(collection(window.db, 'subscriptions'), {
                     userId,
                     courseId,
                     startDate: startDate.toISOString(),
@@ -675,44 +696,42 @@
                     status: 'active',
                     type: duration
                 });
-                // تحديث حالة الطلب
-                await updateDoc(doc(db, 'subscriptionRequests', requestId), { status: 'approved' });
+                await updateDoc(doc(window.db, 'subscriptionRequests', requestId), { status: 'approved' });
                 Swal.fire('تم', 'تم تفعيل الاشتراك', 'success');
                 renderAdminRequests();
             }
         };
 
         window.rejectRequest = async function(requestId) {
-            await updateDoc(doc(db, 'subscriptionRequests', requestId), { status: 'rejected' });
+            await updateDoc(doc(window.db, 'subscriptionRequests', requestId), { status: 'rejected' });
             renderAdminRequests();
         };
 
-        // إدارة المستخدمين والاشتراكات يمكن توسيعها بنفس الطريقة
+        async function renderAdminUsers() {
+            // يمكن عرض المستخدمين من Firestore
+            const content = document.getElementById('adminContent');
+            content.innerHTML = '<p>قائمة المستخدمين (سيتم إضافتها قريباً)</p>';
+        }
+
+        async function renderAdminSubscriptions() {
+            // عرض جميع الاشتراكات
+            const content = document.getElementById('adminContent');
+            content.innerHTML = '<p>جميع الاشتراكات (سيتم إضافتها قريباً)</p>';
+        }
 
         // ================================
-        // تسجيل الخروج
-        // ================================
-        window.logout = async function() {
-            await signOut(auth);
-            navigate('home');
-        };
-
-        // ================================
-        // دوال المساعدة
+        // دوال مساعدة
         // ================================
         window.openLoginModal = () => document.getElementById('loginModal').classList.remove('hidden');
         window.closeLoginModal = () => document.getElementById('loginModal').classList.add('hidden');
         window.toggleMobileMenu = () => document.getElementById('mobileMenu').classList.toggle('hidden');
         window.navigate = navigate;
 
-        // بدء التطبيق: تحديد الصفحة الحالية من الهاش
+        // بدء التطبيق: تحديد الصفحة من الرابط
         (function init() {
             const page = getCurrentPage();
             navigate(page);
         })();
-
     </script>
-    <!-- Swiper (اختياري) -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </body>
 </html>
