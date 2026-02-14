@@ -281,6 +281,38 @@
         const adminEmail = 'bo2584668@gmail.com';
 
         // ================================
+        // استعادة الجلسة من localStorage
+        // ================================
+        (function initSession() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    // تحديث واجهة المستخدم
+                    document.getElementById('authButtons').classList.add('hidden');
+                    document.getElementById('userProfile').classList.remove('hidden');
+                    document.getElementById('userAvatar').src = currentUser.picture || 'https://placehold.co/40';
+                    document.getElementById('userName').innerText = currentUser.name;
+                    // جلب الدور من Firestore
+                    loadUserRole(currentUser.uid).then(() => {
+                        // بعد جلب الدور، نحدد الصفحة المناسبة
+                        const page = getCurrentPage();
+                        if (page === 'home' || page === 'settings' || page === 'admin') {
+                            navigate(page);
+                        } else {
+                            navigate('home');
+                        }
+                    });
+                } catch (e) {
+                    localStorage.removeItem('currentUser');
+                }
+            } else {
+                // لا يوجد مستخدم، نذهب إلى hi
+                navigate('hi');
+            }
+        })();
+
+        // ================================
         // Google Identity Services
         // ================================
         window.onload = function() {
@@ -295,42 +327,49 @@
                     { type: 'standard', theme: 'filled_blue', size: 'large', shape: 'pill', width: 250 }
                 );
             }
-            // تحديد الصفحة الافتراضية
-            navigate('hi');
         };
 
         async function handleGoogleCredential(response) {
-            const data = parseJwt(response.credential);
-            const user = {
-                uid: data.sub,
-                name: data.name,
-                email: data.email,
-                picture: data.picture,
-            };
-            currentUser = user;
+            try {
+                const data = parseJwt(response.credential);
+                const user = {
+                    uid: data.sub,
+                    name: data.name,
+                    email: data.email,
+                    picture: data.picture,
+                };
+                currentUser = user;
 
-            // حفظ/تحديث المستخدم في Firestore
-            await saveUserToFirestore(user);
-            
-            // جلب دور المستخدم والتحقق من اكتمال بياناته
-            await loadUserRole(user.uid);
-            
-            // تحديث واجهة المستخدم
-            updateUIAfterLogin(user);
+                // حفظ في localStorage
+                localStorage.setItem('currentUser', JSON.stringify(user));
 
-            // التحقق من وجود البيانات الإضافية
-            const userRef = doc(window.db, 'users', user.uid);
-            const userSnap = await getDoc(userRef);
-            const userData = userSnap.data();
-            if (!userData.grade || !userData.phone || !userData.howHeard) {
-                // عرض نافذة إدخال البيانات
-                openAdditionalInfoModal();
-            } else {
-                // إذا كانت البيانات مكتملة، انتقل إلى الصفحة الرئيسية
-                navigate('home');
+                // حفظ/تحديث المستخدم في Firestore
+                await saveUserToFirestore(user);
+                
+                // جلب دور المستخدم
+                await loadUserRole(user.uid);
+                
+                // تحديث واجهة المستخدم
+                document.getElementById('authButtons').classList.add('hidden');
+                document.getElementById('userProfile').classList.remove('hidden');
+                document.getElementById('userAvatar').src = user.picture || 'https://placehold.co/40';
+                document.getElementById('userName').innerText = user.name;
+
+                // التحقق من وجود البيانات الإضافية
+                const userRef = doc(window.db, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
+                const userData = userSnap.data();
+                if (!userData.grade || !userData.phone || !userData.howHeard) {
+                    openAdditionalInfoModal();
+                } else {
+                    navigate('home');
+                }
+
+                closeLoginModal();
+            } catch (error) {
+                console.error('Login error:', error);
+                Swal.fire('خطأ', 'حدث خطأ أثناء تسجيل الدخول', 'error');
             }
-
-            closeLoginModal();
         }
 
         function parseJwt(token) {
@@ -373,13 +412,6 @@
             }
         }
 
-        function updateUIAfterLogin(user) {
-            document.getElementById('authButtons').classList.add('hidden');
-            document.getElementById('userProfile').classList.remove('hidden');
-            document.getElementById('userAvatar').src = user.picture || 'https://placehold.co/40';
-            document.getElementById('userName').innerText = user.name;
-        }
-
         // نافذة إدخال البيانات الإضافية
         function openAdditionalInfoModal() {
             document.getElementById('additionalInfoModal').classList.remove('hidden');
@@ -407,6 +439,7 @@
         function logout() {
             currentUser = null;
             currentUserRole = 'user';
+            localStorage.removeItem('currentUser');
             document.getElementById('authButtons').classList.remove('hidden');
             document.getElementById('userProfile').classList.add('hidden');
             document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
@@ -420,6 +453,13 @@
         // نظام التوجيه (SPA)
         // ================================
         function navigate(page) {
+            // الصفحات التي تتطلب تسجيل دخول
+            const protectedPages = ['home', 'settings', 'admin'];
+            if (protectedPages.includes(page) && !currentUser) {
+                // إذا لم يكن مسجل دخول، نذهب إلى hi
+                page = 'hi';
+            }
+
             document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${page}`).classList.remove('hidden');
             history.pushState({page}, '', `#${page}`);
@@ -432,9 +472,7 @@
 
         window.addEventListener('popstate', (e) => {
             const page = e.state?.page || 'hi';
-            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`page-${page}`).classList.remove('hidden');
-            loadPageContent(page);
+            navigate(page);
         });
 
         async function loadPageContent(page) {
