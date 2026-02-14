@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الجابر | الأستاذ هيثم جبر</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>منصة محمد جابر | الأستاذ محمد جابر</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts (Cairo) -->
@@ -43,6 +43,7 @@
             width: 90%;
             max-width: 1300px;
             margin: 0 auto;
+            padding: 0 15px;
         }
         /* ========== Toast Notifications ========== */
         .toast-container {
@@ -94,6 +95,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 15px;
         }
         .logo {
             display: flex;
@@ -126,6 +128,7 @@
             display: flex;
             list-style: none;
             gap: 1.8rem;
+            flex-wrap: wrap;
         }
         nav a {
             color: white;
@@ -134,6 +137,7 @@
             transition: var(--transition);
             position: relative;
             padding: 0.5rem 0;
+            white-space: nowrap;
         }
         nav a:hover {
             color: var(--accent);
@@ -151,11 +155,15 @@
         nav a:hover::after {
             width: 100%;
         }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
         .auth-buttons button {
             background: var(--accent);
             border: none;
             padding: 0.6rem 1.5rem;
-            margin-right: 0.7rem;
             border-radius: 50px;
             font-weight: 700;
             cursor: pointer;
@@ -177,6 +185,7 @@
             padding: 0.5rem 1.2rem;
             border-radius: 50px;
             backdrop-filter: blur(5px);
+            flex-wrap: wrap;
         }
         .user-info span {
             font-weight: 600;
@@ -226,13 +235,13 @@
             to { transform: rotate(360deg); }
         }
         .hero h2 {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin-bottom: 1rem;
             font-weight: 800;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         .hero p {
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 3vw, 1.4rem);
             max-width: 800px;
             margin: 0 auto 2rem;
             opacity: 0.9;
@@ -259,7 +268,7 @@
         /* ========== Cards ========== */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
@@ -315,7 +324,7 @@
             max-width: 600px;
             margin: 3rem auto;
             background: white;
-            padding: 3rem;
+            padding: clamp(1.5rem, 5vw, 3rem);
             border-radius: 30px;
             box-shadow: var(--shadow);
             border: 1px solid rgba(0,0,0,0.05);
@@ -326,6 +335,7 @@
             color: var(--primary);
             font-weight: 800;
             position: relative;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
         }
         .form-container h2::after {
             content: '';
@@ -437,6 +447,8 @@
             align-items: center;
             transition: var(--transition);
             border-right: 5px solid var(--accent);
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .lesson-item.locked {
             border-right-color: #95a5a6;
@@ -541,7 +553,7 @@
         }
         .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
@@ -599,6 +611,30 @@
         .badge.expired { background: #7f8c8d; color: white; }
         .badge.admin { background: #8e44ad; color: white; }
         .badge.user { background: #3498db; color: white; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            nav ul {
+                justify-content: center;
+            }
+            .auth-buttons {
+                justify-content: center;
+            }
+            .user-info {
+                justify-content: center;
+            }
+            .lesson-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .lesson-item .btn-small {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -609,10 +645,10 @@
     <header>
         <div class="container">
             <div class="logo">
-                <img src="mrjabr.png" alt="الأستاذ هيثم جبر" onerror="this.src='https://via.placeholder.com/60?text=Jaber'">
+                <img src="mrjabr.png" alt="الأستاذ محمد جابر" onerror="this.src='https://via.placeholder.com/60?text=Jaber'">
                 <div>
-                    <h1>منصة الجابر</h1>
-                    <span>الأستاذ هيثم جبر</span>
+                    <h1>منصة محمد جابر</h1>
+                    <span>الأستاذ محمد جابر</span>
                 </div>
             </div>
             <nav>
@@ -622,6 +658,7 @@
                     <li><a href="#" data-page="services">الخدمات</a></li>
                     <li><a href="#" data-page="what-we-offer">ماذا نقدم</a></li>
                     <li><a href="#" data-page="book">كتاب الجابر</a></li>
+                    <li><a href="#" data-page="mycourses" class="mycourses-link hidden" id="mycoursesLink">كورساتي</a></li>
                 </ul>
             </nav>
             <div class="auth-buttons" id="authButtons">
@@ -642,15 +679,15 @@
     <main id="mainContent"></main>
 
     <!-- WhatsApp Float -->
-    <a href="https://wa.me/201025608740" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://wa.me/201273740256" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
                 <div>
-                    <h3><i class="fas fa-graduation-cap"></i> منصة الجابر</h3>
-                    <p>المنصة الأولى لتعليم اللغة العربية بطريقة مبتكرة مع الأستاذ هيثم جبر</p>
+                    <h3><i class="fas fa-graduation-cap"></i> منصة محمد جابر</h3>
+                    <p>المنصة الأولى لتعليم اللغة العربية بطريقة مبتكرة مع الأستاذ محمد جابر</p>
                     <p class="quote">"قليل من الفهم خير من كثير من الحفظ"</p>
                 </div>
                 <div>
@@ -660,6 +697,7 @@
                     <a href="#" data-page="services"><i class="fas fa-cogs"></i> الخدمات</a>
                     <a href="#" data-page="what-we-offer"><i class="fas fa-gift"></i> ماذا نقدم</a>
                     <a href="#" data-page="book"><i class="fas fa-book"></i> كتاب الجابر</a>
+                    <a href="#" data-page="mycourses" id="footerMycourses" class="hidden"><i class="fas fa-play-circle"></i> كورساتي</a>
                 </div>
                 <div>
                     <h4>الدعم والمساعدة</h4>
@@ -680,7 +718,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>© 2026 منصة الجابر. جميع الحقوق محفوظة. تم التطوير بواسطة <strong>Saad Elkammah</strong></p>
+                <p>© 2026 منصة محمد جابر. جميع الحقوق محفوظة. تم التطوير بواسطة <strong>براء عمر</strong></p>
             </div>
         </div>
     </footer>
@@ -690,7 +728,7 @@
         // ========== Firebase Imports ==========
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
         // ========== Firebase Config ==========
@@ -722,6 +760,8 @@
         const userRoleSpan = document.getElementById('userRole');
         const subscriptionStatusSpan = document.getElementById('subscriptionStatus');
         const toastContainer = document.getElementById('toastContainer');
+        const mycoursesLink = document.getElementById('mycoursesLink');
+        const footerMycourses = document.getElementById('footerMycourses');
 
         // ========== Toast Function ==========
         function showToast(message, type = 'info', icon = 'fa-info-circle') {
@@ -759,18 +799,26 @@
                 if (userDoc.exists()) {
                     currentUserData = userDoc.data();
                 } else {
-                    // إذا لم يكن هناك مستند، قم بإنشائه (لحالات الطوارئ)
+                    // إنشاء مستند إذا لم يكن موجوداً (للطوارئ)
                     currentUserData = { role: 'user', name: user.email };
                     await setDoc(doc(db, 'users', user.uid), currentUserData);
                 }
-                // Update header
+                // تحديث الهيدر
                 authButtons.classList.add('hidden');
                 userInfoDiv.classList.remove('hidden');
                 userNameSpan.textContent = currentUserData.name || 'مستخدم';
                 userRoleSpan.textContent = currentUserData.role === 'admin' ? 'أدمن' : 'طالب';
-                userRoleSpan.classList.add(currentUserData.role === 'admin' ? 'badge-admin' : 'badge-user');
                 
-                // Check subscription status
+                // إظهار رابط كورساتي للطلاب
+                if (currentUserData.role === 'user') {
+                    mycoursesLink.classList.remove('hidden');
+                    footerMycourses.classList.remove('hidden');
+                } else {
+                    mycoursesLink.classList.add('hidden');
+                    footerMycourses.classList.add('hidden');
+                }
+                
+                // التحقق من الاشتراك
                 const subQuery = query(collection(db, 'subscriptions'), where('userId', '==', user.uid), where('endDate', '>=', new Date()));
                 const subSnap = await getDocs(subQuery);
                 if (!subSnap.empty) {
@@ -781,13 +829,22 @@
                 } else {
                     subscriptionStatusSpan.innerHTML = `<span class="badge expired">غير مشترك</span>`;
                 }
+
+                // إذا كان المستخدم في صفحة تسجيل الدخول أو إنشاء حساب، نوجهه للوحة التحكم
+                if (currentPage === 'login' || currentPage === 'signup') {
+                    loadPage('dashboard');
+                } else {
+                    loadPage(currentPage);
+                }
             } else {
                 currentUser = null;
                 currentUserData = null;
                 authButtons.classList.remove('hidden');
                 userInfoDiv.classList.add('hidden');
+                mycoursesLink.classList.add('hidden');
+                footerMycourses.classList.add('hidden');
+                loadPage(currentPage);
             }
-            loadPage(currentPage);
         });
 
         // ========== Page Loader ==========
@@ -801,6 +858,7 @@
             else if (page === 'login') renderLogin();
             else if (page === 'signup') renderSignup();
             else if (page === 'dashboard') renderDashboard();
+            else if (page === 'mycourses') renderMyCourses();
             else if (page === 'admin') renderAdmin();
             else if (page.startsWith('course?id=')) {
                 const courseId = page.split('=')[1];
@@ -814,14 +872,14 @@
             main.innerHTML = `
                 <section class="hero">
                     <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown">مرحباً بك في منصة الجابر</h2>
-                        <p class="animate__animated animate__fadeInUp">مع الأستاذ هيثم جبر، رحلتك نحو التميز في اللغة العربية تبدأ من هنا</p>
+                        <h2 class="animate__animated animate__fadeInDown">مرحباً بك في منصة محمد جابر</h2>
+                        <p class="animate__animated animate__fadeInUp">مع الأستاذ محمد جابر، رحلتك نحو التميز في اللغة العربية تبدأ من هنا</p>
                         <button class="btn animate__animated animate__zoomIn" onclick="loadPage('services')"><i class="fas fa-play"></i> ابدأ الآن</button>
                     </div>
                 </section>
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 2rem;">الدورات المتاحة</h2>
+                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem); margin-bottom: 2rem;">الدورات المتاحة</h2>
                         <div class="cards-grid" id="coursesGrid"></div>
                     </div>
                 </section>
@@ -858,13 +916,13 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: 2.5rem;">من نحن</h2>
+                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem);">من نحن</h2>
                         <div style="display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;">
                             <div style="flex: 1; min-width: 300px;">
-                                <img src="mrjabr.png" alt="الأستاذ هيثم جبر" style="width: 100%; border-radius: 30px; box-shadow: var(--shadow);">
+                                <img src="mrjabr.png" alt="الأستاذ محمد جابر" style="width: 100%; border-radius: 30px; box-shadow: var(--shadow);">
                             </div>
                             <div style="flex: 2;">
-                                <p style="font-size: 1.2rem; line-height: 1.8;">منصة الأستاذ هيثم جبر لتدريس اللغة العربية. متخصص في تدريس مواد اللغة العربية عن بعد من أي مكان في جمهورية مصر العربية. خبرة أكثر من عشرين عاماً في تدريس مواد اللغة العربية للمراحل الإعدادية والثانوية.</p>
+                                <p style="font-size: 1.2rem; line-height: 1.8;">منصة الأستاذ محمد جابر لتدريس اللغة العربية. متخصص في تدريس مواد اللغة العربية عن بعد من أي مكان في جمهورية مصر العربية. خبرة أكثر من عشرين عاماً في تدريس مواد اللغة العربية للمراحل الإعدادية والثانوية.</p>
                                 <p style="font-size: 1.2rem; margin-top: 1rem;">نقدم تعليماً متميزاً يجمع بين الأصالة والتقنيات الحديثة.</p>
                             </div>
                         </div>
@@ -877,7 +935,7 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: 2.5rem;">خدماتنا</h2>
+                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem);">خدماتنا</h2>
                         <div class="cards-grid">
                             <div class="card"><div class="card-content"><i class="fas fa-chalkboard-teacher fa-3x" style="color: var(--accent);"></i><h3>دروس تفاعلية</h3><p>شروحات حية ومسجلة بأحدث الأساليب.</p></div></div>
                             <div class="card"><div class="card-content"><i class="fas fa-file-alt fa-3x" style="color: var(--accent);"></i><h3>اختبارات دورية</h3><p>تقييم مستمر لمستوى التقدم.</p></div></div>
@@ -893,7 +951,7 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: 2.5rem;">ماذا نقدم</h2>
+                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem);">ماذا نقدم</h2>
                         <div class="cards-grid">
                             <div class="card"><div class="card-content"><h3>بيئة تعليمية</h3><p>بيئة تفاعلية متكاملة تجمع بين التعليم التقليدي والتقنيات الحديثة.</p></div></div>
                             <div class="card"><div class="card-content"><h3>محتوى تعليمي</h3><p>محتوى متميز يغطي جميع فروع اللغة العربية.</p></div></div>
@@ -914,7 +972,7 @@
                                 <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="كتاب الجابر" style="width: 100%; border-radius: 30px;">
                             </div>
                             <div style="flex: 1;">
-                                <h2 style="font-size: 3rem;">كتاب الجابر</h2>
+                                <h2 style="font-size: clamp(2rem, 5vw, 3rem);">كتاب الجابر</h2>
                                 <p style="font-size: 1.3rem;">الكتاب الشامل لتعلم اللغة العربية بطريقة مبتكرة (خاص بالصف الثالث الثانوي)</p>
                                 <p><i class="fas fa-check-circle" style="color: var(--success);"></i> شرح مبسط ومفهوم</p>
                                 <p><i class="fas fa-check-circle" style="color: var(--success);"></i> تمارين تطبيقية شاملة</p>
@@ -956,7 +1014,7 @@
                 try {
                     await signInWithEmailAndPassword(auth, email, password);
                     showToast('تم تسجيل الدخول بنجاح', 'success', 'fa-check-circle');
-                    loadPage('dashboard');
+                    // loadPage ستُستدعى تلقائياً من onAuthStateChanged
                 } catch (error) {
                     showToast(error.message, 'error', 'fa-exclamation-circle');
                 }
@@ -965,6 +1023,15 @@
 
         function renderSignup() {
             if (currentUser) { loadPage('dashboard'); return; }
+            // قائمة المحافظات المصرية
+            const governorates = [
+                'القاهرة', 'الإسكندرية', 'الجيزة', 'القليوبية', 'الشرقية', 'الدقهلية', 'الغربية', 'المنوفية', 'كفر الشيخ',
+                'البحيرة', 'دمياط', 'بورسعيد', 'الإسماعيلية', 'السويس', 'شمال سيناء', 'جنوب سيناء', 'بني سويف', 'الفيوم',
+                'المنيا', 'أسيوط', 'سوهاج', 'قنا', 'الأقصر', 'أسوان', 'مطروح', 'الوادي الجديد', 'البحر الأحمر'
+            ];
+            let options = '<option value="">اختر محافظتك</option>';
+            governorates.forEach(g => options += `<option>${g}</option>`);
+
             main.innerHTML = `
                 <div class="form-container animate__animated animate__fadeInUp">
                     <h2>إنشاء حساب جديد</h2>
@@ -979,10 +1046,7 @@
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-map-marker-alt"></i> المحافظة</label>
-                            <select id="signupGovernorate" required>
-                                <option value="">اختر محافظتك</option>
-                                <option>القاهرة</option><option>الإسكندرية</option><option>كفر الشيخ</option><option>الغربية</option>
-                            </select>
+                            <select id="signupGovernorate" required>${options}</select>
                         </div>
                         <div class="form-group">
                             <label><i class="fas fa-graduation-cap"></i> الصف الدراسي</label>
@@ -1039,7 +1103,7 @@
                         name, email, governorate, grade, institute, studentPhone, parentPhone, role, createdAt: new Date()
                     });
                     showToast('تم إنشاء الحساب بنجاح', 'success', 'fa-check-circle');
-                    loadPage('dashboard');
+                    // سيتم توجيه المستخدم تلقائياً
                 } catch (error) {
                     showToast(error.message, 'error', 'fa-exclamation-circle');
                 }
@@ -1055,13 +1119,13 @@
             main.innerHTML = `
                 <section class="dashboard-header">
                     <div class="container">
-                        <h2 style="font-size: 2.5rem;">مرحباً ${currentUserData.name}</h2>
+                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);">مرحباً ${currentUserData.name}</h2>
                         <p>الصف: ${currentUserData.grade}</p>
                     </div>
                 </section>
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: 2.5rem;">كورساتك</h2>
+                        <h2 style="text-align: center; font-size: clamp(1.5rem, 4vw, 2.5rem);">كورساتي</h2>
                         <div class="cards-grid" id="studentCoursesGrid"></div>
                     </div>
                 </section>
@@ -1072,7 +1136,13 @@
         async function loadStudentCourses() {
             const grid = document.getElementById('studentCoursesGrid');
             if (!grid) return;
-            const coursesSnap = await getDocs(collection(db, 'courses'));
+            // جلب الكورسات التي تطابق صف الطالب
+            const coursesQuery = query(collection(db, 'courses'), where('grade', '==', currentUserData.grade));
+            const coursesSnap = await getDocs(coursesQuery);
+            if (coursesSnap.empty) {
+                grid.innerHTML = '<p class="text-center">لا توجد كورسات متاحة لصفك حالياً</p>';
+                return;
+            }
             let html = '';
             coursesSnap.forEach(doc => {
                 const course = doc.data();
@@ -1085,7 +1155,13 @@
                     </div>
                 `;
             });
-            grid.innerHTML = html || '<p class="text-center">لا توجد كورسات متاحة</p>';
+            grid.innerHTML = html;
+        }
+
+        // صفحة كورساتي (نفس الداشبورد لكن يمكن تخصيصها)
+        function renderMyCourses() {
+            if (!currentUser || currentUserData.role !== 'user') { loadPage('login'); return; }
+            renderDashboard(); // نفس المحتوى
         }
 
         async function renderCourse(courseId) {
@@ -1107,10 +1183,12 @@
             });
 
             let hasActiveSub = false;
-            if (currentUser) {
+            if (currentUser && currentUserData.role === 'user') {
                 const subQuery = query(collection(db, 'subscriptions'), where('userId', '==', currentUser.uid), where('endDate', '>=', new Date()));
                 const subSnap = await getDocs(subQuery);
                 hasActiveSub = !subSnap.empty;
+            } else if (currentUser && currentUserData.role === 'admin') {
+                hasActiveSub = true; // الأدمن يرى كل الدروس
             }
 
             let lessonsHtml = '';
@@ -1132,8 +1210,8 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="font-size: 2.5rem;">${course.name}</h2>
-                        ${!hasActiveSub ? renderSubscriptionRequest() : ''}
+                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);">${course.name}</h2>
+                        ${!hasActiveSub && currentUser && currentUserData.role === 'user' ? renderSubscriptionRequest() : ''}
                         <div id="lessonList">${lessonsHtml}</div>
                         <div id="lessonViewer" class="hidden"></div>
                     </div>
@@ -1146,7 +1224,7 @@
                 const lesson = lessonDoc.data();
                 const videoHtml = lesson.videoUrl ? 
                     (lesson.videoUrl.includes('youtube') ? 
-                        `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${extractYoutubeId(lesson.videoUrl)}" frameborder="0" allowfullscreen></iframe></div>` 
+                        `<div class="video-wrapper" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:20px;"><iframe src="https://www.youtube.com/embed/${extractYoutubeId(lesson.videoUrl)}" frameborder="0" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe></div>` 
                         : `<video controls src="${lesson.videoUrl}" style="width:100%; border-radius:20px;"></video>`) 
                     : '<p>لا يوجد فيديو</p>';
                 document.getElementById('lessonViewer').innerHTML = `
@@ -1235,7 +1313,7 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="font-size: 2.5rem;">لوحة التحكم - الأدمن</h2>
+                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);">قسم الإدارة</h2>
                         <div class="admin-tabs">
                             <div class="admin-tab active" data-admin-tab="requests">طلبات الاشتراك</div>
                             <div class="admin-tab" data-admin-tab="lessons">إدارة الدروس</div>
@@ -1250,7 +1328,6 @@
                 </section>
             `;
 
-            // Tabs
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
@@ -1431,7 +1508,7 @@
                     </div>
                     <div class="form-group">
                         <label>الصف</label>
-                        <input type="text" id="courseGrade" required>
+                        <input type="text" id="courseGrade" placeholder="مثال: الأول الثانوي" required>
                     </div>
                     <button type="submit" class="btn-submit">إضافة</button>
                 </form>
