@@ -3,854 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>منصة محمد جابر | الأستاذ محمد جابر</title>
-    <!-- Font Awesome 6 -->
+    <title>منصة الأستاذ محمد جابر التعليمية</title>
+    <!-- Font Awesome للأيقونات (مثل المنصة الأصلية) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts (Cairo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- AOS Library for animations -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        /* ========== المتغيرات والأساسيات ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
-        body {
-            background: #f0f4f8;
-            color: #1e2a3a;
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-        :root {
-            --primary: #1e2a3a;
-            --secondary: #c9a959;
-            --accent: #d4af37;
-            --light: #f8f9fa;
-            --dark: #0f172a;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --info: #3498db;
-            --gradient: linear-gradient(135deg, #1e2a3a 0%, #2c3e50 100%);
-            --gradient-gold: linear-gradient(135deg, #c9a959 0%, #d4af37 100%);
-            --shadow: 0 10px 30px rgba(0,0,0,0.1);
-            --shadow-hover: 0 20px 40px rgba(0,0,0,0.15);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .container {
-            width: 90%;
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        /* ========== Toast Notifications ========== */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .toast {
-            background: white;
-            color: #2c3e50;
-            padding: 15px 25px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            transform: translateX(120%);
-            animation: slideInLeft 0.3s forwards, fadeOut 0.5s 4.5s forwards;
-            border-right: 5px solid var(--secondary);
-            backdrop-filter: blur(10px);
-            background: rgba(255,255,255,0.95);
-        }
-        .toast.success { border-right-color: var(--success); }
-        .toast.error { border-right-color: var(--danger); }
-        .toast.warning { border-right-color: var(--warning); }
-        .toast.info { border-right-color: var(--info); }
-        .toast i { font-size: 1.2rem; }
-        @keyframes slideInLeft {
-            to { transform: translateX(0); }
-        }
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateX(120%); }
-        }
-        /* ========== Header ========== */
-        header {
-            background: rgba(30, 42, 58, 0.95);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 0.8rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow);
-            border-bottom: 2px solid var(--accent);
-        }
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .logo img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            object-fit: cover;
-            background: white;
-            transition: var(--transition);
-        }
-        .logo img:hover {
-            transform: scale(1.05) rotate(5deg);
-            border-color: white;
-        }
-        .logo h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #f1c40f, #d4af37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        .logo span {
-            display: block;
-            font-size: 0.9rem;
-            color: #bdc3c7;
-            margin-top: -5px;
-        }
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 1.8rem;
-            flex-wrap: wrap;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            position: relative;
-            padding: 0.5rem 0;
-            white-space: nowrap;
-            font-size: 1.1rem;
-        }
-        nav a:hover {
-            color: var(--accent);
-            transform: translateY(-2px);
-        }
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: var(--transition);
-        }
-        nav a:hover::after {
-            width: 100%;
-        }
-        .auth-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .auth-buttons button {
-            background: var(--gradient-gold);
-            border: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--dark);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .auth-buttons button:hover {
-            background: linear-gradient(135deg, #d4af37, #c9a959);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: white;
-            background: rgba(255,255,255,0.15);
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            flex-wrap: wrap;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .user-info span {
-            font-weight: 600;
-        }
-        .user-info .role-badge {
-            background: var(--accent);
-            color: var(--dark);
-            padding: 0.2rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-        .user-info button {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 0.3rem 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .user-info button:hover {
-            background: #c0392b;
-            transform: scale(1.05);
-        }
-        .hidden { display: none !important; }
-
-        /* ========== Hero Section ========== */
-        .hero {
-            background: linear-gradient(135deg, rgba(30,42,58,0.9), rgba(44,62,80,0.9)), url('https://images.unsplash.com/photo-1503676260728-51780f9c5f5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover fixed;
-            color: white;
-            text-align: center;
-            padding: 8rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
-            animation: rotate 30s linear infinite;
-        }
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .hero h2 {
-            font-size: clamp(2rem, 5vw, 4rem);
-            margin-bottom: 1rem;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .hero p {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-        }
-        .hero .btn {
-            background: var(--gradient-gold);
-            color: var(--dark);
-            padding: 1rem 3rem;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 1.2rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: var(--transition);
-            border: 2px solid var(--accent);
-            display: inline-block;
-            text-decoration: none;
-            animation: pulse 2s infinite;
-        }
-        .hero .btn:hover {
-            background: transparent;
-            color: white;
-            border-color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
-
-        /* ========== Cards ========== */
-        .section {
-            padding: 4rem 0;
-        }
-        .section-title {
-            text-align: center;
-            font-size: clamp(2rem, 5vw, 3rem);
-            margin-bottom: 3rem;
-            position: relative;
-            color: var(--primary);
-            font-weight: 800;
-        }
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--accent);
-            margin: 1rem auto 0;
-            border-radius: 2px;
-        }
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .card {
-            background: white;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
-            top: 0;
-            border: 1px solid rgba(0,0,0,0.05);
-            text-align: center;
-            padding: 2rem;
-        }
-        .card:hover {
-            transform: translateY(-15px);
-            box-shadow: var(--shadow-hover);
-        }
-        .card i {
-            font-size: 3.5rem;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-        }
-        .card h3 {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-        .card p {
-            color: #555;
-            margin-bottom: 1.5rem;
-        }
-        .btn-card {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .btn-card:hover {
-            background: linear-gradient(135deg, #2c3e50, #1e2a3a);
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* ========== Stats Section ========== */
-        .stats-section {
-            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
-            color: white;
-            padding: 4rem 0;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            text-align: center;
-        }
-        .stat-item {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 30px;
-            border: 1px solid rgba(255,215,0,0.3);
-        }
-        .stat-item i {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-        .stat-item h3 {
-            font-size: 2.5rem;
-            font-weight: 800;
-        }
-
-        /* ========== Forms ========== */
-        .form-container {
-            max-width: 600px;
-            margin: 4rem auto;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            padding: clamp(1.5rem, 5vw, 3rem);
-            border-radius: 30px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .form-container h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--primary);
-            font-weight: 800;
-            position: relative;
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-        }
-        .form-container h2::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--accent);
-            margin: 1rem auto 0;
-            border-radius: 2px;
-        }
-        .form-group {
-            margin-bottom: 1.8rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 50px;
-            font-size: 1rem;
-            transition: var(--transition);
-            background: #f9f9f9;
-        }
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-        }
-        .form-group input[type="file"] {
-            padding: 0.8rem;
-            border-radius: 30px;
-            background: white;
-        }
-        .btn-submit {
-            background: var(--gradient-gold);
-            color: var(--dark);
-            width: 100%;
-            padding: 1.2rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 1rem;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .btn-submit:hover:not(:disabled) {
-            background: linear-gradient(135deg, #d4af37, #c9a959);
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* ========== Dashboard ========== */
-        .dashboard-header {
-            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 3px solid var(--accent);
-        }
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-        .dashboard-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: var(--transition);
-        }
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.15);
-        }
-        .dashboard-card i {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-        .dashboard-card h3 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* ========== Lessons ========== */
-        .lesson-group {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .lesson-group h3 {
-            color: var(--primary);
-            font-size: 1.8rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .lesson-item {
-            background: #f8f9fa;
-            padding: 1.2rem 2rem;
-            margin-bottom: 0.8rem;
-            border-radius: 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition);
-            border-right: 5px solid var(--accent);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .lesson-item.locked {
-            border-right-color: #95a5a6;
-            opacity: 0.7;
-            background: #ecf0f1;
-        }
-        .lesson-item .title {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        .lesson-item .lock-icon {
-            color: var(--danger);
-        }
-        .lesson-item .free-icon {
-            color: var(--success);
-        }
-        .btn-small {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-        }
-        .btn-small:hover {
-            background: var(--accent);
-            color: var(--dark);
-            transform: scale(1.05);
-        }
-
-        /* ========== Admin Tabs ========== */
-        .admin-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .admin-tab {
-            padding: 0.8rem 2rem;
-            background: white;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .admin-tab.active {
-            background: var(--gradient-gold);
-            color: var(--dark);
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
-        }
-        .admin-section {
-            display: none;
-            background: white;
-            padding: 2rem;
-            border-radius: 30px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .admin-section.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ========== Table ========== */
-        .table-responsive {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        th {
-            background: var(--primary);
-            color: white;
-            padding: 1rem;
-            font-weight: 600;
-        }
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid #ecf0f1;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        tr:hover td {
-            background: #f5f5f5;
-        }
-
-        /* ========== Footer ========== */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 4rem 0 1rem;
-            margin-top: 4rem;
-            border-top: 3px solid var(--accent);
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        .footer-grid a {
-            color: #bdc3c7;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: var(--transition);
-        }
-        .footer-grid a:hover {
-            color: var(--accent);
-            padding-right: 5px;
-        }
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #34495e;
-            color: #95a5a6;
-        }
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            background: #25d366;
-            color: white;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            text-align: center;
-            font-size: 35px;
-            line-height: 65px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            z-index: 100;
-            transition: var(--transition);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-        .whatsapp-float:hover {
-            background: #20b954;
-            transform: scale(1.1) rotate(10deg);
-        }
-        .badge {
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-        .badge.pending { background: #f39c12; color: white; }
-        .badge.active { background: #27ae60; color: white; }
-        .badge.expired { background: #7f8c8d; color: white; }
-        .badge.admin { background: #8e44ad; color: white; }
-        .badge.user { background: #3498db; color: white; }
-
-        /* Loading Spinner */
-        .spinner {
-            border: 4px solid rgba(0,0,0,0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--accent);
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header .container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            nav ul {
-                justify-content: center;
-            }
-            .auth-buttons {
-                justify-content: center;
-            }
-            .user-info {
-                justify-content: center;
-            }
-            .lesson-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .lesson-item .btn-small {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="logo">
-                <img src="mrjabr.png" alt="الأستاذ محمد جابر" onerror="this.src='https://via.placeholder.com/60?text=Jaber'">
-                <div>
-                    <h1>منصة محمد جابر</h1>
-                    <span>الأستاذ محمد جابر</span>
-                </div>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#" data-page="home">الرئيسية</a></li>
-                    <li><a href="#" data-page="about">من نحن</a></li>
-                    <li><a href="#" data-page="services">الخدمات</a></li>
-                    <li><a href="#" data-page="what-we-offer">ماذا نقدم</a></li>
-                    <li><a href="#" data-page="book">كتاب الجابر</a></li>
-                    <li><a href="#" data-page="mycourses" class="mycourses-link hidden" id="mycoursesLink">كورساتي</a></li>
-                </ul>
-            </nav>
-            <div class="auth-buttons" id="authButtons">
-                <button id="showLogin"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
-                <button id="showSignup"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
-            </div>
-            <div class="user-info hidden" id="userInfo">
-                <i class="fas fa-user-circle fa-2x"></i>
-                <span id="userName"></span>
-                <span class="role-badge" id="userRole"></span>
-                <span id="subscriptionStatus"></span>
-                <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main id="mainContent"></main>
-
-    <!-- WhatsApp Float -->
-    <a href="https://wa.me/201273740256" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <h3><i class="fas fa-graduation-cap"></i> منصة محمد جابر</h3>
-                    <p>المنصة الأولى لتعليم اللغة العربية بطريقة مبتكرة مع الأستاذ محمد جابر</p>
-                    <p class="quote">"قليل من الفهم خير من كثير من الحفظ"</p>
-                </div>
-                <div>
-                    <h4>روابط سريعة</h4>
-                    <a href="#" data-page="home"><i class="fas fa-home"></i> الرئيسية</a>
-                    <a href="#" data-page="about"><i class="fas fa-info-circle"></i> من نحن</a>
-                    <a href="#" data-page="services"><i class="fas fa-cogs"></i> الخدمات</a>
-                    <a href="#" data-page="what-we-offer"><i class="fas fa-gift"></i> ماذا نقدم</a>
-                    <a href="#" data-page="book"><i class="fas fa-book"></i> كتاب الجابر</a>
-                    <a href="#" data-page="mycourses" id="footerMycourses" class="hidden"><i class="fas fa-play-circle"></i> كورساتي</a>
-                </div>
-                <div>
-                    <h4>الدعم والمساعدة</h4>
-                    <a href="#"><i class="fas fa-question-circle"></i> مركز المساعدة</a>
-                    <a href="#"><i class="fas fa-comments"></i> الأسئلة الشائعة</a>
-                    <a href="#"><i class="fas fa-shield-alt"></i> سياسة الخصوصية</a>
-                    <a href="#"><i class="fas fa-file-contract"></i> شروط الاستخدام</a>
-                </div>
-                <div>
-                    <h4>تواصل معنا</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> المحلة الكبرى، مصر</p>
-                    <p><i class="fas fa-phone-alt"></i> 01273740256</p>
-                    <div style="font-size: 1.5rem; margin-top: 1rem;">
-                        <i class="fab fa-facebook-square"></i>
-                        <i class="fab fa-youtube"></i>
-                        <i class="fab fa-twitter"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2026 منصة محمد جابر. جميع الحقوق محفوظة. تم التطوير بواسطة <strong>براء عمر</strong></p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- AOS Library -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (بنفس الكود الذي زودتني به) -->
     <script type="module">
-        // ========== Firebase Imports ==========
+        // استيراد مكتبات Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
-
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-        });
-
-        // ========== Firebase Config ==========
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        
+        // إعدادات Firebase الخاصة بك - مشروع Mr. Jabr
         const firebaseConfig = {
             apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
             authDomain: "mr-jabr.firebaseapp.com",
@@ -861,887 +24,1012 @@
             measurementId: "G-C7L0T2QHL8"
         };
 
+        // تهيئة Firebase
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        // ========== Global Variables ==========
-        let currentUser = null;
-        let currentUserData = null;
-        let currentPage = 'home';
-
-        // DOM Elements
-        const main = document.getElementById('mainContent');
-        const authButtons = document.getElementById('authButtons');
-        const userInfoDiv = document.getElementById('userInfo');
-        const userNameSpan = document.getElementById('userName');
-        const userRoleSpan = document.getElementById('userRole');
-        const subscriptionStatusSpan = document.getElementById('subscriptionStatus');
-        const toastContainer = document.getElementById('toastContainer');
-        const mycoursesLink = document.getElementById('mycoursesLink');
-        const footerMycourses = document.getElementById('footerMycourses');
-
-        // ========== Toast Function ==========
-        function showToast(message, type = 'info', icon = 'fa-info-circle') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-            toastContainer.appendChild(toast);
-            setTimeout(() => {
-                toast.remove();
-            }, 5000);
-        }
-
-        // ========== Navigation ==========
-        document.querySelectorAll('[data-page]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const page = e.target.closest('a').getAttribute('data-page');
-                loadPage(page);
-            });
-        });
-
-        document.getElementById('showLogin').addEventListener('click', () => loadPage('login'));
-        document.getElementById('showSignup').addEventListener('click', () => loadPage('signup'));
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            await signOut(auth);
-            showToast('تم تسجيل الخروج بنجاح', 'success', 'fa-check-circle');
-            loadPage('home');
-        });
-
-        // ========== Auth State Listener ==========
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    currentUserData = userDoc.data();
-                } else {
-                    // إنشاء مستند إذا لم يكن موجوداً (للطوارئ)
-                    currentUserData = { role: 'user', name: user.email };
-                    await setDoc(doc(db, 'users', user.uid), currentUserData);
-                }
-                // تحديث الهيدر
-                authButtons.classList.add('hidden');
-                userInfoDiv.classList.remove('hidden');
-                userNameSpan.textContent = currentUserData.name || 'مستخدم';
-                userRoleSpan.textContent = currentUserData.role === 'admin' ? 'أدمن' : 'طالب';
+        
+        // دالة لعرض الكورسات من Firebase (سيتم استدعاؤها لاحقاً)
+        window.loadCoursesFromFirebase = async function() {
+            try {
+                const coursesGrid = document.getElementById('courses-grid');
+                if (!coursesGrid) return;
                 
-                // إظهار رابط كورساتي للطلاب
-                if (currentUserData.role === 'user') {
-                    mycoursesLink.classList.remove('hidden');
-                    footerMycourses.classList.remove('hidden');
-                } else {
-                    mycoursesLink.classList.add('hidden');
-                    footerMycourses.classList.add('hidden');
-                }
+                coursesGrid.innerHTML = '<div class="loading">جاري تحميل الكورسات...</div>';
+                const querySnapshot = await getDocs(collection(db, 'courses'));
                 
-                // التحقق من الاشتراك
-                const subQuery = query(collection(db, 'subscriptions'), where('userId', '==', user.uid), where('endDate', '>=', new Date()));
-                const subSnap = await getDocs(subQuery);
-                if (!subSnap.empty) {
-                    const sub = subSnap.docs[0].data();
-                    const endDate = sub.endDate.toDate();
-                    const daysLeft = Math.ceil((endDate - new Date()) / (1000*60*60*24));
-                    subscriptionStatusSpan.innerHTML = `<span class="badge active">مشترك (${daysLeft} يوم)</span>`;
-                } else {
-                    subscriptionStatusSpan.innerHTML = `<span class="badge expired">غير مشترك</span>`;
-                }
-
-                // إذا كان المستخدم في صفحة تسجيل الدخول أو إنشاء حساب، نوجهه للوحة التحكم فوراً
-                if (currentPage === 'login' || currentPage === 'signup') {
-                    // تغيير currentPage قبل التحميل لتجنب التوجيه المتكرر
-                    currentPage = 'dashboard';
-                    await loadPage('dashboard');
-                } else {
-                    await loadPage(currentPage);
-                }
-            } else {
-                currentUser = null;
-                currentUserData = null;
-                authButtons.classList.remove('hidden');
-                userInfoDiv.classList.add('hidden');
-                mycoursesLink.classList.add('hidden');
-                footerMycourses.classList.add('hidden');
-                await loadPage(currentPage);
-            }
-        });
-
-        // ========== Page Loader ==========
-        async function loadPage(page) {
-            currentPage = page;
-            if (page === 'home') renderHome();
-            else if (page === 'about') renderAbout();
-            else if (page === 'services') renderServices();
-            else if (page === 'what-we-offer') renderWhatWeOffer();
-            else if (page === 'book') renderBook();
-            else if (page === 'login') renderLogin();
-            else if (page === 'signup') renderSignup();
-            else if (page === 'dashboard') renderDashboard();
-            else if (page === 'mycourses') renderMyCourses();
-            else if (page === 'admin') renderAdmin();
-            else if (page.startsWith('course?id=')) {
-                const courseId = page.split('=')[1];
-                renderCourse(courseId);
-            }
-            else renderHome();
-        }
-
-        // ========== Render Functions ==========
-        function renderHome() {
-            main.innerHTML = `
-                <section class="hero">
-                    <div class="container">
-                        <h2 data-aos="fade-down">مرحباً بك في منصة محمد جابر</h2>
-                        <p data-aos="fade-up">مع الأستاذ محمد جابر، رحلتك نحو التميز في اللغة العربية تبدأ من هنا</p>
-                        <button class="btn" onclick="loadPage('services')" data-aos="zoom-in"><i class="fas fa-play"></i> ابدأ الآن</button>
-                    </div>
-                </section>
-                <section class="stats-section">
-                    <div class="container">
-                        <div class="stats-grid">
-                            <div class="stat-item" data-aos="flip-right">
-                                <i class="fas fa-users"></i>
-                                <h3>5000+</h3>
-                                <p>طالب وطالبة</p>
-                            </div>
-                            <div class="stat-item" data-aos="flip-right" data-aos-delay="100">
-                                <i class="fas fa-video"></i>
-                                <h3>200+</h3>
-                                <p>درس مسجل</p>
-                            </div>
-                            <div class="stat-item" data-aos="flip-right" data-aos-delay="200">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                                <h3>15</h3>
-                                <p>مدرس متخصص</p>
-                            </div>
-                            <div class="stat-item" data-aos="flip-right" data-aos-delay="300">
-                                <i class="fas fa-trophy"></i>
-                                <h3>100%</h3>
-                                <p>رضا العملاء</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title" data-aos="fade-up">الدورات المتاحة</h2>
-                        <div class="cards-grid" id="coursesGrid"></div>
-                    </div>
-                </section>
-            `;
-            loadCourses();
-        }
-
-        async function loadCourses() {
-            const grid = document.getElementById('coursesGrid');
-            if (!grid) return;
-            const coursesSnap = await getDocs(collection(db, 'courses'));
-            if (coursesSnap.empty) {
-                grid.innerHTML = '<p class="text-center">لا توجد دورات بعد</p>';
-                return;
-            }
-            let html = '';
-            coursesSnap.forEach(doc => {
-                const course = doc.data();
-                html += `
-                    <div class="card" data-aos="fade-up">
-                        <i class="fas fa-book-open"></i>
-                        <h3>${course.name}</h3>
-                        <p>${course.description || 'شرح مبسط وممتع'}</p>
-                        <button class="btn-card" onclick="loadPage('course?id=${doc.id}')">عرض المحتوى</button>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
-        }
-
-        function renderAbout() {
-            main.innerHTML = `
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title" data-aos="fade-up">من نحن</h2>
-                        <div style="display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;">
-                            <div style="flex: 1; min-width: 300px;" data-aos="fade-left">
-                                <img src="mrjabr.png" alt="الأستاذ محمد جابر" style="width: 100%; border-radius: 30px; box-shadow: var(--shadow);">
-                            </div>
-                            <div style="flex: 2;" data-aos="fade-right">
-                                <p style="font-size: 1.2rem; line-height: 1.8;">منصة الأستاذ محمد جابر لتدريس اللغة العربية. متخصص في تدريس مواد اللغة العربية عن بعد من أي مكان في جمهورية مصر العربية. خبرة أكثر من عشرين عاماً في تدريس مواد اللغة العربية للمراحل الإعدادية والثانوية.</p>
-                                <p style="font-size: 1.2rem; margin-top: 1rem;">نقدم تعليماً متميزاً يجمع بين الأصالة والتقنيات الحديثة.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            `;
-        }
-
-        function renderServices() {
-            main.innerHTML = `
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title" data-aos="fade-up">خدماتنا</h2>
-                        <div class="cards-grid">
-                            <div class="card" data-aos="zoom-in"><i class="fas fa-chalkboard-teacher"></i><h3>دروس تفاعلية</h3><p>شروحات حية ومسجلة بأحدث الأساليب.</p></div>
-                            <div class="card" data-aos="zoom-in" data-aos-delay="100"><i class="fas fa-file-alt"></i><h3>اختبارات دورية</h3><p>تقييم مستمر لمستوى التقدم.</p></div>
-                            <div class="card" data-aos="zoom-in" data-aos-delay="200"><i class="fas fa-headset"></i><h3>دعم فني 24/7</h3><p>فريق متخصص للإجابة عن استفساراتك.</p></div>
-                            <div class="card" data-aos="zoom-in" data-aos-delay="300"><i class="fas fa-certificate"></i><h3>شهادات معتمدة</h3><p>احصل على شهادة بعد إتمام الدورة.</p></div>
-                        </div>
-                    </div>
-                </section>
-            `;
-        }
-
-        function renderWhatWeOffer() {
-            main.innerHTML = `
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title" data-aos="fade-up">ماذا نقدم</h2>
-                        <div class="cards-grid">
-                            <div class="card" data-aos="fade-up"><i class="fas fa-laptop"></i><h3>بيئة تعليمية</h3><p>بيئة تفاعلية متكاملة تجمع بين التعليم التقليدي والتقنيات الحديثة.</p></div>
-                            <div class="card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-database"></i><h3>محتوى تعليمي</h3><p>محتوى متميز يغطي جميع فروع اللغة العربية.</p></div>
-                            <div class="card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-tasks"></i><h3>اختبارات دورية</h3><p>لتقييم مستوى الطلاب ومتابعة تقدمهم.</p></div>
-                            <div class="card" data-aos="fade-up" data-aos-delay="300"><i class="fas fa-comments"></i><h3>دعم مباشر</h3><p>متابعة مستمرة من فريق متخصص.</p></div>
-                        </div>
-                    </div>
-                </section>
-            `;
-        }
-
-        function renderBook() {
-            main.innerHTML = `
-                <section class="section">
-                    <div class="container">
-                        <div style="display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;">
-                            <div style="flex: 1;" data-aos="fade-left">
-                                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="كتاب الجابر" style="width: 100%; border-radius: 30px;">
-                            </div>
-                            <div style="flex: 1;" data-aos="fade-right">
-                                <h2 style="font-size: clamp(2rem, 5vw, 3rem);">كتاب الجابر</h2>
-                                <p style="font-size: 1.3rem;">الكتاب الشامل لتعلم اللغة العربية بطريقة مبتكرة (خاص بالصف الثالث الثانوي)</p>
-                                <p><i class="fas fa-check-circle" style="color: var(--success);"></i> شرح مبسط ومفهوم</p>
-                                <p><i class="fas fa-check-circle" style="color: var(--success);"></i> تمارين تطبيقية شاملة</p>
-                                <p><i class="fas fa-check-circle" style="color: var(--success);"></i> أمثلة من الحياة اليومية</p>
-                                <p><i class="fas fa-check-circle" style="color: var(--success);"></i> اختبارات تقييمية</p>
-                                <h3 style="margin-top: 2rem;">للحجز والاستفسار:</h3>
-                                <p style="font-size: 1.5rem; direction: ltr;"><i class="fas fa-phone-alt"></i> 01273740256</p>
-                                <a href="https://wa.me/201273740256" class="btn" style="background: #25d366; color: white;"><i class="fab fa-whatsapp"></i> واتساب</a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            `;
-        }
-
-        function renderLogin() {
-            if (currentUser) { loadPage('dashboard'); return; }
-            main.innerHTML = `
-                <div class="form-container animate__animated animate__fadeInUp">
-                    <h2>تسجيل الدخول</h2>
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                            <input type="email" id="loginEmail" placeholder="example@domain.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> كلمة المرور</label>
-                            <input type="password" id="loginPassword" placeholder="********" required>
-                        </div>
-                        <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> دخول</button>
-                    </form>
-                    <p style="text-align: center; margin-top: 1.5rem;">ليس لديك حساب؟ <a href="#" onclick="loadPage('signup')">إنشاء حساب جديد</a></p>
-                </div>
-            `;
-            document.getElementById('loginForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showToast('تم تسجيل الدخول بنجاح', 'success', 'fa-check-circle');
-                    // loadPage ستُستدعى تلقائياً من onAuthStateChanged
-                } catch (error) {
-                    showToast(error.message, 'error', 'fa-exclamation-circle');
-                }
-            });
-        }
-
-        function renderSignup() {
-            if (currentUser) { loadPage('dashboard'); return; }
-            // قائمة المحافظات المصرية
-            const governorates = [
-                'القاهرة', 'الإسكندرية', 'الجيزة', 'القليوبية', 'الشرقية', 'الدقهلية', 'الغربية', 'المنوفية', 'كفر الشيخ',
-                'البحيرة', 'دمياط', 'بورسعيد', 'الإسماعيلية', 'السويس', 'شمال سيناء', 'جنوب سيناء', 'بني سويف', 'الفيوم',
-                'المنيا', 'أسيوط', 'سوهاج', 'قنا', 'الأقصر', 'أسوان', 'مطروح', 'الوادي الجديد', 'البحر الأحمر'
-            ];
-            let options = '<option value="">اختر محافظتك</option>';
-            governorates.forEach(g => options += `<option>${g}</option>`);
-
-            main.innerHTML = `
-                <div class="form-container animate__animated animate__fadeInUp">
-                    <h2>إنشاء حساب جديد</h2>
-                    <form id="signupForm">
-                        <div class="form-group">
-                            <label><i class="fas fa-user"></i> الاسم بالكامل</label>
-                            <input type="text" id="signupName" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
-                            <input type="email" id="signupEmail" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-map-marker-alt"></i> المحافظة</label>
-                            <select id="signupGovernorate" required>${options}</select>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-graduation-cap"></i> الصف الدراسي</label>
-                            <select id="signupGrade" required>
-                                <option value="">اختر الصف</option>
-                                <option>الأول الثانوي</option><option>الثاني الثانوي</option><option>الثالث الثانوي</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-school"></i> اسم المعهد</label>
-                            <input type="text" id="signupInstitute" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-phone"></i> تليفون الطالب</label>
-                            <input type="tel" id="signupStudentPhone" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-phone-alt"></i> تليفون ولي الأمر</label>
-                            <input type="tel" id="signupParentPhone" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> كلمة المرور</label>
-                            <input type="password" id="signupPassword" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> أعد كتابة كلمة المرور</label>
-                            <input type="password" id="signupConfirmPassword" required>
-                        </div>
-                        <button type="submit" class="btn-submit"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
-                    </form>
-                    <p style="text-align: center; margin-top: 1.5rem;">لديك حساب بالفعل؟ <a href="#" onclick="loadPage('login')">تسجيل الدخول</a></p>
-                </div>
-            `;
-            document.getElementById('signupForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const name = document.getElementById('signupName').value;
-                const email = document.getElementById('signupEmail').value;
-                const governorate = document.getElementById('signupGovernorate').value;
-                const grade = document.getElementById('signupGrade').value;
-                const institute = document.getElementById('signupInstitute').value;
-                const studentPhone = document.getElementById('signupStudentPhone').value;
-                const parentPhone = document.getElementById('signupParentPhone').value;
-                const password = document.getElementById('signupPassword').value;
-                const confirm = document.getElementById('signupConfirmPassword').value;
-                if (password !== confirm) {
-                    showToast('كلمة المرور غير متطابقة', 'error', 'fa-exclamation-circle');
+                if (querySnapshot.empty) {
+                    coursesGrid.innerHTML = '<p class="no-courses">لا توجد كورسات مضافة حالياً</p>';
                     return;
                 }
-                try {
-                    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCred.user;
-                    const role = (email === 'bo2584668@gmail.com') ? 'admin' : 'user';
-                    await setDoc(doc(db, 'users', user.uid), {
-                        name, email, governorate, grade, institute, studentPhone, parentPhone, role, createdAt: new Date()
-                    });
-                    showToast('تم إنشاء الحساب بنجاح', 'success', 'fa-check-circle');
-                    // سيتم توجيه المستخدم تلقائياً
-                } catch (error) {
-                    showToast(error.message, 'error', 'fa-exclamation-circle');
-                }
-            });
-        }
-
-        function renderDashboard() {
-            if (!currentUser) { loadPage('login'); return; }
-            if (currentUserData.role === 'admin') {
-                renderAdmin();
-                return;
-            }
-            main.innerHTML = `
-                <section class="dashboard-header">
-                    <div class="container">
-                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);" data-aos="fade-down">مرحباً ${currentUserData.name}</h2>
-                        <p data-aos="fade-up">الصف: ${currentUserData.grade}</p>
-                    </div>
-                </section>
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title" data-aos="fade-up">كورساتي</h2>
-                        <div class="cards-grid" id="studentCoursesGrid"></div>
-                    </div>
-                </section>
-            `;
-            loadStudentCourses();
-        }
-
-        async function loadStudentCourses() {
-            const grid = document.getElementById('studentCoursesGrid');
-            if (!grid) return;
-            // جلب الكورسات التي تطابق صف الطالب
-            const coursesQuery = query(collection(db, 'courses'), where('grade', '==', currentUserData.grade));
-            const coursesSnap = await getDocs(coursesQuery);
-            if (coursesSnap.empty) {
-                grid.innerHTML = '<p class="text-center">لا توجد كورسات متاحة لصفك حالياً</p>';
-                return;
-            }
-            let html = '';
-            coursesSnap.forEach(doc => {
-                const course = doc.data();
-                html += `
-                    <div class="card" data-aos="fade-up">
-                        <i class="fas fa-play-circle"></i>
-                        <h3>${course.name}</h3>
-                        <button class="btn-card" onclick="loadPage('course?id=${doc.id}')">اضغط لعرض المحتوى</button>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
-        }
-
-        // صفحة كورساتي (نفس الداشبورد لكن يمكن تخصيصها)
-        function renderMyCourses() {
-            if (!currentUser || currentUserData.role !== 'user') { loadPage('login'); return; }
-            renderDashboard(); // نفس المحتوى
-        }
-
-        async function renderCourse(courseId) {
-            if (!courseId) { loadPage('dashboard'); return; }
-            const courseDoc = await getDoc(doc(db, 'courses', courseId));
-            if (!courseDoc.exists()) { loadPage('dashboard'); return; }
-            const course = courseDoc.data();
-            
-            const lessonsQuery = query(collection(db, 'lessons'), where('courseId', '==', courseId), orderBy('month', 'asc'), orderBy('order', 'asc'));
-            const lessonsSnap = await getDocs(lessonsQuery);
-            const lessons = [];
-            lessonsSnap.forEach(d => lessons.push({ id: d.id, ...d.data() }));
-
-            const months = {};
-            lessons.forEach(lesson => {
-                const month = lesson.month || 'أخرى';
-                if (!months[month]) months[month] = [];
-                months[month].push(lesson);
-            });
-
-            let hasActiveSub = false;
-            if (currentUser && currentUserData.role === 'user') {
-                const subQuery = query(collection(db, 'subscriptions'), where('userId', '==', currentUser.uid), where('endDate', '>=', new Date()));
-                const subSnap = await getDocs(subQuery);
-                hasActiveSub = !subSnap.empty;
-            } else if (currentUser && currentUserData.role === 'admin') {
-                hasActiveSub = true; // الأدمن يرى كل الدروس
-            }
-
-            let lessonsHtml = '';
-            for (let month in months) {
-                lessonsHtml += `<div class="lesson-group"><h3>محتوى شهر ${month}</h3>`;
-                months[month].forEach(lesson => {
-                    const locked = lesson.paid && !hasActiveSub;
-                    lessonsHtml += `
-                        <div class="lesson-item ${locked ? 'locked' : ''}">
-                            <span class="title">${lesson.title}</span>
-                            ${locked ? '<span class="lock-icon"><i class="fas fa-lock"></i> محتوى مغلق - اشترك الآن</span>' : '<span class="free-icon"><i class="fas fa-unlock"></i> متاح</span>'}
-                            ${!locked ? `<button class="btn-small" onclick="viewLesson('${lesson.id}')">عرض</button>` : ''}
-                        </div>
-                    `;
-                });
-                lessonsHtml += '</div>';
-            }
-
-            main.innerHTML = `
-                <section class="section">
-                    <div class="container">
-                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);">${course.name}</h2>
-                        ${!hasActiveSub && currentUser && currentUserData.role === 'user' ? renderSubscriptionRequest() : ''}
-                        <div id="lessonList">${lessonsHtml}</div>
-                        <div id="lessonViewer" class="hidden"></div>
-                    </div>
-                </section>
-            `;
-
-            window.viewLesson = async (lessonId) => {
-                const lessonDoc = await getDoc(doc(db, 'lessons', lessonId));
-                if (!lessonDoc.exists()) return;
-                const lesson = lessonDoc.data();
-                const videoHtml = lesson.videoUrl ? 
-                    (lesson.videoUrl.includes('youtube') ? 
-                        `<div class="video-wrapper" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:20px;"><iframe src="https://www.youtube.com/embed/${extractYoutubeId(lesson.videoUrl)}" frameborder="0" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe></div>` 
-                        : `<video controls src="${lesson.videoUrl}" style="width:100%; border-radius:20px;"></video>`) 
-                    : '<p>لا يوجد فيديو</p>';
-                document.getElementById('lessonViewer').innerHTML = `
-                    <div class="lesson-content">
-                        <h3>${lesson.title}</h3>
-                        <p>${lesson.description}</p>
-                        ${videoHtml}
-                        <button class="btn" onclick="document.getElementById('lessonViewer').classList.add('hidden');document.getElementById('lessonList').classList.remove('hidden');"><i class="fas fa-arrow-right"></i> عودة</button>
-                    </div>
-                `;
-                document.getElementById('lessonViewer').classList.remove('hidden');
-                document.getElementById('lessonList').classList.add('hidden');
-            };
-        }
-
-        function extractYoutubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : '';
-        }
-
-        function renderSubscriptionRequest() {
-            return `
-                <div class="request-form" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 2rem; border-radius: 30px; margin-bottom: 2rem; border: 1px solid rgba(0,0,0,0.05);">
-                    <h3 style="color: var(--primary);"><i class="fas fa-key"></i> تفعيل الاشتراك</h3>
-                    <p>سعر الاشتراك: <strong>شهري 100 جنيه</strong> | <strong>ترم 300 جنيه</strong></p>
-                    <p>لتفعيل الاشتراك يرجى تحويل فودافون كاش على الأرقام التالية:</p>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><i class="fas fa-phone"></i> 01097841446</li>
-                        <li><i class="fas fa-phone"></i> 01033781752</li>
-                        <li><i class="fas fa-phone"></i> 01044768288</li>
-                    </ul>
-                    <form id="subRequestForm">
-                        <div class="form-group">
-                            <label>نوع الاشتراك</label>
-                            <select id="subType" required>
-                                <option value="monthly">شهري (100 جنيه)</option>
-                                <option value="semester">ترم (300 جنيه)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الهاتف المحول منه</label>
-                            <input type="tel" id="subPhone" required>
-                        </div>
-                        <div class="form-group">
-                            <label>صورة الإيصال</label>
-                            <input type="file" id="subReceipt" accept="image/*" required>
-                        </div>
-                        <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> إرسال الطلب</button>
-                    </form>
-                </div>
-            `;
-            setTimeout(() => {
-                document.getElementById('subRequestForm')?.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    if (!currentUser) { showToast('يجب تسجيل الدخول أولاً', 'error', 'fa-exclamation-circle'); return; }
-                    const type = document.getElementById('subType').value;
-                    const phone = document.getElementById('subPhone').value;
-                    const file = document.getElementById('subReceipt').files[0];
-                    if (!file) { showToast('اختر صورة الإيصال', 'warning', 'fa-exclamation-triangle'); return; }
-                    try {
-                        const storageRef = ref(storage, `receipts/${currentUser.uid}_${Date.now()}.jpg`);
-                        await uploadBytes(storageRef, file);
-                        const url = await getDownloadURL(storageRef);
-                        await addDoc(collection(db, 'subscriptionRequests'), {
-                            userId: currentUser.uid,
-                            userName: currentUserData.name,
-                            userGrade: currentUserData.grade,
-                            type,
-                            phone,
-                            receiptUrl: url,
-                            status: 'pending',
-                            createdAt: new Date()
-                        });
-                        showToast('تم تقديم الطلب بنجاح، سيتم مراجعته قريباً', 'success', 'fa-check-circle');
-                    } catch (error) {
-                        showToast(error.message, 'error', 'fa-exclamation-circle');
-                    }
-                });
-            }, 100);
-        }
-
-        // ========== Admin Panel ==========
-        async function renderAdmin() {
-            if (!currentUser || currentUserData.role !== 'admin') { loadPage('home'); return; }
-            main.innerHTML = `
-                <section class="section">
-                    <div class="container">
-                        <h2 class="section-title" data-aos="fade-up">قسم الإدارة</h2>
-                        <div class="admin-tabs">
-                            <div class="admin-tab active" data-admin-tab="requests">طلبات الاشتراك</div>
-                            <div class="admin-tab" data-admin-tab="lessons">إدارة الدروس</div>
-                            <div class="admin-tab" data-admin-tab="courses">إدارة الكورسات</div>
-                            <div class="admin-tab" data-admin-tab="users">إدارة المستخدمين</div>
-                        </div>
-                        <div id="adminRequests" class="admin-section active"></div>
-                        <div id="adminLessons" class="admin-section"></div>
-                        <div id="adminCourses" class="admin-section"></div>
-                        <div id="adminUsers" class="admin-section"></div>
-                    </div>
-                </section>
-            `;
-
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-                    document.getElementById('admin' + tab.dataset.adminTab.charAt(0).toUpperCase() + tab.dataset.adminTab.slice(1)).classList.add('active');
-                });
-            });
-
-            loadRequests();
-            loadLessonsTab();
-            loadCoursesTab();
-            loadUsersTab();
-        }
-
-        async function loadRequests() {
-            const div = document.getElementById('adminRequests');
-            const requestsSnap = await getDocs(collection(db, 'subscriptionRequests'));
-            let html = `
-                <h3>طلبات الاشتراك</h3>
-                <div class="table-responsive">
-                    <table>
-                        <thead><tr><th>الطالب</th><th>الصف</th><th>النوع</th><th>الهاتف</th><th>الإيصال</th><th>الحالة</th><th>الإجراء</th></tr></thead>
-                        <tbody>
-            `;
-            requestsSnap.forEach(doc => {
-                const req = doc.data();
-                html += `
-                    <tr>
-                        <td>${req.userName}</td>
-                        <td>${req.userGrade}</td>
-                        <td>${req.type === 'monthly' ? 'شهري' : 'ترم'}</td>
-                        <td>${req.phone}</td>
-                        <td><a href="${req.receiptUrl}" target="_blank" style="color: var(--accent);"><i class="fas fa-eye"></i> عرض</a></td>
-                        <td><span class="badge pending">${req.status}</span></td>
-                        <td>
-                            ${req.status === 'pending' ? `<button class="btn-small" onclick="approveRequest('${doc.id}', '${req.userId}', '${req.type}')">تفعيل</button>` : ''}
-                        </td>
-                    </tr>
-                `;
-            });
-            html += '</tbody></table></div>';
-            div.innerHTML = html;
-
-            window.approveRequest = async (reqId, userId, type) => {
-                const now = new Date();
-                const endDate = new Date(now);
-                if (type === 'monthly') endDate.setDate(now.getDate() + 30);
-                else endDate.setMonth(now.getMonth() + 5);
-                await addDoc(collection(db, 'subscriptions'), {
-                    userId,
-                    type,
-                    startDate: now,
-                    endDate: endDate,
-                    createdAt: now
-                });
-                await updateDoc(doc(db, 'subscriptionRequests', reqId), { status: 'approved' });
-                showToast('تم تفعيل الاشتراك', 'success', 'fa-check-circle');
-                loadRequests();
-            };
-        }
-
-        async function loadLessonsTab() {
-            const div = document.getElementById('adminLessons');
-            const coursesSnap = await getDocs(collection(db, 'courses'));
-            let courseOptions = '';
-            coursesSnap.forEach(doc => {
-                courseOptions += `<option value="${doc.id}">${doc.data().name}</option>`;
-            });
-
-            div.innerHTML = `
-                <h3>إضافة درس جديد</h3>
-                <form id="addLessonForm">
-                    <div class="form-group">
-                        <label>الكورس</label>
-                        <select id="lessonCourse" required>${courseOptions}</select>
-                    </div>
-                    <div class="form-group">
-                        <label>الشهر</label>
-                        <select id="lessonMonth" required>
-                            <option value="يناير">يناير</option><option value="فبراير">فبراير</option><option value="مارس">مارس</option><option value="أبريل">أبريل</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>عنوان الدرس</label>
-                        <input type="text" id="lessonTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label>وصف الدرس</label>
-                        <textarea id="lessonDesc" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>رابط يوتيوب (أو رفع فيديو)</label>
-                        <input type="text" id="lessonVideo" placeholder="https://youtu.be/...">
-                        <input type="file" id="lessonVideoFile" accept="video/*">
-                    </div>
-                    <div class="form-group">
-                        <label>صورة مصغرة</label>
-                        <input type="file" id="lessonThumb" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <label><input type="checkbox" id="lessonPaid"> درس مدفوع</label>
-                    </div>
-                    <button type="submit" class="btn-submit" id="addLessonBtn">نشر الدرس</button>
-                </form>
-                <hr>
-                <h3>الدروس الموجودة</h3>
-                <div id="lessonsList"></div>
-            `;
-
-            document.getElementById('addLessonForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('addLessonBtn');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري النشر...';
                 
-                try {
-                    const courseId = document.getElementById('lessonCourse').value;
-                    const month = document.getElementById('lessonMonth').value;
-                    const title = document.getElementById('lessonTitle').value;
-                    const desc = document.getElementById('lessonDesc').value;
-                    const videoUrl = document.getElementById('lessonVideo').value;
-                    const videoFile = document.getElementById('lessonVideoFile').files[0];
-                    const thumbFile = document.getElementById('lessonThumb').files[0];
-                    const paid = document.getElementById('lessonPaid').checked;
-
-                    if (!videoUrl && !videoFile) {
-                        showToast('يجب إدخال رابط فيديو أو رفع ملف فيديو', 'warning', 'fa-exclamation-triangle');
-                        btn.disabled = false;
-                        btn.innerHTML = 'نشر الدرس';
-                        return;
+                coursesGrid.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const course = doc.data();
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    
+                    // تحديد الصورة (إذا وجدت)
+                    let imageHtml = '';
+                    if (course.imageUrl) {
+                        imageHtml = `<img src="${course.imageUrl}" alt="${course.title}" loading="lazy">`;
+                    } else {
+                        imageHtml = `<div class="course-no-image"><i class="fas fa-book-open"></i></div>`;
                     }
-
-                    let finalVideoUrl = videoUrl;
-                    if (videoFile) {
-                        const storageRef = ref(storage, `videos/${Date.now()}_${videoFile.name}`);
-                        await uploadBytes(storageRef, videoFile);
-                        finalVideoUrl = await getDownloadURL(storageRef);
-                    }
-                    let thumbUrl = '';
-                    if (thumbFile) {
-                        const thumbRef = ref(storage, `thumbs/${Date.now()}_${thumbFile.name}`);
-                        await uploadBytes(thumbRef, thumbFile);
-                        thumbUrl = await getDownloadURL(thumbRef);
-                    }
-
-                    await addDoc(collection(db, 'lessons'), {
-                        courseId, month, title, description: desc, videoUrl: finalVideoUrl, thumbUrl, paid, order: Date.now(), createdAt: new Date()
-                    });
-                    showToast('تم إضافة الدرس بنجاح', 'success', 'fa-check-circle');
-                    document.getElementById('addLessonForm').reset();
-                    loadLessonsList();
-                } catch (error) {
-                    showToast('حدث خطأ: ' + error.message, 'error', 'fa-exclamation-circle');
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = 'نشر الدرس';
-                }
-            });
-
-            loadLessonsList();
-        }
-
-        async function loadLessonsList() {
-            const div = document.getElementById('lessonsList');
-            if (!div) return;
-            const lessonsSnap = await getDocs(collection(db, 'lessons'));
-            let html = '<div class="table-responsive"><table><tr><th>العنوان</th><th>الشهر</th><th>الإجراء</th></tr>';
-            lessonsSnap.forEach(doc => {
-                const lesson = doc.data();
-                html += `<tr><td>${lesson.title}</td><td>${lesson.month}</td><td><button class="btn-small" onclick="deleteLesson('${doc.id}')">حذف</button></td></tr>`;
-            });
-            html += '</table></div>';
-            div.innerHTML = html;
-
-            window.deleteLesson = async (id) => {
-                if (confirm('هل أنت متأكد؟')) {
-                    await deleteDoc(doc(db, 'lessons', id));
-                    showToast('تم الحذف', 'success');
-                    loadLessonsList();
-                }
-            };
-        }
-
-        async function loadCoursesTab() {
-            const div = document.getElementById('adminCourses');
-            div.innerHTML = `
-                <h3>إضافة كورس جديد</h3>
-                <form id="addCourseForm">
-                    <div class="form-group">
-                        <label>اسم الكورس</label>
-                        <input type="text" id="courseName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>الوصف</label>
-                        <textarea id="courseDesc" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>الصف</label>
-                        <input type="text" id="courseGrade" placeholder="مثال: الأول الثانوي" required>
-                    </div>
-                    <button type="submit" class="btn-submit">إضافة</button>
-                </form>
-                <hr>
-                <h3>الكورسات الحالية</h3>
-                <div id="coursesList"></div>
-            `;
-
-            document.getElementById('addCourseForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const name = document.getElementById('courseName').value;
-                const desc = document.getElementById('courseDesc').value;
-                const grade = document.getElementById('courseGrade').value;
-                await addDoc(collection(db, 'courses'), { name, description: desc, grade });
-                showToast('تم إضافة الكورس', 'success');
-                loadCoursesList();
-            });
-
-            loadCoursesList();
-        }
-
-        async function loadCoursesList() {
-            const div = document.getElementById('coursesList');
-            if (!div) return;
-            const coursesSnap = await getDocs(collection(db, 'courses'));
-            let html = '<div class="table-responsive"><table><tr><th>الاسم</th><th>الصف</th><th>الإجراء</th></tr>';
-            coursesSnap.forEach(doc => {
-                const course = doc.data();
-                html += `<tr><td>${course.name}</td><td>${course.grade}</td><td><button class="btn-small" onclick="deleteCourse('${doc.id}')">حذف</button></td></tr>`;
-            });
-            html += '</table></div>';
-            div.innerHTML = html;
-
-            window.deleteCourse = async (id) => {
-                if (confirm('هل أنت متأكد؟')) {
-                    await deleteDoc(doc(db, 'courses', id));
-                    showToast('تم الحذف', 'success');
-                    loadCoursesList();
-                }
-            };
-        }
-
-        async function loadUsersTab() {
-            const div = document.getElementById('adminUsers');
-            const usersSnap = await getDocs(collection(db, 'users'));
-            let html = '<h3>المستخدمين</h3><div class="table-responsive"><table><tr><th>الاسم</th><th>البريد</th><th>الصف</th><th>الدور</th><th>الإجراء</th></tr>';
-            usersSnap.forEach(doc => {
-                const user = doc.data();
-                html += `<tr>
-                    <td>${user.name || ''}</td>
-                    <td>${user.email}</td>
-                    <td>${user.grade || ''}</td>
-                    <td><span class="badge ${user.role}">${user.role}</span></td>
-                    <td>
-                        ${user.role !== 'admin' ? `<button class="btn-small" onclick="makeAdmin('${doc.id}')">ترقية لأدمن</button>` : ''}
-                    </td>
-                </tr>`;
-            });
-            html += '</table></div>';
-            div.innerHTML = html;
-
-            window.makeAdmin = async (uid) => {
-                await updateDoc(doc(db, 'users', uid), { role: 'admin' });
-                showToast('تمت الترقية', 'success');
-                loadUsersTab();
-            };
-        }
-
-        // ========== Helper Functions ==========
-        window.loadPage = loadPage;
+                    
+                    courseCard.innerHTML = `
+                        ${imageHtml}
+                        <div class="course-tag">${course.category || 'النحو'}</div>
+                        <h3>${course.title}</h3>
+                        <p>${course.description.substring(0, 80)}...</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-chalkboard-teacher"></i> ${course.instructor || 'محمد جابر'}</span>
+                        </div>
+                        ${course.videoUrl ? `<a href="${course.videoUrl}" class="course-link" target="_blank">مشاهدة الدرس <i class="fas fa-arrow-left"></i></a>` : ''}
+                    `;
+                    coursesGrid.appendChild(courseCard);
+                });
+            } catch (error) {
+                console.error("خطأ في تحميل الكورسات:", error);
+                document.getElementById('courses-grid').innerHTML = '<p class="error">حدث خطأ في تحميل الكورسات</p>';
+            }
+        };
+        
+        // تحميل الكورسات عند اكتمال الصفحة
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof window.loadCoursesFromFirebase === 'function') {
+                window.loadCoursesFromFirebase();
+            }
+        });
     </script>
+    <style>
+        /* ===== التصميم الأساسي (مطابق لمنصة الهيثم) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tahoma', 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* الهيدر مع صورة الأستاذ - متجاوب */
+        .header {
+            background: linear-gradient(135deg, #0a4b7a 0%, #0d5e8a 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><text x="10" y="20" font-size="14">📚</text><text x="80" y="80" font-size="20">✏️</text></svg>');
+            opacity: 0.1;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* صورة الأستاذ - بشكل دائري وجذاب */
+        .professor-image {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            background-color: #fff;
+        }
+        
+        .professor-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* صورة افتراضية إذا لم يتم توفير صورة */
+        .professor-image.default {
+            background: linear-gradient(145deg, #f0f0f0, #ddd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #0a4b7a;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* شريط التنقل */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+        
+        .nav-links a:hover {
+            color: #0a4b7a;
+        }
+        
+        .admin-link {
+            background-color: #0a4b7a;
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+        
+        .admin-link:hover {
+            background-color: #0d5e8a;
+        }
+        
+        /* الأقسام العامة */
+        .section {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: #0a4b7a;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background-color: #f9a826;
+        }
+        
+        .section-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        /* قسم من نحن - مع صورة الأستاذ (مثل المنصة الأصلية) */
+        .about-section {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin: 2rem auto;
+            overflow: hidden;
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            padding: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .about-text {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .about-text h3 {
+            font-size: 1.8rem;
+            color: #0a4b7a;
+            margin-bottom: 1rem;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .about-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #f9a826;
+        }
+        
+        .stat-label {
+            color: #666;
+        }
+        
+        .about-image {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+        }
+        
+        .about-image img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #f9a826;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: #e09612;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(249, 168, 38, 0.3);
+        }
+        
+        /* شبكة الكورسات - متجاوبة بالكامل */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .course-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .course-no-image {
+            height: 180px;
+            background: linear-gradient(135deg, #0a4b7a, #2c7cb0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .course-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f9a826;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .course-card h3 {
+            padding: 1rem 1rem 0.5rem;
+            font-size: 1.2rem;
+            color: #0a4b7a;
+        }
+        
+        .course-card p {
+            padding: 0 1rem 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .course-meta {
+            padding: 0 1rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .course-link {
+            display: block;
+            padding: 1rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            color: #0a4b7a;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .course-link:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* قسم قصص النجاح (شهادات الطلاب) */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 5rem;
+            color: #f0f0f0;
+            font-family: serif;
+        }
+        
+        .testimonial-card p {
+            margin-bottom: 1.5rem;
+            color: #555;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #0a4b7a, #2c7cb0);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .author-info h4 {
+            color: #0a4b7a;
+            margin-bottom: 0.2rem;
+        }
+        
+        .author-info p {
+            color: #888;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        /* قسم مميزات المنصة */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0a4b7a, #2c7cb0);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .feature-item h3 {
+            color: #0a4b7a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        /* قسم كتاب محمد جابر */
+        .book-section {
+            background: linear-gradient(135deg, #0a4b7a 0%, #1a6b9f 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin: 2rem auto;
+        }
+        
+        .book-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .book-text {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .book-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .book-text p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .book-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .book-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .book-feature i {
+            color: #f9a826;
+        }
+        
+        .book-cover {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .book-cover img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+        }
+        
+        .contact-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #20b859;
+        }
+        
+        /* أيقونة واتساب ثابتة (زي منصة الهيثم) */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+            z-index: 999;
+            transition: transform 0.3s;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+        
+        /* الفوتر */
+        .footer {
+            background-color: #222;
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: #f9a826;
+        }
+        
+        .copyright {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* تحميل متجاوب للهواتف */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .about-content {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            
+            .about-stats {
+                justify-content: center;
+            }
+            
+            .stat-item {
+                flex: 1 1 100px;
+            }
+            
+            .book-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .book-features {
+                justify-content: center;
+            }
+            
+            .contact-buttons {
+                justify-content: center;
+            }
+            
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                bottom: 20px;
+                left: 20px;
+            }
+            
+            .professor-image {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        
+        /* للهواتف الصغيرة جداً */
+        @media (max-width: 480px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                gap: 0.8rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.9rem;
+            }
+            
+            .section {
+                padding: 2rem 0.8rem;
+            }
+        }
+        
+        /* تحميل مؤقت */
+        .loading, .no-courses, .error {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- الهيدر مع صورة الأستاذ محمد جابر (مثل منصة الهيثم تماماً) -->
+    <header class="header">
+        <div class="header-content">
+            <div class="professor-image">
+                <!-- صورة الأستاذ محمد جابر - قم بتغيير الرابط لصورة حقيقية -->
+                <img src="https://via.placeholder.com/300x300/0a4b7a/ffffff?text=محمد+جابر" alt="الأستاذ محمد جابر">
+            </div>
+            <h1>منصة الأستاذ محمد جابر</h1>
+            <p>المنصة الأولى لتعليم اللغة العربية بطريقة مبتكرة وفعالة مع خبرة تدريسية تمتد لأكثر من عشرين عاماً في مجال تدريس اللغة العربية</p>
+            <a href="#courses" class="btn">انضم إلينا الآن</a>
+        </div>
+    </header>
+    
+    <!-- شريط التنقل -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-graduation-cap" style="color: #0a4b7a; font-size: 1.5rem;"></i>
+                <span style="font-weight: bold; margin-right: 0.5rem;">محمد جابر</span>
+            </div>
+            <div class="nav-links">
+                <a href="#about">من نحن</a>
+                <a href="#courses">الدورات</a>
+                <a href="#testimonials">قصص نجاح</a>
+                <a href="#features">المميزات</a>
+                <a href="#book">الكتاب</a>
+                <a href="login.html" class="admin-link"><i class="fas fa-user-lock"></i> المشرف</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- قسم من نحن (مع صورة الأستاذ مثل المنصة الأصلية) -->
+    <section id="about" class="section">
+        <div class="about-section">
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>منصة الأستاذ محمد جابر لتدريس اللغة العربية</h3>
+                    <p>متخصص في تدريس مواد اللغة العربية للأزهر الشريف عن بعد من أي مكان في جمهورية مصر العربية. خبرة أكثر من عشرين عاما في تدريس مواد الأزهر الشريف من الصف الأول الإعدادي وحتى الصف الثالث الثانوي الأزهري.</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">٢٠+</div>
+                            <div class="stat-label">عاماً من الخبرة</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">١٠٠٠+</div>
+                            <div class="stat-label">طالب وطالبة</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">٥٠+</div>
+                            <div class="stat-label">كورس متكامل</div>
+                        </div>
+                    </div>
+                    <a href="#courses" class="btn" style="margin-top: 1.5rem;">ابدأ رحلتك التعليمية</a>
+                </div>
+                <div class="about-image">
+                    <!-- صورة الأستاذ في قسم من نحن -->
+                    <img src="https://via.placeholder.com/400x400/0a4b7a/ffffff?text=محمد+جابر" alt="الأستاذ محمد جابر">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم الدورات المتاحة (يتم تحميلها من Firebase) -->
+    <section id="courses" class="section">
+        <div class="section-title">
+            <h2>الدورات المتاحة</h2>
+            <p>اختر المستوى المناسب لك وابدأ رحلتك التعليمية</p>
+        </div>
+        
+        <div class="courses-grid" id="courses-grid">
+            <!-- سيتم تحميل الكورسات تلقائياً من Firebase عبر الكود أعلاه -->
+            <!-- عينات افتراضية في حال عدم وجود بيانات -->
+            <div class="course-card">
+                <div class="course-no-image"><i class="fas fa-book"></i></div>
+                <div class="course-tag">النحو</div>
+                <h3>التمييز تعريفه وشرح التعريف وتمييز الذات</h3>
+                <p>نركز جامد ونسمع أول بأول وبلاش تراكم لو سمحتم الترم قصير ربنا يصلح حالكم</p>
+                <div class="course-meta">
+                    <span><i class="fas fa-chalkboard-teacher"></i> محمد جابر</span>
+                    <span><i class="fas fa-users"></i> الصف الثاني الثانوي</span>
+                </div>
+                <a href="#" class="course-link">مشاهدة الدرس <i class="fas fa-arrow-left"></i></a>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-no-image"><i class="fas fa-book"></i></div>
+                <div class="course-tag">النحو</div>
+                <h3>كان وأخواتها عملها وأقسامه</h3>
+                <p>نركز جامد ونسمع أول بأول وبلاش تراكم لو سمحتم الترم قصير ربنا يصلح حالكم</p>
+                <div class="course-meta">
+                    <span><i class="fas fa-chalkboard-teacher"></i> محمد جابر</span>
+                    <span><i class="fas fa-users"></i> الصف الأول الثانوي</span>
+                </div>
+                <a href="#" class="course-link">مشاهدة الدرس <i class="fas fa-arrow-left"></i></a>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-no-image"><i class="fas fa-book"></i></div>
+                <div class="course-tag">النحو</div>
+                <h3>المفعول به</h3>
+                <p>نركز جامد ونسمع أول بأول وبلاش تراكم لو سمحتم الترم قصير ربنا يصلح حالكم</p>
+                <div class="course-meta">
+                    <span><i class="fas fa-chalkboard-teacher"></i> محمد جابر</span>
+                    <span><i class="fas fa-users"></i> الصف الثاني الإعدادي</span>
+                </div>
+                <a href="#" class="course-link">مشاهدة الدرس <i class="fas fa-arrow-left"></i></a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم قصص نجاح الطلاب -->
+    <section id="testimonials" class="section" style="background-color: #f0f4f8;">
+        <div class="section-title">
+            <h2>قصص نجاح طلابنا</h2>
+            <p>شهادات حقيقية من طلاب حققوا النجاح معنا</p>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"منصة الأستاذ محمد جابر غيرت مفهومي عن تعلم اللغة العربية. الشرح واضح والمتابعة مستمرة. حصلت على درجات ممتازة بفضل هذه المنصة."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">أ</div>
+                    <div class="author-info">
+                        <h4>أحمد محمد</h4>
+                        <p>الصف الثالث الثانوي</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p>"التدريس التفاعلي والأسلوب المبسط جعلني أحب مادة اللغة العربية. الآن أفهم القواعد بسهولة وأطبقها بثقة."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">ف</div>
+                    <div class="author-info">
+                        <h4>فاطمة علي</h4>
+                        <p>الصف الأول الثانوي</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p>"المنصة سهلة الاستخدام والدروس منظمة بشكل ممتاز. الأستاذ محمد يشرح بطريقة تجعل الصعب سهل والمعقد بسيط."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">م</div>
+                    <div class="author-info">
+                        <h4>محمد حسن</h4>
+                        <p>الصف الثاني الإعدادي</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم مميزات المنصة -->
+    <section id="features" class="section">
+        <div class="section-title">
+            <h2>ماذا نقدم في المنصة؟</h2>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                <h3>بيئة تعليمية</h3>
+                <p>بيئة تعليمية تفاعلية متكاملة تجمع بين التعليم التقليدي والتقنيات الحديثة</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+                <h3>محتوى تعليمي</h3>
+                <p>محتوى تعليمي متميز يغطي جميع جوانب اللغة العربية بطريقة مبسطة وفعالة</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-tasks"></i></div>
+                <h3>اختبارات دورية</h3>
+                <p>اختبارات وتمارين دورية لتقييم مستوى الطلاب ومتابعة تقدمهم</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                <h3>دعم مباشر</h3>
+                <p>دعم فني ومتابعة مستمرة من فريق متخصص لضمان أفضل تجربة تعليمية</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-certificate"></i></div>
+                <h3>شهادات معتمدة</h3>
+                <p>شهادات معتمدة عند إتمام الدورات التدريبية بنجاح</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                <h3>مرونة في التعلم</h3>
+                <p>حرية اختيار وقت التعلم والدراسة حسب الجدول المناسب للطالب</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم كتاب محمد جابر -->
+    <section id="book" class="section">
+        <div class="book-section">
+            <div class="book-content">
+                <div class="book-text">
+                    <h3>احجز كتاب محمد جابر في فروع اللغة العربية</h3>
+                    <p class="book-subtitle" style="color: #f9a826; font-weight: bold;">(خاص بالصف الثالث الثانوي)</p>
+                    <p>كتاب شامل ومتكامل لتعلم اللغة العربية بطريقة مبتكرة</p>
+                    
+                    <div class="book-features">
+                        <div class="book-feature"><i class="fas fa-check-circle"></i> شرح مبسط ومفهوم</div>
+                        <div class="book-feature"><i class="fas fa-check-circle"></i> تمارين تطبيقية شاملة</div>
+                        <div class="book-feature"><i class="fas fa-check-circle"></i> أمثلة عملية من الحياة اليومية</div>
+                        <div class="book-feature"><i class="fas fa-check-circle"></i> اختبارات تقييمية</div>
+                    </div>
+                    
+                    <div class="contact-buttons">
+                        <a href="tel:+201234567890" class="btn"><i class="fas fa-phone"></i> اتصل الآن</a>
+                        <a href="https://wa.me/201234567890" class="whatsapp-btn" target="_blank"><i class="fab fa-whatsapp"></i> واتساب</a>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">اضغط على الرقم للاتصال أو على أيقونة الواتساب للمراسلة</p>
+                </div>
+                
+                <div class="book-cover">
+                    <!-- صورة غلاف الكتاب -->
+                    <img src="https://via.placeholder.com/300x400/ffffff/0a4b7a?text=كتاب+محمد+جابر" alt="كتاب محمد جابر">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- أيقونة واتساب ثابتة -->
+    <a href="https://wa.me/201234567890" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- الفوتر -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: 1rem;">منصة الأستاذ محمد جابر</h3>
+            <div class="footer-links">
+                <a href="#about">من نحن</a>
+                <a href="#courses">الدورات</a>
+                <a href="#testimonials">قصص نجاح</a>
+                <a href="#features">المميزات</a>
+                <a href="#book">الكتاب</a>
+                <a href="privacy.html">سياسة الخصوصية</a>
+            </div>
+            <div class="social-links" style="margin: 1.5rem 0;">
+                <a href="#" style="color: white; margin: 0 0.5rem; font-size: 1.3rem;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: white; margin: 0 0.5rem; font-size: 1.3rem;"><i class="fab fa-youtube"></i></a>
+                <a href="#" style="color: white; margin: 0 0.5rem; font-size: 1.3rem;"><i class="fab fa-telegram"></i></a>
+                <a href="#" style="color: white; margin: 0 0.5rem; font-size: 1.3rem;"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <p class="copyright">جميع الحقوق محفوظة &copy; 2026 منصة الأستاذ محمد جابر التعليمية</p>
+        </div>
+    </footer>
 </body>
 </html>
