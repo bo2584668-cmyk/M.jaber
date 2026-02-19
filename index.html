@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- AOS Library for animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         /* ========== المتغيرات والأساسيات ========== */
         * {
@@ -19,8 +19,8 @@
             font-family: 'Cairo', sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecf2 100%);
-            color: #2c3e50;
+            background: #f0f4f8;
+            color: #1e2a3a;
             line-height: 1.6;
             overflow-x: hidden;
             min-height: 100vh;
@@ -86,7 +86,8 @@
         }
         /* ========== Header ========== */
         header {
-            background: var(--gradient);
+            background: rgba(30, 42, 58, 0.95);
+            backdrop-filter: blur(10px);
             color: white;
             padding: 0.8rem 0;
             position: sticky;
@@ -117,7 +118,7 @@
             transition: var(--transition);
         }
         .logo img:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) rotate(5deg);
             border-color: white;
         }
         .logo h1 {
@@ -230,10 +231,10 @@
 
         /* ========== Hero Section ========== */
         .hero {
-            background: linear-gradient(135deg, rgba(30,42,58,0.95), rgba(44,62,80,0.95)), url('https://images.unsplash.com/photo-1503676260728-51780f9c5f5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover fixed;
+            background: linear-gradient(135deg, rgba(30,42,58,0.9), rgba(44,62,80,0.9)), url('https://images.unsplash.com/photo-1503676260728-51780f9c5f5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover fixed;
             color: white;
             text-align: center;
-            padding: 6rem 0;
+            padding: 8rem 0;
             position: relative;
             overflow: hidden;
         }
@@ -244,21 +245,21 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
+            background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
         }
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
         .hero h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2rem, 5vw, 4rem);
             margin-bottom: 1rem;
             font-weight: 800;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         .hero p {
-            font-size: clamp(1rem, 3vw, 1.4rem);
+            font-size: clamp(1rem, 3vw, 1.5rem);
             max-width: 800px;
             margin: 0 auto 2rem;
             opacity: 0.9;
@@ -275,6 +276,7 @@
             border: 2px solid var(--accent);
             display: inline-block;
             text-decoration: none;
+            animation: pulse 2s infinite;
         }
         .hero .btn:hover {
             background: transparent;
@@ -285,37 +287,52 @@
         }
 
         /* ========== Cards ========== */
+        .section {
+            padding: 4rem 0;
+        }
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+            position: relative;
+            color: var(--primary);
+            font-weight: 800;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--accent);
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
         .card {
             background: white;
-            border-radius: 20px;
+            border-radius: 30px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
             position: relative;
             top: 0;
             border: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+            padding: 2rem;
         }
         .card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
             box-shadow: var(--shadow-hover);
         }
-        .card-img {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            transition: var(--transition);
-        }
-        .card:hover .card-img {
-            transform: scale(1.05);
-        }
-        .card-content {
-            padding: 2rem;
+        .card i {
+            font-size: 3.5rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
         }
         .card h3 {
             font-size: 1.8rem;
@@ -345,10 +362,39 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
+        /* ========== Stats Section ========== */
+        .stats-section {
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            color: white;
+            padding: 4rem 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        .stat-item i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .stat-item h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
         /* ========== Forms ========== */
         .form-container {
             max-width: 600px;
-            margin: 3rem auto;
+            margin: 4rem auto;
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             padding: clamp(1.5rem, 5vw, 3rem);
@@ -431,15 +477,15 @@
             background: linear-gradient(135deg, #1e2a3a, #2c3e50);
             color: white;
             padding: 2rem 0;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             border-bottom: 3px solid var(--accent);
         }
-        .stats-grid {
+        .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
         }
-        .stat-card {
+        .dashboard-card {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             padding: 2rem;
@@ -448,19 +494,20 @@
             border: 1px solid rgba(255,255,255,0.2);
             transition: var(--transition);
         }
-        .stat-card:hover {
+        .dashboard-card:hover {
             transform: translateY(-5px);
             background: rgba(255,255,255,0.15);
         }
-        .stat-card i {
+        .dashboard-card i {
             font-size: 3rem;
             color: var(--accent);
             margin-bottom: 1rem;
         }
-        .stat-card h3 {
+        .dashboard-card h3 {
             font-size: 2rem;
             margin-bottom: 0.5rem;
         }
+
         /* ========== Lessons ========== */
         .lesson-group {
             background: white;
@@ -595,7 +642,7 @@
         footer {
             background: var(--dark);
             color: white;
-            padding: 3rem 0 1rem;
+            padding: 4rem 0 1rem;
             margin-top: 4rem;
             border-top: 3px solid var(--accent);
         }
@@ -787,6 +834,8 @@
         </div>
     </footer>
 
+    <!-- AOS Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <!-- Firebase SDK -->
     <script type="module">
         // ========== Firebase Imports ==========
@@ -794,6 +843,12 @@
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, orderBy, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
 
         // ========== Firebase Config ==========
         const firebaseConfig = {
@@ -938,14 +993,40 @@
             main.innerHTML = `
                 <section class="hero">
                     <div class="container">
-                        <h2 class="animate__animated animate__fadeInDown">مرحباً بك في منصة محمد جابر</h2>
-                        <p class="animate__animated animate__fadeInUp">مع الأستاذ محمد جابر، رحلتك نحو التميز في اللغة العربية تبدأ من هنا</p>
-                        <button class="btn animate__animated animate__zoomIn" onclick="loadPage('services')"><i class="fas fa-play"></i> ابدأ الآن</button>
+                        <h2 data-aos="fade-down">مرحباً بك في منصة محمد جابر</h2>
+                        <p data-aos="fade-up">مع الأستاذ محمد جابر، رحلتك نحو التميز في اللغة العربية تبدأ من هنا</p>
+                        <button class="btn" onclick="loadPage('services')" data-aos="zoom-in"><i class="fas fa-play"></i> ابدأ الآن</button>
+                    </div>
+                </section>
+                <section class="stats-section">
+                    <div class="container">
+                        <div class="stats-grid">
+                            <div class="stat-item" data-aos="flip-right">
+                                <i class="fas fa-users"></i>
+                                <h3>5000+</h3>
+                                <p>طالب وطالبة</p>
+                            </div>
+                            <div class="stat-item" data-aos="flip-right" data-aos-delay="100">
+                                <i class="fas fa-video"></i>
+                                <h3>200+</h3>
+                                <p>درس مسجل</p>
+                            </div>
+                            <div class="stat-item" data-aos="flip-right" data-aos-delay="200">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <h3>15</h3>
+                                <p>مدرس متخصص</p>
+                            </div>
+                            <div class="stat-item" data-aos="flip-right" data-aos-delay="300">
+                                <i class="fas fa-trophy"></i>
+                                <h3>100%</h3>
+                                <p>رضا العملاء</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem); margin-bottom: 2rem;">الدورات المتاحة</h2>
+                        <h2 class="section-title" data-aos="fade-up">الدورات المتاحة</h2>
                         <div class="cards-grid" id="coursesGrid"></div>
                     </div>
                 </section>
@@ -965,13 +1046,11 @@
             coursesSnap.forEach(doc => {
                 const course = doc.data();
                 html += `
-                    <div class="card animate__animated animate__fadeInUp">
-                        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
-                        <div class="card-content">
-                            <h3>${course.name}</h3>
-                            <p>${course.description || 'شرح مبسط وممتع'}</p>
-                            <button class="btn-card" onclick="loadPage('course?id=${doc.id}')">عرض المحتوى</button>
-                        </div>
+                    <div class="card" data-aos="fade-up">
+                        <i class="fas fa-book-open"></i>
+                        <h3>${course.name}</h3>
+                        <p>${course.description || 'شرح مبسط وممتع'}</p>
+                        <button class="btn-card" onclick="loadPage('course?id=${doc.id}')">عرض المحتوى</button>
                     </div>
                 `;
             });
@@ -982,12 +1061,12 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem);">من نحن</h2>
+                        <h2 class="section-title" data-aos="fade-up">من نحن</h2>
                         <div style="display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;">
-                            <div style="flex: 1; min-width: 300px;">
+                            <div style="flex: 1; min-width: 300px;" data-aos="fade-left">
                                 <img src="mrjabr.png" alt="الأستاذ محمد جابر" style="width: 100%; border-radius: 30px; box-shadow: var(--shadow);">
                             </div>
-                            <div style="flex: 2;">
+                            <div style="flex: 2;" data-aos="fade-right">
                                 <p style="font-size: 1.2rem; line-height: 1.8;">منصة الأستاذ محمد جابر لتدريس اللغة العربية. متخصص في تدريس مواد اللغة العربية عن بعد من أي مكان في جمهورية مصر العربية. خبرة أكثر من عشرين عاماً في تدريس مواد اللغة العربية للمراحل الإعدادية والثانوية.</p>
                                 <p style="font-size: 1.2rem; margin-top: 1rem;">نقدم تعليماً متميزاً يجمع بين الأصالة والتقنيات الحديثة.</p>
                             </div>
@@ -1001,12 +1080,12 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem);">خدماتنا</h2>
+                        <h2 class="section-title" data-aos="fade-up">خدماتنا</h2>
                         <div class="cards-grid">
-                            <div class="card"><div class="card-content"><i class="fas fa-chalkboard-teacher fa-3x" style="color: var(--accent);"></i><h3>دروس تفاعلية</h3><p>شروحات حية ومسجلة بأحدث الأساليب.</p></div></div>
-                            <div class="card"><div class="card-content"><i class="fas fa-file-alt fa-3x" style="color: var(--accent);"></i><h3>اختبارات دورية</h3><p>تقييم مستمر لمستوى التقدم.</p></div></div>
-                            <div class="card"><div class="card-content"><i class="fas fa-headset fa-3x" style="color: var(--accent);"></i><h3>دعم فني 24/7</h3><p>فريق متخصص للإجابة عن استفساراتك.</p></div></div>
-                            <div class="card"><div class="card-content"><i class="fas fa-certificate fa-3x" style="color: var(--accent);"></i><h3>شهادات معتمدة</h3><p>احصل على شهادة بعد إتمام الدورة.</p></div></div>
+                            <div class="card" data-aos="zoom-in"><i class="fas fa-chalkboard-teacher"></i><h3>دروس تفاعلية</h3><p>شروحات حية ومسجلة بأحدث الأساليب.</p></div>
+                            <div class="card" data-aos="zoom-in" data-aos-delay="100"><i class="fas fa-file-alt"></i><h3>اختبارات دورية</h3><p>تقييم مستمر لمستوى التقدم.</p></div>
+                            <div class="card" data-aos="zoom-in" data-aos-delay="200"><i class="fas fa-headset"></i><h3>دعم فني 24/7</h3><p>فريق متخصص للإجابة عن استفساراتك.</p></div>
+                            <div class="card" data-aos="zoom-in" data-aos-delay="300"><i class="fas fa-certificate"></i><h3>شهادات معتمدة</h3><p>احصل على شهادة بعد إتمام الدورة.</p></div>
                         </div>
                     </div>
                 </section>
@@ -1017,12 +1096,12 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: clamp(2rem, 5vw, 2.5rem);">ماذا نقدم</h2>
+                        <h2 class="section-title" data-aos="fade-up">ماذا نقدم</h2>
                         <div class="cards-grid">
-                            <div class="card"><div class="card-content"><h3>بيئة تعليمية</h3><p>بيئة تفاعلية متكاملة تجمع بين التعليم التقليدي والتقنيات الحديثة.</p></div></div>
-                            <div class="card"><div class="card-content"><h3>محتوى تعليمي</h3><p>محتوى متميز يغطي جميع فروع اللغة العربية.</p></div></div>
-                            <div class="card"><div class="card-content"><h3>اختبارات دورية</h3><p>لتقييم مستوى الطلاب ومتابعة تقدمهم.</p></div></div>
-                            <div class="card"><div class="card-content"><h3>دعم مباشر</h3><p>متابعة مستمرة من فريق متخصص.</p></div></div>
+                            <div class="card" data-aos="fade-up"><i class="fas fa-laptop"></i><h3>بيئة تعليمية</h3><p>بيئة تفاعلية متكاملة تجمع بين التعليم التقليدي والتقنيات الحديثة.</p></div>
+                            <div class="card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-database"></i><h3>محتوى تعليمي</h3><p>محتوى متميز يغطي جميع فروع اللغة العربية.</p></div>
+                            <div class="card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-tasks"></i><h3>اختبارات دورية</h3><p>لتقييم مستوى الطلاب ومتابعة تقدمهم.</p></div>
+                            <div class="card" data-aos="fade-up" data-aos-delay="300"><i class="fas fa-comments"></i><h3>دعم مباشر</h3><p>متابعة مستمرة من فريق متخصص.</p></div>
                         </div>
                     </div>
                 </section>
@@ -1034,10 +1113,10 @@
                 <section class="section">
                     <div class="container">
                         <div style="display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;">
-                            <div style="flex: 1;">
+                            <div style="flex: 1;" data-aos="fade-left">
                                 <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="كتاب الجابر" style="width: 100%; border-radius: 30px;">
                             </div>
-                            <div style="flex: 1;">
+                            <div style="flex: 1;" data-aos="fade-right">
                                 <h2 style="font-size: clamp(2rem, 5vw, 3rem);">كتاب الجابر</h2>
                                 <p style="font-size: 1.3rem;">الكتاب الشامل لتعلم اللغة العربية بطريقة مبتكرة (خاص بالصف الثالث الثانوي)</p>
                                 <p><i class="fas fa-check-circle" style="color: var(--success);"></i> شرح مبسط ومفهوم</p>
@@ -1185,13 +1264,13 @@
             main.innerHTML = `
                 <section class="dashboard-header">
                     <div class="container">
-                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);">مرحباً ${currentUserData.name}</h2>
-                        <p>الصف: ${currentUserData.grade}</p>
+                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);" data-aos="fade-down">مرحباً ${currentUserData.name}</h2>
+                        <p data-aos="fade-up">الصف: ${currentUserData.grade}</p>
                     </div>
                 </section>
                 <section class="section">
                     <div class="container">
-                        <h2 style="text-align: center; font-size: clamp(1.5rem, 4vw, 2.5rem);">كورساتي</h2>
+                        <h2 class="section-title" data-aos="fade-up">كورساتي</h2>
                         <div class="cards-grid" id="studentCoursesGrid"></div>
                     </div>
                 </section>
@@ -1213,11 +1292,10 @@
             coursesSnap.forEach(doc => {
                 const course = doc.data();
                 html += `
-                    <div class="card">
-                        <div class="card-content">
-                            <h3>${course.name}</h3>
-                            <button class="btn-card" onclick="loadPage('course?id=${doc.id}')">اضغط لعرض المحتوى</button>
-                        </div>
+                    <div class="card" data-aos="fade-up">
+                        <i class="fas fa-play-circle"></i>
+                        <h3>${course.name}</h3>
+                        <button class="btn-card" onclick="loadPage('course?id=${doc.id}')">اضغط لعرض المحتوى</button>
                     </div>
                 `;
             });
@@ -1379,7 +1457,7 @@
             main.innerHTML = `
                 <section class="section">
                     <div class="container">
-                        <h2 style="font-size: clamp(1.5rem, 4vw, 2.5rem);">قسم الإدارة</h2>
+                        <h2 class="section-title" data-aos="fade-up">قسم الإدارة</h2>
                         <div class="admin-tabs">
                             <div class="admin-tab active" data-admin-tab="requests">طلبات الاشتراك</div>
                             <div class="admin-tab" data-admin-tab="lessons">إدارة الدروس</div>
