@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - المشرف</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background: #f0f2f5; }
+        .admin-nav { background: #1e3c5c; color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; }
+        .admin-nav h2 { font-size: 1.5rem; }
+        .admin-nav button { background: #dc3545; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer; }
+        .container { max-width: 1300px; margin: 2rem auto; padding: 0 2rem; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tab { padding: 0.8rem 2rem; background: white; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; color: #1e3c5c; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .tab.active { background: #1e3c5c; color: white; }
+        .tab-content { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.8rem; border: 2px solid #e0e7ef; border-radius: 12px; }
+        .btn-primary { background: #1e3c5c; color: white; border: none; padding: 0.8rem 2rem; border-radius: 50px; cursor: pointer; font-weight: 600; }
+        .btn-danger { background: #dc3545; color: white; border: none; padding: 0.3rem 1rem; border-radius: 5px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: center; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #1e3c5c; }
+        .status-badge { background: #f9a826; color: white; padding: 0.2rem 0.8rem; border-radius: 50px; font-size: 0.8rem; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="admin-nav">
+        <h2>لوحة تحكم المشرف - محمد جابر</h2>
+        <button id="logoutAdmin">تسجيل خروج</button>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('courses')">الكورسات</button>
+            <button class="tab" onclick="showTab('users')">الطلاب</button>
+            <button class="tab" onclick="showTab('addCourse')">إضافة كورس</button>
+        </div>
+
+        <div id="coursesTab" class="tab-content" style="display:block;">
+            <h3>جميع الكورسات</h3>
+            <table id="coursesTable">
+                <thead>
+                    <tr><th>العنوان</th><th>الصف</th><th>مدفوع</th><th>الإجراءات</th></tr>
+                </thead>
+                <tbody id="coursesBody"></tbody>
+            </table>
+        </div>
+
+        <div id="usersTab" class="tab-content" style="display:none;">
+            <h3>قائمة الطلاب المسجلين</h3>
+            <table>
+                <thead>
+                    <tr><th>الاسم</th><th>البريد</th><th>المرحلة</th><th>الواتساب</th><th>الحالة</th><th>تفعيل</th></tr>
+                </thead>
+                <tbody id="usersBody"></tbody>
+            </table>
+        </div>
+
+        <div id="addCourseTab" class="tab-content" style="display:none;">
+            <h3>إضافة كورس جديد</h3>
+            <form id="courseForm">
+                <div class="form-group">
+                    <label>عنوان الكورس</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label>وصف مختصر</label>
+                    <textarea id="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>الصف الدراسي</label>
+                    <select id="grade" required>
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                        <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>رابط الفيديو (YouTube أو غيره)</label>
+                    <input type="url" id="videoUrl" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>صورة الكورس (اختياري)</label>
+                    <input type="file" id="courseImage" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>نوع الكورس</label>
+                    <select id="isFree">
+                        <option value="true">مجاني</option>
+                        <option value="false">مدفوع</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">نشر الكورس</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
+            authDomain: "mr-jabr.firebaseapp.com",
+            projectId: "mr-jabr",
+            storageBucket: "mr-jabr.firebasestorage.app",
+            messagingSenderId: "563345828466",
+            appId: "1:563345828466:web:f0bdd40711c935f60d30eb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // السماح فقط للأدمن
+        onAuthStateChanged(auth, (user) => {
+            if (!user || user.email !== 'bo2584668@gmail.com') {
+                window.location.href = 'login.html';
+            } else {
+                loadCourses();
+                loadUsers();
+            }
+        });
+
+        document.getElementById('logoutAdmin').addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        });
+
+        window.showTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById(tab + 'Tab').style.display = 'block';
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        // تحميل الكورسات
+        async function loadCourses() {
+            const tbody = document.getElementById('coursesBody');
+            tbody.innerHTML = '<tr><td colspan="4">جاري التحميل...</td></tr>';
+            const snapshot = await getDocs(collection(db, 'courses'));
+            tbody.innerHTML = '';
+            snapshot.forEach(docSnap => {
+                const c = docSnap.data();
+                const row = `<tr>
+                    <td>${c.title}</td>
+                    <td>${c.grade}</td>
+                    <td>${c.isFree ? 'مجاني' : 'مدفوع'}</td>
+                    <td><button class="btn-danger" onclick="deleteCourse('${docSnap.id}')">حذف</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        window.deleteCourse = async (id) => {
+            if (confirm('متأكد من الحذف؟')) {
+                await deleteDoc(doc(db, 'courses', id));
+                loadCourses();
+            }
+        };
+
+        // تحميل الطلاب
+        async function loadUsers() {
+            const tbody = document.getElementById('usersBody');
+            const snapshot = await getDocs(collection(db, 'users'));
+            tbody.innerHTML = '';
+            snapshot.forEach(docSnap => {
+                const u = docSnap.data();
+                const status = u.isActive ? '<span class="status-badge" style="background:#28a745;">مفعل</span>' : '<span class="status-badge" style="background:#6c757d;">غير مفعل</span>';
+                const row = `<tr>
+                    <td>${u.fullName}</td>
+                    <td>${u.email}</td>
+                    <td>${u.grade}</td>
+                    <td>${u.whatsapp}</td>
+                    <td>${status}</td>
+                    <td><button onclick="toggleUser('${docSnap.id}', ${!u.isActive})" class="btn-primary" style="background:#f9a826;">تغيير الحالة</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        window.toggleUser = async (id, newStatus) => {
+            await updateDoc(doc(db, 'users', id), { isActive: newStatus });
+            loadUsers();
+        };
+
+        // إضافة كورس
+        document.getElementById('courseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const grade = document.getElementById('grade').value;
+            const videoUrl = document.getElementById('videoUrl').value;
+            const isFree = document.getElementById('isFree').value === 'true';
+            const imageFile = document.getElementById('courseImage').files[0];
+
+            let imageUrl = '';
+            if (imageFile) {
+                const storageRef = ref(storage, `courses/${Date.now()}_${imageFile.name}`);
+                await uploadBytes(storageRef, imageFile);
+                imageUrl = await getDownloadURL(storageRef);
+            }
+
+            await addDoc(collection(db, 'courses'), {
+                title, description, grade, videoUrl, isFree, imageUrl,
+                createdAt: new Date()
+            });
+
+            alert('تمت إضافة الكورس');
+            document.getElementById('courseForm').reset();
+            loadCourses();
+        });
+    </script>
+</body>
+</html>
