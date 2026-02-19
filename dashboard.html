@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرئيسية - منصة محمد جابر</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background: #f5f7fa; }
+        .navbar { background: white; padding: 1rem 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo { font-size: 1.5rem; font-weight: 900; color: #1e3c5c; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { text-decoration: none; color: #1e2a3a; font-weight: 600; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer; font-weight: 600; }
+        .container { max-width: 1300px; margin: 2rem auto; padding: 0 2rem; }
+        .welcome-card { background: linear-gradient(145deg, #1e3c5c, #0f2b44); color: white; padding: 2rem; border-radius: 30px; margin-bottom: 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .welcome-card h1 { font-size: 2.2rem; }
+        .welcome-card p { opacity: 0.9; margin-top: 0.5rem; }
+        .section-title { display: flex; justify-content: space-between; align-items: center; margin: 2rem 0 1rem; }
+        .section-title h2 { color: #1e3c5c; }
+        .section-title a { color: #f9a826; text-decoration: none; font-weight: 600; }
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+        .course-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .course-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .course-image { height: 150px; background: #1e3c5c; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; }
+        .course-details { padding: 1.5rem; }
+        .course-details h3 { color: #1e3c5c; margin-bottom: 0.5rem; }
+        .course-details p { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+        .course-meta { display: flex; justify-content: space-between; color: #888; font-size: 0.85rem; border-top: 1px solid #eee; padding-top: 1rem; }
+        .badge { background: #f9a826; color: white; padding: 0.2rem 0.8rem; border-radius: 50px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">منصة محمد جابر</div>
+        <div class="nav-links">
+            <a href="dashboard.html">الرئيسية</a>
+            <a href="courses.html">كل الكورسات</a>
+            <a href="subscription.html">الاشتراكات</a>
+        </div>
+        <button class="logout-btn" id="logout">تسجيل خروج</button>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-card" id="welcomeCard">
+            <h1>مرحباً <span id="userName">...</span> 👋</h1>
+            <p>نتمنى لك يوماً دراسياً موفقاً. تصفح الكورسات المتاحة حسب مرحلتك.</p>
+        </div>
+
+        <div class="section-title">
+            <h2>كورسات مقترحة لك</h2>
+            <a href="courses.html">عرض الكل <i class="fas fa-arrow-left"></i></a>
+        </div>
+
+        <div class="courses-grid" id="coursesContainer">
+            <!-- يتم تحميل الكورسات من Firebase -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
+            authDomain: "mr-jabr.firebaseapp.com",
+            projectId: "mr-jabr",
+            storageBucket: "mr-jabr.firebasestorage.app",
+            messagingSenderId: "563345828466",
+            appId: "1:563345828466:web:f0bdd40711c935f60d30eb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // التحقق من حالة تسجيل الدخول
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('userName').textContent = user.displayName || 'طالب';
+
+            // جلب بيانات المستخدم من Firestore
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                // عرض كورسات حسب مرحلته (grade)
+                loadCourses(userData.grade);
+            }
+        });
+
+        // تحميل الكورسات حسب المرحلة
+        async function loadCourses(grade) {
+            const container = document.getElementById('coursesContainer');
+            container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">جاري التحميل...</p>';
+            
+            const q = query(collection(db, 'courses'), where('grade', '==', grade));
+            const querySnapshot = await getDocs(q);
+            
+            if (querySnapshot.empty) {
+                container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">لا توجد كورسات متاحة حالياً لمرحلتك</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            querySnapshot.forEach((doc) => {
+                const course = doc.data();
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.innerHTML = `
+                    <div class="course-image"><i class="fas fa-play-circle"></i></div>
+                    <div class="course-details">
+                        <h3>${course.title}</h3>
+                        <p>${course.description.substring(0, 60)}...</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-video"></i> ${course.videoCount || 10} درس</span>
+                            <span class="badge">${course.isFree ? 'مجاني' : 'مدفوع'}</span>
+                        </div>
+                        <a href="course-details.html?id=${doc.id}" style="display:block; margin-top:1rem; color:#f9a826;">عرض التفاصيل</a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        document.getElementById('logout').addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
