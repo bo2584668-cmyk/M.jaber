@@ -27,12 +27,12 @@
         <div class="info-box">
             <p><strong>الباقة الشهرية:</strong> 100 جنيه</p>
             <p><strong>الباقة السنوية:</strong> 1000 جنيه (خصم 20%)</p>
-            <p><strong>طرق الدفع:</strong> تحويل على فودافون كاش (010XXXXXXXX) أو تحويل بنكي (حساب …)</p>
+            <p><strong>طرق الدفع:</strong> تحويل على فودافون كاش (⁦01000662181) أو تحويل بنكي (حساب …)</p>
         </div>
 
         <div id="userData"></div>
 
-        <a href="https://wa.me/201234567890" class="whatsapp-btn" target="_blank" id="whatsappLink">
+        <a href="https://wa.me/⁦201000662181" class="whatsapp-btn" target="_blank" id="whatsappLink">
             <i class="fab fa-whatsapp"></i> أرسل طلبك عبر واتساب
         </a>
         <p class="note">سيتم إنشاء رسالة جاهزة تتضمن بياناتك، فقط اضغط على الزر وأرسلها.</p>
@@ -76,7 +76,7 @@
                 `;
 
                 // إعداد رابط واتساب المباشر مع رسالة جاهزة
-                const adminWhatsApp = "201234567890"; // ضع رقم واتساب الأدمن هنا
+                const adminWhatsApp = "⁦+201000662181"; // ضع رقم واتساب الأدمن هنا
                 const message = `طلب اشتراك جديد من:\nالاسم: ${data.fullName}\nالبريد: ${data.email}\nالمرحلة: ${data.grade}\nرقمي: ${data.whatsapp}\nأريد الاشتراك في الباقة: [الشهرية/السنوية] وسأقوم بالتحويل الآن.`;
                 const encodedMessage = encodeURIComponent(message);
                 document.getElementById('whatsappLink').href = `https://wa.me/${adminWhatsApp}?text=${encodedMessage}`;
