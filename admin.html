@@ -3,78 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - المشرف</title>
+    <title>لوحة التحكم - المشرف | منصة محمد جابر</title>
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background: #f0f2f5; }
-        .admin-nav { background: #1e3c5c; color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; }
-        .admin-nav h2 { font-size: 1.5rem; }
-        .admin-nav button { background: #dc3545; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer; }
-        .container { max-width: 1300px; margin: 2rem auto; padding: 0 2rem; }
-        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .tab { padding: 0.8rem 2rem; background: white; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; color: #1e3c5c; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .tab.active { background: #1e3c5c; color: white; }
-        .tab-content { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.8rem; border: 2px solid #e0e7ef; border-radius: 12px; }
-        .btn-primary { background: #1e3c5c; color: white; border: none; padding: 0.8rem 2rem; border-radius: 50px; cursor: pointer; font-weight: 600; }
-        .btn-danger { background: #dc3545; color: white; border: none; padding: 0.3rem 1rem; border-radius: 5px; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { padding: 1rem; text-align: center; border-bottom: 1px solid #eee; }
-        th { background: #f8f9fa; color: #1e3c5c; }
-        .status-badge { background: #f9a826; color: white; padding: 0.2rem 0.8rem; border-radius: 50px; font-size: 0.8rem; display: inline-block; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+        }
+
+        /* شريط التنقل العلوي */
+        .admin-nav {
+            background: #1e3c5c;
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-nav h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-nav h2 i {
+            color: #f9a826;
+        }
+
+        .admin-nav button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.6rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-nav button:hover {
+            background: #b02a37;
+            transform: translateY(-2px);
+        }
+
+        /* الحاوية الرئيسية */
+        .container {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* تبويبات */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.8rem 2rem;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #1e3c5c;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab i {
+            font-size: 1rem;
+        }
+
+        .tab.active {
+            background: #1e3c5c;
+            color: white;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active:hover {
+            background: #0f2b44;
+        }
+
+        /* محتوى التبويبات */
+        .tab-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* نماذج الإدخال */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: #1e3c5c;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e7ef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #f9a826;
+            outline: none;
+        }
+
+        /* عداد التقدم */
+        .progress-container {
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f9a826, #ffc85c);
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 50px;
+            position: relative;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.3rem;
+            font-size: 0.9rem;
+            color: #1e3c5c;
+            font-weight: 600;
+        }
+
+        /* أزرار */
+        .btn-primary {
+            background: #1e3c5c;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: #0f2b44;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30,60,92,0.3);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #b02a37;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* الجداول */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #1e3c5c;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            background: #f9a826;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-badge.active {
+            background: #28a745;
+        }
+
+        .status-badge.inactive {
+            background: #6c757d;
+        }
+
+        /* رسائل التحميل */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #1e3c5c;
+        }
+
+        /* استجابة للجوال */
+        @media (max-width: 768px) {
+            .admin-nav {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .tabs {
+                justify-content: center;
+            }
+            table {
+                font-size: 0.9rem;
+            }
+            th, td {
+                padding: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="admin-nav">
-        <h2>لوحة تحكم المشرف - محمد جابر</h2>
-        <button id="logoutAdmin">تسجيل خروج</button>
+        <h2><i class="fas fa-crown"></i> لوحة تحكم المشرف - محمد جابر</h2>
+        <button id="logoutAdmin"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
     </div>
 
     <div class="container">
+        <!-- التبويبات -->
         <div class="tabs">
-            <button class="tab active" onclick="showTab('courses')">الكورسات</button>
-            <button class="tab" onclick="showTab('users')">الطلاب</button>
-            <button class="tab" onclick="showTab('addCourse')">إضافة كورس</button>
+            <button class="tab active" data-tab="courses"><i class="fas fa-book"></i> الكورسات</button>
+            <button class="tab" data-tab="users"><i class="fas fa-users"></i> الطلاب</button>
+            <button class="tab" data-tab="addCourse"><i class="fas fa-plus-circle"></i> إضافة كورس</button>
         </div>
 
-        <div id="coursesTab" class="tab-content" style="display:block;">
-            <h3>جميع الكورسات</h3>
-            <table id="coursesTable">
-                <thead>
-                    <tr><th>العنوان</th><th>الصف</th><th>مدفوع</th><th>الإجراءات</th></tr>
-                </thead>
-                <tbody id="coursesBody"></tbody>
-            </table>
+        <!-- محتوى التبويب: الكورسات -->
+        <div id="coursesTab" class="tab-content">
+            <h3 style="margin-bottom:1rem; color:#1e3c5c;">📚 جميع الكورسات</h3>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>العنوان</th>
+                            <th>الصف</th>
+                            <th>النوع</th>
+                            <th>الصورة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coursesBody">
+                        <tr><td colspan="5" class="loading">جاري التحميل...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
+        <!-- محتوى التبويب: الطلاب -->
         <div id="usersTab" class="tab-content" style="display:none;">
-            <h3>قائمة الطلاب المسجلين</h3>
-            <table>
-                <thead>
-                    <tr><th>الاسم</th><th>البريد</th><th>المرحلة</th><th>الواتساب</th><th>الحالة</th><th>تفعيل</th></tr>
-                </thead>
-                <tbody id="usersBody"></tbody>
-            </table>
+            <h3 style="margin-bottom:1rem; color:#1e3c5c;">👥 قائمة الطلاب المسجلين</h3>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>البريد</th>
+                            <th>المرحلة</th>
+                            <th>الواتساب</th>
+                            <th>الحالة</th>
+                            <th>تفعيل</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersBody">
+                        <tr><td colspan="6" class="loading">جاري التحميل...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
+        <!-- محتوى التبويب: إضافة كورس -->
         <div id="addCourseTab" class="tab-content" style="display:none;">
-            <h3>إضافة كورس جديد</h3>
+            <h3 style="margin-bottom:1.5rem; color:#1e3c5c;">➕ إضافة كورس جديد</h3>
+            
+            <!-- عداد التقدم -->
+            <div id="progressContainer" class="progress-container">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <div id="progressText" class="progress-text">0%</div>
+            </div>
+
             <form id="courseForm">
                 <div class="form-group">
                     <label>عنوان الكورس</label>
-                    <input type="text" id="title" required>
+                    <input type="text" id="title" placeholder="مثال: شرح التمييز" required>
                 </div>
+
                 <div class="form-group">
-                    <label>وصف مختصر</label>
-                    <textarea id="description" rows="3" required></textarea>
+                    <label>وصف الكورس</label>
+                    <textarea id="description" rows="3" placeholder="وصف مختصر للكورس..." required></textarea>
                 </div>
+
                 <div class="form-group">
                     <label>الصف الدراسي</label>
                     <select id="grade" required>
+                        <option value="">اختر الصف</option>
                         <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
                         <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
                         <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
@@ -83,32 +381,46 @@
                         <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
                     </select>
                 </div>
+
                 <div class="form-group">
-                    <label>رابط الفيديو (YouTube أو غيره)</label>
-                    <input type="url" id="videoUrl" placeholder="https://...">
+                    <label>رابط الفيديو (YouTube أو غيره - اختياري)</label>
+                    <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=...">
                 </div>
+
                 <div class="form-group">
-                    <label>صورة الكورس (اختياري)</label>
+                    <label>صورة الكورس (اختياري - يفضل صورة مربعة)</label>
                     <input type="file" id="courseImage" accept="image/*">
+                    <small style="color:#666;">أقصى حجم 5 ميجابايت</small>
                 </div>
+
                 <div class="form-group">
                     <label>نوع الكورس</label>
-                    <select id="isFree">
+                    <select id="isFree" required>
                         <option value="true">مجاني</option>
                         <option value="false">مدفوع</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-primary">نشر الكورس</button>
+
+                <div class="form-group">
+                    <label>عدد الدروس (تقديري)</label>
+                    <input type="number" id="videoCount" value="12" min="1">
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> نشر الكورس
+                </button>
             </form>
         </div>
     </div>
 
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
+        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
             authDomain: "mr-jabr.firebaseapp.com",
@@ -123,103 +435,224 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // السماح فقط للأدمن
+        // التحقق من أن المستخدم هو الأدمن
         onAuthStateChanged(auth, (user) => {
             if (!user || user.email !== 'bo2584668@gmail.com') {
                 window.location.href = 'login.html';
             } else {
+                // تحميل البيانات
                 loadCourses();
                 loadUsers();
             }
         });
 
+        // تسجيل الخروج
         document.getElementById('logoutAdmin').addEventListener('click', async () => {
             await signOut(auth);
             window.location.href = 'index.html';
         });
 
-        window.showTab = (tab) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-            document.getElementById(tab + 'Tab').style.display = 'block';
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
-        };
+        // التعامل مع التبويبات
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabName = tab.dataset.tab;
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                
+                if (tabName === 'courses') document.getElementById('coursesTab').style.display = 'block';
+                else if (tabName === 'users') document.getElementById('usersTab').style.display = 'block';
+                else if (tabName === 'addCourse') document.getElementById('addCourseTab').style.display = 'block';
+            });
+        });
 
-        // تحميل الكورسات
+        // ==================== تحميل وعرض الكورسات ====================
         async function loadCourses() {
             const tbody = document.getElementById('coursesBody');
-            tbody.innerHTML = '<tr><td colspan="4">جاري التحميل...</td></tr>';
-            const snapshot = await getDocs(collection(db, 'courses'));
-            tbody.innerHTML = '';
-            snapshot.forEach(docSnap => {
-                const c = docSnap.data();
-                const row = `<tr>
-                    <td>${c.title}</td>
-                    <td>${c.grade}</td>
-                    <td>${c.isFree ? 'مجاني' : 'مدفوع'}</td>
-                    <td><button class="btn-danger" onclick="deleteCourse('${docSnap.id}')">حذف</button></td>
-                </tr>`;
-                tbody.innerHTML += row;
-            });
+            tbody.innerHTML = '<tr><td colspan="5" class="loading">جاري التحميل...</td></tr>';
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, 'courses'));
+                tbody.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="loading">لا توجد كورسات مضافة بعد</td></tr>';
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    const course = docSnap.data();
+                    const row = document.createElement('tr');
+                    
+                    // عرض الصورة مصغرة إن وجدت
+                    const imageCell = course.imageUrl 
+                        ? `<img src="${course.imageUrl}" width="50" height="50" style="border-radius:10px; object-fit:cover;">` 
+                        : '<i class="fas fa-image" style="color:#aaa;"></i>';
+                    
+                    row.innerHTML = `
+                        <td><strong>${course.title}</strong></td>
+                        <td>${course.grade || 'غير محدد'}</td>
+                        <td><span class="status-badge ${course.isFree ? 'active' : 'inactive'}">${course.isFree ? 'مجاني' : 'مدفوع'}</span></td>
+                        <td>${imageCell}</td>
+                        <td>
+                            <button class="btn-danger" onclick="deleteCourse('${docSnap.id}')"><i class="fas fa-trash"></i> حذف</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="5" class="loading">خطأ: ${error.message}</td></tr>`;
+            }
         }
 
+        // دالة حذف الكورس (تُعرّف على النافذة)
         window.deleteCourse = async (id) => {
-            if (confirm('متأكد من الحذف؟')) {
+            if (confirm('هل أنت متأكد من حذف هذا الكورس؟')) {
                 await deleteDoc(doc(db, 'courses', id));
                 loadCourses();
             }
         };
 
-        // تحميل الطلاب
+        // ==================== تحميل وعرض الطلاب ====================
         async function loadUsers() {
             const tbody = document.getElementById('usersBody');
-            const snapshot = await getDocs(collection(db, 'users'));
-            tbody.innerHTML = '';
-            snapshot.forEach(docSnap => {
-                const u = docSnap.data();
-                const status = u.isActive ? '<span class="status-badge" style="background:#28a745;">مفعل</span>' : '<span class="status-badge" style="background:#6c757d;">غير مفعل</span>';
-                const row = `<tr>
-                    <td>${u.fullName}</td>
-                    <td>${u.email}</td>
-                    <td>${u.grade}</td>
-                    <td>${u.whatsapp}</td>
-                    <td>${status}</td>
-                    <td><button onclick="toggleUser('${docSnap.id}', ${!u.isActive})" class="btn-primary" style="background:#f9a826;">تغيير الحالة</button></td>
-                </tr>`;
-                tbody.innerHTML += row;
-            });
+            tbody.innerHTML = '<tr><td colspan="6" class="loading">جاري التحميل...</td></tr>';
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, 'users'));
+                tbody.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="loading">لا يوجد طلاب مسجلين بعد</td></tr>';
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    const user = docSnap.data();
+                    const statusClass = user.isActive ? 'active' : 'inactive';
+                    const statusText = user.isActive ? 'مفعل' : 'غير مفعل';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.fullName || '---'}</td>
+                        <td>${user.email}</td>
+                        <td>${user.grade || '---'}</td>
+                        <td>${user.whatsapp || '---'}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn-success" onclick="toggleUser('${docSnap.id}', ${!user.isActive})">
+                                ${user.isActive ? 'إلغاء التفعيل' : 'تفعيل'}
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="6" class="loading">خطأ: ${error.message}</td></tr>`;
+            }
         }
 
+        // دالة تغيير حالة التفعيل
         window.toggleUser = async (id, newStatus) => {
             await updateDoc(doc(db, 'users', id), { isActive: newStatus });
             loadUsers();
         };
 
-        // إضافة كورس
+        // ==================== إضافة كورس جديد مع عداد التقدم ====================
         document.getElementById('courseForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('title').value;
-            const description = document.getElementById('description').value;
+            e.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري النشر...';
+
+            // إظهار عداد التقدم
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = '0%';
+
+            // جمع البيانات
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
             const grade = document.getElementById('grade').value;
-            const videoUrl = document.getElementById('videoUrl').value;
+            const videoUrl = document.getElementById('videoUrl').value.trim();
             const isFree = document.getElementById('isFree').value === 'true';
+            const videoCount = parseInt(document.getElementById('videoCount').value) || 12;
             const imageFile = document.getElementById('courseImage').files[0];
 
-            let imageUrl = '';
-            if (imageFile) {
-                const storageRef = ref(storage, `courses/${Date.now()}_${imageFile.name}`);
-                await uploadBytes(storageRef, imageFile);
-                imageUrl = await getDownloadURL(storageRef);
+            try {
+                let imageUrl = '';
+
+                // إذا وجدت صورة، ارفعها أولاً مع عداد التقدم
+                if (imageFile) {
+                    // التحقق من الحجم (أقل من 5 ميجابايت)
+                    if (imageFile.size > 5 * 1024 * 1024) {
+                        throw new Error('حجم الصورة كبير جداً (الحد الأقصى 5 ميجابايت)');
+                    }
+
+                    const storageRef = ref(storage, `courses/${Date.now()}_${imageFile.name}`);
+                    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+                    // مراقبة تقدم الرفع
+                    await new Promise((resolve, reject) => {
+                        uploadTask.on('state_changed',
+                            (snapshot) => {
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                progressFill.style.width = progress + '%';
+                                progressText.textContent = Math.round(progress) + '%';
+                            },
+                            (error) => reject(error),
+                            async () => {
+                                imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                                resolve();
+                            }
+                        );
+                    });
+                } else {
+                    // إذا ما في صورة، أكمل مباشرة
+                    progressFill.style.width = '100%';
+                    progressText.textContent = '100%';
+                }
+
+                // إضافة الكورس إلى Firestore
+                await addDoc(collection(db, 'courses'), {
+                    title,
+                    description,
+                    grade,
+                    videoUrl,
+                    isFree,
+                    videoCount,
+                    imageUrl,
+                    createdAt: new Date()
+                });
+
+                alert('✅ تم نشر الكورس بنجاح!');
+
+                // إعادة تعيين النموذج
+                document.getElementById('courseForm').reset();
+                progressContainer.style.display = 'none';
+                
+                // تحديث قائمة الكورسات
+                loadCourses();
+
+                // التبديل إلى تبويب الكورسات
+                document.querySelector('[data-tab="courses"]').click();
+
+            } catch (error) {
+                alert('❌ خطأ: ' + error.message);
+                console.error(error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> نشر الكورس';
+                // نخفي العداد بعد فترة قصيرة
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 2000);
             }
-
-            await addDoc(collection(db, 'courses'), {
-                title, description, grade, videoUrl, isFree, imageUrl,
-                createdAt: new Date()
-            });
-
-            alert('تمت إضافة الكورس');
-            document.getElementById('courseForm').reset();
-            loadCourses();
         });
     </script>
 </body>
