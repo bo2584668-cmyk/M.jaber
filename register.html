@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب جديد - منصة محمد جابر</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background: linear-gradient(145deg, #f0f5fa, #d9e2ec); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .register-card { background: white; width: 90%; max-width: 500px; padding: 2.5rem; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .register-card h1 { color: #1e3c5c; margin-bottom: 0.5rem; text-align: center; }
+        .register-card p { color: #666; margin-bottom: 2rem; text-align: center; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: #1e2a3a; font-weight: 600; }
+        .input-group input, .input-group select { width: 100%; padding: 0.8rem 1rem; border: 2px solid #e0e7ef; border-radius: 12px; font-size: 1rem; }
+        .input-group input:focus, .input-group select:focus { border-color: #f9a826; outline: none; }
+        .btn-register { width: 100%; padding: 1rem; background: #1e3c5c; color: white; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
+        .btn-register:hover { background: #0f2b44; }
+        .login-link { margin-top: 1.5rem; text-align: center; }
+        .login-link a { color: #f9a826; text-decoration: none; font-weight: 700; }
+        .error { color: #dc3545; margin-top: 1rem; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="register-card">
+        <h1>إنشاء حساب جديد</h1>
+        <p>أدخل بياناتك للتسجيل في المنصة</p>
+        <form id="registerForm">
+            <div class="input-group">
+                <label>الاسم الكامل</label>
+                <input type="text" id="fullName" placeholder="مثل: أحمد محمد" required>
+            </div>
+            <div class="input-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="email" placeholder="example@domain.com" required>
+            </div>
+            <div class="input-group">
+                <label>رقم الواتساب (مع مفتاح الدولة)</label>
+                <input type="tel" id="whatsapp" placeholder="مثال: 201234567890" required>
+            </div>
+            <div class="input-group">
+                <label>المرحلة التعليمية</label>
+                <select id="grade" required>
+                    <option value="">اختر مرحلتك</option>
+                    <option value="الصف الأول الإعدادي">الصف الأول الإعدادي الأزهري</option>
+                    <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي الأزهري</option>
+                    <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي الأزهري</option>
+                    <option value="الصف الأول الثانوي">الصف الأول الثانوي الأزهري</option>
+                    <option value="الصف الثاني الثانوي">الصف الثاني الثانوي الأزهري</option>
+                    <option value="الصف الثالث الثانوي">الصف الثالث الثانوي الأزهري</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="password" placeholder="أدخل كلمة مرور قوية" required>
+            </div>
+            <button type="submit" class="btn-register">تسجيل</button>
+            <div id="errorMessage" class="error"></div>
+        </form>
+        <div class="login-link">
+            لديك حساب بالفعل؟ <a href="login.html">سجل دخولك</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
+            authDomain: "mr-jabr.firebaseapp.com",
+            projectId: "mr-jabr",
+            storageBucket: "mr-jabr.firebasestorage.app",
+            messagingSenderId: "563345828466",
+            appId: "1:563345828466:web:f0bdd40711c935f60d30eb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const grade = document.getElementById('grade').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                await updateProfile(user, { displayName: fullName });
+                
+                // تخزين بيانات إضافية في Firestore
+                await setDoc(doc(db, 'users', user.uid), {
+                    fullName,
+                    email,
+                    whatsapp,
+                    grade,
+                    isActive: false, // غير مفعل حتى يوافق الأدمن
+                    createdAt: new Date()
+                });
+
+                window.location.href = 'login.html?registered=1';
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>
