@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب اشتراك - منصة محمد جابر</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background: #f5f7fa; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .subscription-card { background: white; width: 90%; max-width: 600px; padding: 2.5rem; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .subscription-card h1 { color: #1e3c5c; text-align: center; margin-bottom: 0.5rem; }
+        .subscription-card p { color: #666; text-align: center; margin-bottom: 2rem; }
+        .info-box { background: #f0f5fa; padding: 1.5rem; border-radius: 20px; margin-bottom: 2rem; }
+        .info-box p { margin: 0.5rem 0; text-align: right; }
+        .whatsapp-btn { display: block; background: #25D366; color: white; text-align: center; padding: 1rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.2rem; transition: 0.3s; }
+        .whatsapp-btn:hover { background: #20b859; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37,211,102,0.3); }
+        .note { margin-top: 1.5rem; color: #888; font-size: 0.9rem; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="subscription-card">
+        <h1>طلب اشتراك</h1>
+        <p>اختر الباقة المناسبة وتواصل معنا عبر واتساب</p>
+
+        <div class="info-box">
+            <p><strong>الباقة الشهرية:</strong> 100 جنيه</p>
+            <p><strong>الباقة السنوية:</strong> 1000 جنيه (خصم 20%)</p>
+            <p><strong>طرق الدفع:</strong> تحويل على فودافون كاش (010XXXXXXXX) أو تحويل بنكي (حساب …)</p>
+        </div>
+
+        <div id="userData"></div>
+
+        <a href="https://wa.me/201234567890" class="whatsapp-btn" target="_blank" id="whatsappLink">
+            <i class="fab fa-whatsapp"></i> أرسل طلبك عبر واتساب
+        </a>
+        <p class="note">سيتم إنشاء رسالة جاهزة تتضمن بياناتك، فقط اضغط على الزر وأرسلها.</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoG63qojGugIkvc7-T0M7BnP4KRMQuyrE",
+            authDomain: "mr-jabr.firebaseapp.com",
+            projectId: "mr-jabr",
+            storageBucket: "mr-jabr.firebasestorage.app",
+            messagingSenderId: "563345828466",
+            appId: "1:563345828466:web:f0bdd40711c935f60d30eb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // جلب بيانات المستخدم
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                const data = userDoc.data();
+                document.getElementById('userData').innerHTML = `
+                    <div style="background:#f9f9f9; padding:1rem; border-radius:12px; margin-bottom:1.5rem;">
+                        <p><strong>الاسم:</strong> ${data.fullName}</p>
+                        <p><strong>البريد:</strong> ${data.email}</p>
+                        <p><strong>المرحلة:</strong> ${data.grade}</p>
+                        <p><strong>الواتساب:</strong> ${data.whatsapp}</p>
+                    </div>
+                `;
+
+                // إعداد رابط واتساب المباشر مع رسالة جاهزة
+                const adminWhatsApp = "201234567890"; // ضع رقم واتساب الأدمن هنا
+                const message = `طلب اشتراك جديد من:\nالاسم: ${data.fullName}\nالبريد: ${data.email}\nالمرحلة: ${data.grade}\nرقمي: ${data.whatsapp}\nأريد الاشتراك في الباقة: [الشهرية/السنوية] وسأقوم بالتحويل الآن.`;
+                const encodedMessage = encodeURIComponent(message);
+                document.getElementById('whatsappLink').href = `https://wa.me/${adminWhatsApp}?text=${encodedMessage}`;
+            }
+        });
+    </script>
+</body>
+</html>
