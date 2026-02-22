@@ -34,7 +34,8 @@
 
         <div id="userData"></div>
 
-        <a href="https://wa.me/+⁦201000662181" class="whatsapp-btn" target="_blank" id="whatsappLink">
+        <!-- تم تصحيح الرقم هنا: إزالة الحرف الخفي ⁦ -->
+        <a href="https://wa.me/+201000662181" class="whatsapp-btn" target="_blank" id="whatsappLink">
             <i class="fab fa-whatsapp"></i> أرسل طلبك عبر واتساب
         </a>
         <p class="note">سيتم إنشاء رسالة جاهزة تتضمن بياناتك، فقط اضغط على الزر وأرسلها.</p>
@@ -78,7 +79,8 @@
                 `;
 
                 // إعداد رابط واتساب المباشر مع رسالة جاهزة
-                const adminWhatsApp = "⁦+201000662181"; // ضع رقم واتساب الأدمن هنا
+                // تم تصحيح الرقم هنا أيضاً
+                const adminWhatsApp = "+201000662181"; // الرقم الصحيح بدون أحرف خفية
                 const message = `طلب اشتراك جديد من:\nالاسم: ${data.fullName}\nالبريد: ${data.email}\nالمرحلة: ${data.grade}\nرقمي: ${data.whatsapp}\nأريد الاشتراك في الباقة: [الشهرية/السنوية] وسأقوم بالتحويل الآن.`;
                 const encodedMessage = encodeURIComponent(message);
                 document.getElementById('whatsappLink').href = `https://wa.me/${adminWhatsApp}?text=${encodedMessage}`;
