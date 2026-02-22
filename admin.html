@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
+        /* نفس الأنماط السابقة */
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Tajawal',sans-serif; }
         body { background:#f0f2f5; }
         .admin-nav { background:#1e3c5c; color:white; padding:1rem 5%; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
@@ -14,7 +15,7 @@
         .admin-nav h2 i { color:#f9a826; }
         .admin-nav button { background:#dc3545; color:white; border:none; padding:0.6rem 2rem; border-radius:50px; cursor:pointer; font-weight:700; transition:0.3s; display:flex; align-items:center; gap:0.5rem; }
         .admin-nav button:hover { background:#b02a37; transform:translateY(-2px); }
-        .container { max-width:1400px; margin:2rem auto; padding:0 2rem; }
+        .container { max-width:1300px; margin:2rem auto; padding:0 2rem; }
         .tabs { display:flex; gap:1rem; margin-bottom:2rem; flex-wrap:wrap; }
         .tab { padding:0.8rem 2rem; background:white; border:none; border-radius:50px; cursor:pointer; font-weight:700; color:#1e3c5c; box-shadow:0 2px 8px rgba(0,0,0,0.05); transition:0.3s; display:flex; align-items:center; gap:0.5rem; }
         .tab.active { background:#1e3c5c; color:white; }
@@ -26,30 +27,15 @@
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:#f9a826; outline:none; }
         .btn-primary { background:#1e3c5c; color:white; border:none; padding:0.8rem 2rem; border-radius:50px; cursor:pointer; font-weight:700; font-size:1rem; transition:0.3s; display:inline-flex; align-items:center; gap:0.5rem; }
         .btn-primary:hover { background:#0f2b44; transform:translateY(-2px); }
-        .btn-success { background:#28a745; color:white; border:none; padding:0.4rem 1rem; border-radius:50px; cursor:pointer; font-weight:600; transition:0.3s; }
-        .btn-success:hover { background:#218838; }
-        .btn-warning { background:#ffc107; color:#1e3c5c; border:none; padding:0.4rem 1rem; border-radius:50px; cursor:pointer; font-weight:600; transition:0.3s; }
-        .btn-warning:hover { background:#e0a800; }
         .btn-danger { background:#dc3545; color:white; border:none; padding:0.4rem 1rem; border-radius:50px; cursor:pointer; font-weight:600; transition:0.3s; }
         .btn-danger:hover { background:#b02a37; }
-        table { width:100%; border-collapse:collapse; margin-top:1rem; font-size:0.9rem; }
-        th, td { padding:0.8rem; text-align:center; border-bottom:1px solid #eee; }
+        table { width:100%; border-collapse:collapse; margin-top:1rem; }
+        th, td { padding:1rem; text-align:center; border-bottom:1px solid #eee; }
         th { background:#f8f9fa; color:#1e3c5c; font-weight:700; }
         .status-badge { background:#f9a826; color:white; padding:0.3rem 1rem; border-radius:50px; font-size:0.8rem; font-weight:600; display:inline-block; }
         .status-badge.active { background:#28a745; }
         .status-badge.inactive { background:#6c757d; }
-        .status-badge.expired { background:#dc3545; }
-        .days-remaining { font-weight:700; }
-        .days-remaining.urgent { color:#dc3545; }
         .loading { text-align:center; padding:2rem; color:#1e3c5c; }
-        .popup-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; z-index:1000; }
-        .popup { background:white; padding:2rem; border-radius:20px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
-        .popup h3 { margin-bottom:1.5rem; color:#1e3c5c; }
-        .popup select, .popup button { width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:10px; border:2px solid #e0e7ef; }
-        .popup button { background:#1e3c5c; color:white; font-weight:700; border:none; cursor:pointer; }
-        .popup button:hover { background:#0f2b44; }
-        .popup .cancel { background:#6c757d; }
-        .popup .cancel:hover { background:#5a6268; }
     </style>
 </head>
 <body>
@@ -62,7 +48,6 @@
         <div class="tabs">
             <button class="tab active" data-tab="courses"><i class="fas fa-book"></i> الكورسات</button>
             <button class="tab" data-tab="users"><i class="fas fa-users"></i> الطلاب</button>
-            <button class="tab" data-tab="expired"><i class="fas fa-hourglass-end"></i> المنتهية اشتراكاتهم</button>
             <button class="tab" data-tab="addCourse"><i class="fas fa-plus-circle"></i> إضافة كورس</button>
         </div>
 
@@ -79,28 +64,15 @@
             </div>
         </div>
 
-        <!-- تبويب الطلاب (جميع الطلاب) -->
+        <!-- تبويب الطلاب -->
         <div id="usersTab" class="tab-content" style="display:none;">
-            <h3 style="margin-bottom:1rem;">👥 جميع الطلاب</h3>
+            <h3 style="margin-bottom:1rem;">👥 قائمة الطلاب</h3>
             <div style="overflow-x:auto;">
                 <table>
                     <thead>
-                        <tr><th>الاسم</th><th>البريد</th><th>المرحلة</th><th>الواتساب</th><th>الباقة</th><th>تاريخ البدء</th><th>تاريخ الانتهاء</th><th>الأيام المتبقية</th><th>الإجراءات</th></tr>
+                        <tr><th>الاسم</th><th>البريد</th><th>المرحلة</th><th>الواتساب</th><th>الحالة</th><th>تفعيل</th></tr>
                     </thead>
-                    <tbody id="usersBody"><tr><td colspan="9" class="loading">جاري التحميل...</td></tr></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- تبويب المنتهية اشتراكاتهم -->
-        <div id="expiredTab" class="tab-content" style="display:none;">
-            <h3 style="margin-bottom:1rem;">⏳ الطلاب المنتهية اشتراكاتهم</h3>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr><th>الاسم</th><th>البريد</th><th>المرحلة</th><th>الواتساب</th><th>الباقة</th><th>تاريخ الانتهاء</th><th>الإجراءات</th></tr>
-                    </thead>
-                    <tbody id="expiredBody"><tr><td colspan="7" class="loading">جاري التحميل...</td></tr></tbody>
+                    <tbody id="usersBody"><tr><td colspan="6" class="loading">جاري التحميل...</td></tr></tbody>
                 </table>
             </div>
         </div>
@@ -135,8 +107,8 @@
                 </div>
                 <div class="form-group">
                     <label>أو كود التضمين (iframe) - اختياري</label>
-                    <textarea id="iframeCode" rows="4" placeholder="ضع كود iframe كامل هنا"></textarea>
-                    <small style="color:#666;">اترك أحد الحقلين حسب نوع الفيديو</small>
+                    <textarea id="iframeCode" rows="4" placeholder="ضع كود iframe كامل هنا مثل: <iframe width='600' height='480' src='https://myvidplay.com/e/...' frameborder='0' allowfullscreen></iframe>"></textarea>
+                    <small style="color:#666;">اترك أحد الحقلين (رابط يوتيوب أو iframe) حسب نوع الفيديو</small>
                 </div>
                 <div class="form-group">
                     <label>صورة الكورس (اختياري)</label>
@@ -160,24 +132,10 @@
         </div>
     </div>
 
-    <!-- Popup اختيار الباقة -->
-    <div id="subscriptionPopup" class="popup-overlay" style="display:none;">
-        <div class="popup">
-            <h3><i class="fas fa-calendar-alt"></i> تفعيل اشتراك الطالب</h3>
-            <select id="subscriptionType">
-                <option value="monthly">شهري (31 يوم)</option>
-                <option value="semester">ترم (5 شهور)</option>
-                <option value="yearly">سنوي (10 شهور)</option>
-            </select>
-            <button id="confirmActivate"><i class="fas fa-check"></i> تأكيد التفعيل</button>
-            <button class="cancel" id="cancelPopup"><i class="fas fa-times"></i> إلغاء</button>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -193,10 +151,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
-
-        // متغيرات لحالة popup
-        let currentUserId = null;
-        let currentUserEmail = null;
 
         // التحقق من أن المستخدم هو الأدمن
         onAuthStateChanged(auth, (user) => {
@@ -221,14 +175,7 @@
                 const tabName = tab.dataset.tab;
                 document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
                 if (tabName === 'courses') document.getElementById('coursesTab').style.display = 'block';
-                else if (tabName === 'users') {
-                    document.getElementById('usersTab').style.display = 'block';
-                    loadUsers(); // إعادة تحميل للتحديث
-                }
-                else if (tabName === 'expired') {
-                    document.getElementById('expiredTab').style.display = 'block';
-                    loadExpiredUsers();
-                }
+                else if (tabName === 'users') document.getElementById('usersTab').style.display = 'block';
                 else if (tabName === 'addCourse') document.getElementById('addCourseTab').style.display = 'block';
             });
         });
@@ -261,152 +208,31 @@
             }
         };
 
-        // دالة حساب تاريخ الانتهاء بناءً على نوع الباقة
-        function calculateEndDate(startDate, type) {
-            const date = new Date(startDate);
-            if (type === 'monthly') {
-                date.setDate(date.getDate() + 31);
-            } else if (type === 'semester') {
-                date.setMonth(date.getMonth() + 5);
-            } else if (type === 'yearly') {
-                date.setMonth(date.getMonth() + 10); // 10 شهور
-            }
-            return date;
-        }
-
-        // دالة تفعيل الاشتراك
-        async function activateSubscription(userId, type) {
-            const now = new Date();
-            const endDate = calculateEndDate(now, type);
-            await updateDoc(doc(db, 'users', userId), {
-                subscriptionType: type,
-                startDate: Timestamp.fromDate(now),
-                endDate: Timestamp.fromDate(endDate),
-                isActive: true
-            });
-            loadUsers();
-            loadExpiredUsers(); // تحديث قائمة المنتهية إذا كانت مفتوحة
-        }
-
-        // تحميل جميع الطلاب مع حالة الاشتراك
+        // تحميل الطلاب
         async function loadUsers() {
             const tbody = document.getElementById('usersBody');
-            tbody.innerHTML = '<tr><td colspan="9" class="loading">جاري التحميل...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="loading">جاري التحميل...</td></tr>';
             const snapshot = await getDocs(collection(db, 'users'));
             tbody.innerHTML = '';
-            
-            // تحديث الحالة لكل طالب بناءً على تاريخ الانتهاء
-            const now = Timestamp.now();
-            for (const docSnap of snapshot.docs) {
+            snapshot.forEach(docSnap => {
                 const u = docSnap.data();
-                let isActive = u.isActive || false;
-                // إذا كان هناك endDate وانتهى، نعطل الحالة
-                if (u.endDate && u.endDate.toDate() < now.toDate()) {
-                    if (isActive) {
-                        isActive = false;
-                        await updateDoc(docSnap.ref, { isActive: false });
-                    }
-                }
-                // حساب الأيام المتبقية
-                let daysRemaining = '---';
-                let statusClass = 'inactive';
-                let statusText = 'غير مفعل';
-                if (u.endDate) {
-                    const end = u.endDate.toDate();
-                    const diff = Math.ceil((end - now.toDate()) / (1000 * 60 * 60 * 24));
-                    if (diff > 0) {
-                        daysRemaining = diff + ' يوم';
-                        statusClass = 'active';
-                        statusText = 'مفعل';
-                    } else {
-                        daysRemaining = '🚫 منتهي';
-                        statusClass = 'expired';
-                        statusText = 'منتهي';
-                    }
-                } else {
-                    daysRemaining = '---';
-                }
-
-                // ترجمة نوع الباقة
-                let typeText = '---';
-                if (u.subscriptionType === 'monthly') typeText = 'شهري';
-                else if (u.subscriptionType === 'semester') typeText = 'ترم';
-                else if (u.subscriptionType === 'yearly') typeText = 'سنوي';
-
+                const statusClass = u.isActive ? 'active' : 'inactive';
+                const statusText = u.isActive ? 'مفعل' : 'غير مفعل';
                 const row = `<tr>
                     <td>${u.fullName || '---'}</td>
                     <td>${u.email}</td>
                     <td>${u.grade || '---'}</td>
                     <td>${u.whatsapp || '---'}</td>
-                    <td>${typeText}</td>
-                    <td>${u.startDate ? new Date(u.startDate.toDate()).toLocaleDateString('ar-EG') : '---'}</td>
-                    <td>${u.endDate ? new Date(u.endDate.toDate()).toLocaleDateString('ar-EG') : '---'}</td>
-                    <td class="days-remaining ${diff <= 3 && diff > 0 ? 'urgent' : ''}">${daysRemaining}</td>
-                    <td>
-                        ${!u.endDate || u.endDate.toDate() < now.toDate() 
-                            ? `<button class="btn-success" onclick="showActivatePopup('${docSnap.id}', '${u.email}')"><i class="fas fa-play"></i> تفعيل</button>` 
-                            : `<button class="btn-warning" onclick="deactivateUser('${docSnap.id}')"><i class="fas fa-pause"></i> إلغاء التفعيل</button>`}
-                    </td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td><button class="btn-success" onclick="toggleUser('${docSnap.id}', ${!u.isActive})">${u.isActive ? 'إلغاء التفعيل' : 'تفعيل'}</button></td>
                 </tr>`;
                 tbody.innerHTML += row;
-            }
+            });
         }
-
-        // تحميل الطلاب المنتهية اشتراكاتهم فقط
-        async function loadExpiredUsers() {
-            const tbody = document.getElementById('expiredBody');
-            tbody.innerHTML = '<tr><td colspan="7" class="loading">جاري التحميل...</td></tr>';
-            const snapshot = await getDocs(collection(db, 'users'));
-            tbody.innerHTML = '';
-            const now = Timestamp.now();
-            for (const docSnap of snapshot.docs) {
-                const u = docSnap.data();
-                // إذا كان الاشتراك منتهي (ليس لديه endDate أو انتهى)
-                if (!u.endDate || u.endDate.toDate() < now.toDate()) {
-                    const row = `<tr>
-                        <td>${u.fullName || '---'}</td>
-                        <td>${u.email}</td>
-                        <td>${u.grade || '---'}</td>
-                        <td>${u.whatsapp || '---'}</td>
-                        <td>${u.subscriptionType ? (u.subscriptionType === 'monthly' ? 'شهري' : u.subscriptionType === 'semester' ? 'ترم' : 'سنوي') : '---'}</td>
-                        <td>${u.endDate ? new Date(u.endDate.toDate()).toLocaleDateString('ar-EG') : '---'}</td>
-                        <td><button class="btn-success" onclick="showActivatePopup('${docSnap.id}', '${u.email}')"><i class="fas fa-play"></i> تفعيل</button></td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                }
-            }
-        }
-
-        // إظهار popup اختيار الباقة
-        window.showActivatePopup = (userId, userEmail) => {
-            currentUserId = userId;
-            currentUserEmail = userEmail;
-            document.getElementById('subscriptionPopup').style.display = 'flex';
+        window.toggleUser = async (id, newStatus) => {
+            await updateDoc(doc(db, 'users', id), { isActive: newStatus });
+            loadUsers();
         };
-
-        // إلغاء التفعيل (تعطيل الاشتراك)
-        window.deactivateUser = async (id) => {
-            if (confirm('هل أنت متأكد من إلغاء تفعيل هذا الطالب؟')) {
-                await updateDoc(doc(db, 'users', id), { isActive: false });
-                loadUsers();
-                loadExpiredUsers();
-            }
-        };
-
-        // معالجة popup
-        document.getElementById('confirmActivate').addEventListener('click', async () => {
-            const type = document.getElementById('subscriptionType').value;
-            if (currentUserId) {
-                await activateSubscription(currentUserId, type);
-                document.getElementById('subscriptionPopup').style.display = 'none';
-                currentUserId = null;
-            }
-        });
-
-        document.getElementById('cancelPopup').addEventListener('click', () => {
-            document.getElementById('subscriptionPopup').style.display = 'none';
-            currentUserId = null;
-        });
 
         // إضافة كورس
         document.getElementById('courseForm').addEventListener('submit', async (e) => {
@@ -419,7 +245,7 @@
             const description = document.getElementById('description').value.trim();
             const grade = document.getElementById('grade').value;
             const videoUrl = document.getElementById('videoUrl').value.trim();
-            const iframeCode = document.getElementById('iframeCode').value.trim();
+            const iframeCode = document.getElementById('iframeCode').value.trim(); // الكود الجديد
             const isFree = document.getElementById('isFree').value === 'true';
             const videoCount = parseInt(document.getElementById('videoCount').value) || 12;
             const imageFile = document.getElementById('courseImage').files[0];
@@ -433,16 +259,17 @@
                     imageUrl = await getDownloadURL(storageRef);
                 }
 
+                // تخزين iframeCode إذا تم إدخاله
                 await addDoc(collection(db, 'courses'), {
                     title,
                     description,
                     grade,
                     videoUrl,
-                    iframeCode,
+                    iframeCode,      // الحقل الجديد
                     isFree,
                     videoCount,
                     imageUrl,
-                    createdAt: Timestamp.now()
+                    createdAt: new Date()
                 });
 
                 alert('✅ تم نشر الكورس بنجاح!');
