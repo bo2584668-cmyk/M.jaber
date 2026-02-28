@@ -154,12 +154,14 @@
 
         // التحقق من أن المستخدم هو الأدمن
         onAuthStateChanged(auth, (user) => {
-            if (!user || user.email !== 'bo2584668@gmail.com') {
-                window.location.href = 'login.html';
-            } else {
-                loadCourses();
-                loadUsers();
-            }
+    if (!user || 
+        (user.email !== 'bo2584668@gmail.com' && 
+         user.email !== 'mj7224150@gmail.com')) {
+        window.location.href = 'login.html';
+    } else {
+        loadCourses();
+        loadUsers();
+    }
         });
 
         document.getElementById('logoutAdmin').addEventListener('click', async () => {
