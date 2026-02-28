@@ -311,9 +311,8 @@
 
         let allCourses = []; // نخزن كل الكورسات هنا
 
-        // التحقق من حالة تسجيل الدخول (اختياري، لكننا نسمح بعرض الكورسات للجميع)
+        // التحقق من حالة تسجيل الدخول
         onAuthStateChanged(auth, (user) => {
-            // لا نمنع المشاهدة، لكن نعرض رسالة ترحيب أو لا
             loadCourses(); // تحميل الكورسات بغض النظر عن حالة الدخول
         });
 
@@ -359,7 +358,7 @@
                 // تحديد محتوى الصورة
                 let imageHtml = '';
                 if (course.imageUrl) {
-                    imageHtml = `<img src="${course.imageUrl}" alt="${course.title}">`;
+                    imageHtml = `<img src="${course.imageUrl}" alt="${course.title || 'كورس'}">`;
                 } else {
                     imageHtml = `<i class="fas fa-play-circle"></i>`;
                 }
@@ -368,16 +367,30 @@
                 const badgeClass = course.isFree ? 'free' : 'paid';
                 const badgeText = course.isFree ? 'مجاني' : 'مدفوع';
 
+                // معالجة الوصف: التحقق من وجوده واختصاره بشكل ذكي
+                let descriptionText = '';
+                if (course.description) {
+                    descriptionText = course.description.length > 80 
+                        ? course.description.substring(0, 80) + '...' 
+                        : course.description;
+                }
+
+                // عدد الدروس: استخدام القيمة 0 إذا كانت موجودة، وإلا 12 كافتراضي
+                const videoCount = course.videoCount !== undefined ? course.videoCount : 12;
+
+                // الصف الدراسي (للوسم)
+                const gradeTag = course.grade || 'عام';
+
                 card.innerHTML = `
                     <div class="course-image">
                         ${imageHtml}
-                        <span class="course-tag">${course.grade || 'عام'}</span>
+                        <span class="course-tag">${gradeTag}</span>
                     </div>
                     <div class="course-details">
-                        <h3>${course.title}</h3>
-                        <p>${course.description.substring(0, 80)}...</p>
+                        <h3>${course.title || 'بدون عنوان'}</h3>
+                        <p>${descriptionText || 'لا يوجد وصف'}</p>
                         <div class="course-meta">
-                            <span><i class="fas fa-video"></i> ${course.videoCount || 12} درس</span>
+                            <span><i class="fas fa-video"></i> ${videoCount} درس</span>
                             <span class="badge ${badgeClass}">${badgeText}</span>
                         </div>
                     </div>
